@@ -1,21 +1,24 @@
 @extends('layouts.app')
 
+@section('title', 'Téléchargez le CV ci-dessous')
+
 @section('content')
-<div class="prose lg:prose-lg p-6 bg-white dark:bg-[#161615] rounded-lg">
-    <h1>Curriculum Vitae</h1>
-    <p class="text-sm text-[#706f6c]">Version courte du CV — sections : Expériences, Formations, Compétences.</p>
+<div class="max-w-4xl mx-auto p-6">
+    <div class="bg-white dark:bg-[#161615] rounded-lg shadow p-6">
+        <h1 class="text-2xl font-semibold mb-2">Curriculum Vitae</h1>
+        <p class="text-sm text-[#706f6c] mb-4">Vous pouvez consulter ou télécharger mon CV au format PDF.</p>
 
-    <section class="mt-6">
-        <h2 class="font-medium">Expériences</h2>
-        <ul class="mt-2 list-disc ml-6 text-sm text-[#706f6c]">
-            <li>Entreprise A — Développeur (2020–2023)</li>
-        </ul>
-    </section>
+        <div class="flex gap-3 mb-6">
+            <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-[#1b1b18] text-white rounded">Ouvrir le CV (nouvel onglet)</a>
+            <a href="/cv/jeremy-escassut-v0.1.pdf" download class="inline-flex items-center gap-2 px-4 py-2 bg-white border rounded">Télécharger le CV</a>
+        </div>
 
-    <section class="mt-4">
-        <h2 class="font-medium">Formations</h2>
-        <p class="text-sm text-[#706f6c]">Licence / Master en informatique (placeholder)</p>
-    </section>
+        <div class="border rounded overflow-hidden" style="height:70vh;">
+            <iframe src="/cv/jeremy-escassut-v0.1.pdf" title="Aperçu du CV" class="w-full h-full" aria-label="Aperçu du CV en PDF"></iframe>
+        </div>
+
+        <p class="text-xs text-[#706f6c] mt-3">Si le PDF ne s'affiche pas dans l'aperçu, utilisez le bouton "Télécharger le CV" ou ouvrez-le dans un nouvel onglet.</p>
+    </div>
 </div>
 
 @endsection

@@ -33,7 +33,7 @@
                     </svg>
                 </button>
 
-                <a href="/cv" class="p-3 bg-white border rounded-full" aria-label="Voir le CV">
+                <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-3 bg-white border rounded-full" aria-label="Voir le CV (ouvre dans un nouvel onglet)">
                     <!-- resume icon -->
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -42,11 +42,21 @@
                 </a>
             </div>
 
-            <!-- Social icons -->
+            <!-- Social icon buttons (rounded) -->
             <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c]">
-                <a href="#" aria-label="LinkedIn" class="hover:underline">LinkedIn</a>
-                <a href="#" aria-label="Indeed" class="hover:underline">Indeed</a>
-                <a href="#" aria-label="GitLab" class="hover:underline">GitLab</a>
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-3 bg-white border rounded-full hover:shadow-md">
+                    <svg class="w-4 h-4 text-[#0A66C2]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M4.98 3.5C4.98 4.88 3.86 6 2.49 6 1.11 6 0 4.88 0 3.5 0 2.12 1.11 1 2.49 1 3.86 1 4.98 2.12 4.98 3.5zM.22 8.98H4.75V24H.22zM8.98 8.98h4.29v2.07h.06c.6-1.14 2.07-2.34 4.26-2.34 4.56 0 5.4 3 5.4 6.9V24h-4.53v-7.2c0-1.72 0-3.93-2.39-3.93-2.4 0-2.77 1.88-2.77 3.8V24H8.98z" />
+                    </svg>
+                </a>
+
+                <!-- GitLab -->
+                <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-3 bg-white border rounded-full hover:shadow-md">
+                    <svg class="w-4 h-4 text-[#FC6D27]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M22.945 10.49l-2.03-6.25a.5.5 0 00-.95-.02L16.88 12h3.14a1 1 0 00.92-1.51zM9.12 12L4.03 4.22a.5.5 0 00-.93.05L1.08 10.5A1 1 0 002.07 12H9.12zM12 22.5l3.77-10.5H8.23L12 22.5zM18.25 12l3.15-7.75a.5.5 0 00-.71-.63L15.97 10.5H18.25z" />
+                    </svg>
+                </a>
             </div>
         </div>
     </aside>
