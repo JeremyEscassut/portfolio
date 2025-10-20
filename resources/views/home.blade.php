@@ -25,7 +25,7 @@
 
             <!-- Actions: icons -->
             <div class="mt-6 flex items-center gap-3">
-                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full" aria-label="Ouvrir le contact">
+                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full cursor-pointer" aria-label="Ouvrir le contact">
                     <!-- simple mail icon -->
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16v16H4z" />
@@ -361,15 +361,17 @@
 </script>
 <script>
     // Delegated click logger: logs when a click reaches document and matches the contact button
-    (function(){
+    (function() {
         try {
             if (!window.__contactClickLoggerBound) {
-                document.addEventListener('click', function (e) {
+                document.addEventListener('click', function(e) {
                     const btn = e.target.closest && e.target.closest('button[aria-label="Ouvrir le contact"]');
                     if (btn) {
                         console.log('Delegated click detected on contact button', btn);
                     }
-                }, {capture: true});
+                }, {
+                    capture: true
+                });
                 window.__contactClickLoggerBound = true;
             }
         } catch (e) {
