@@ -5,7 +5,7 @@
     <!-- LEFT: navigation / identity (centré verticalement sur grand écran) -->
     <!-- LEFT: like Brittany, sticky on large screens within page scroll -->
     <aside class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
-        <div class="w-full bg-white dark:bg-[#161615] rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
+        <div class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
             <!-- Name -->
             <div class="mb-8">
                 <h1 class="text-3xl font-semibold">Jérémy Escassut</h1>
@@ -23,27 +23,8 @@
                 </ul>
             </nav>
 
-            <!-- Actions: icons -->
-            <div class="mt-6 flex items-center gap-3">
-                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full cursor-pointer" aria-label="Ouvrir le contact">
-                    <!-- simple mail icon -->
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 4h16v16H4z" />
-                        <path d="M22 6l-10 7L2 6" />
-                    </svg>
-                </button>
-
-                <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-3 bg-white border rounded-full" aria-label="Voir le CV (ouvre dans un nouvel onglet)">
-                    <!-- resume icon -->
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <path d="M14 2v6h6" />
-                    </svg>
-                </a>
-            </div>
-
             <!-- Social icon buttons (rounded) -->
-            <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c]">
+            <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
                 <!-- LinkedIn -->
                 <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-3 bg-white border rounded-full hover:shadow-md">
                     <svg class="w-4 h-4 text-[#0A66C2]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -55,6 +36,25 @@
                 <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-3 bg-white border rounded-full hover:shadow-md">
                     <svg class="w-4 h-4 text-[#FC6D27]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M22.945 10.49l-2.03-6.25a.5.5 0 00-.95-.02L16.88 12h3.14a1 1 0 00.92-1.51zM9.12 12L4.03 4.22a.5.5 0 00-.93.05L1.08 10.5A1 1 0 002.07 12H9.12zM12 22.5l3.77-10.5H8.23L12 22.5zM18.25 12l3.15-7.75a.5.5 0 00-.71-.63L15.97 10.5H18.25z" />
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Actions: icons -->
+            <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
+                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full cursor-pointer" aria-label="Ouvrir le contact" style="margin-top:2px;">
+                    <!-- simple mail icon -->
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16v16H4z" />
+                        <path d="M22 6l-10 7L2 6" />
+                    </svg>
+                </button>
+
+                <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-3 bg-white border rounded-full" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                    <!-- resume icon -->
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <path d="M14 2v6h6" />
                     </svg>
                 </a>
             </div>
@@ -161,7 +161,7 @@
     }
 
     /* page scroll on body/html by default; keep smooth scrolling */
-    @media (min-width: 1024px) {
+    @media (min-width: 500px) {
         /* no special overflow on body; aside will be sticky */
     }
 
@@ -178,6 +178,20 @@
         background: rgba(255, 255, 255, 0.95);
         box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.06);
         z-index: 40;
+    }
+
+    /* Contact/CV actions when fixed on small screens */
+    #contact-cv-actions.fixed {
+        position: fixed !important;
+        margin-top: 2px;
+        top: 2px !important;
+        right: 55px !important;
+        left: auto !important;
+        z-index: 60 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        display: flex !important;
+        align-items: center !important;
     }
 </style>
 @endpush
@@ -322,6 +336,66 @@
             checkFooterStuckWindow();
         }
     });
+</script>
+<script>
+    (function() {
+        const target = document.getElementById('contact-cv-actions');
+        if (!target) return;
+
+        let origRect = null;
+
+        function recalc() {
+            origRect = target.getBoundingClientRect();
+            target.__origTop = origRect.top + window.scrollY;
+        }
+
+        function applyFixed() {
+            if (target.classList.contains('fixed')) return;
+            const w = target.offsetWidth;
+            const h = target.offsetHeight;
+            target.style.width = w + 'px';
+            target.style.height = h + 'px';
+            target.classList.add('fixed');
+        }
+
+        function removeFixed() {
+            if (!target.classList.contains('fixed')) return;
+            target.classList.remove('fixed');
+            target.style.width = '';
+            target.style.height = '';
+        }
+
+        function onScroll() {
+            if (window.innerWidth > 640) {
+                removeFixed();
+                return;
+            }
+            if (origRect === null) recalc();
+            if (window.scrollY > target.__origTop) applyFixed();
+            else removeFixed();
+        }
+
+        window.addEventListener('resize', () => {
+            recalc();
+            onScroll();
+        });
+        window.addEventListener('orientationchange', () => {
+            recalc();
+            onScroll();
+        });
+        window.addEventListener('load', () => {
+            recalc();
+            onScroll();
+        });
+        window.addEventListener('scroll', onScroll, {
+            passive: true
+        });
+        // initial
+        setTimeout(() => {
+            recalc();
+            onScroll();
+        }, 120);
+    })();
 </script>
 <script>
     // Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
