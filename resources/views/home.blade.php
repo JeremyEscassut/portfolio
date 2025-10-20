@@ -25,7 +25,7 @@
 
             <!-- Actions: icons -->
             <div class="mt-6 flex items-center gap-3">
-                <button @click="$dispatch('open-contact')" class="p-3 bg-[#1b1b18] text-white rounded-full" aria-label="Ouvrir le contact">
+                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full" aria-label="Ouvrir le contact">
                     <!-- simple mail icon -->
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16v16H4z" />
@@ -183,12 +183,46 @@
 @endpush
 
 <!-- Contact modal (Alpine) -->
-<div x-data="contactModal()" @open-contact.window="openModal()" :aria-hidden="!open">
-    <template x-if="open">
-        <div>
-            <div x-show="open" x-cloak class="fixed inset-0 bg-black/50" aria-hidden="true"></div>
+<script>
+    // Ensure contactModal factory exists before Alpine initialises. Use `isOpen` to avoid collision with window.open.
+    window.contactModal = function() {
+        return {
+            isOpen: false,
+            lastActive: null,
+            openModal() {
+                console.log('contactModal.openModal called');
+                this.lastActive = document.activeElement;
+                this.isOpen = true;
+                this.$nextTick(() => {
+                    if (this.$refs && this.$refs.email) this.$refs.email.focus();
+                });
+                document.addEventListener('keydown', this._escHandler = (e) => {
+                    if (e.key === 'Escape') this.closeModal();
+                });
+            },
+            closeModal() {
+                console.log('contactModal.closeModal called');
+                this.isOpen = false;
+                document.removeEventListener('keydown', this._escHandler);
+                this.$nextTick(() => {
+                    if (this.lastActive && typeof this.lastActive.focus === 'function') this.lastActive.focus();
+                });
+            },
+            onSubmit(e) {
+                console.log('contactModal.onSubmit called');
+                e.preventDefault();
+                this.closeModal();
+            }
+        }
+    }
+</script>
 
-            <div x-show="open" x-cloak class="fixed inset-0 flex items-center justify-center p-4">
+<div x-data="contactModal()" @open-contact.window="isOpen = true; $nextTick(() => { if ($refs.email) $refs.email.focus(); })" :aria-hidden="!isOpen">
+    <template x-if="isOpen">
+        <div>
+            <div x-show="isOpen" x-cloak class="fixed inset-0 bg-black/50" aria-hidden="true"></div>
+
+            <div x-show="isOpen" x-cloak class="fixed inset-0 flex items-center justify-center p-4">
                 <div @click.away="closeModal()" class="w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="Contact form">
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
@@ -230,43 +264,8 @@
 @push('scripts')
 <script>
     document.addEventListener('alpine:init', () => {
-
-        // Contact modal component: focus management and restore
-        window.contactModal = function() {
-            return {
-                open: false,
-                lastActive: null,
-                openModal() {
-                    this.lastActive = document.activeElement;
-                    this.open = true;
-                    this.$nextTick(() => {
-                        // focus the email input if present
-                        if (this.$refs.email) {
-                            this.$refs.email.focus();
-                        }
-                    });
-                    document.addEventListener('keydown', this._escHandler = (e) => {
-                        if (e.key === 'Escape') this.closeModal();
-                    });
-                },
-                closeModal() {
-                    this.open = false;
-                    document.removeEventListener('keydown', this._escHandler);
-                    this.$nextTick(() => {
-                        if (this.lastActive && typeof this.lastActive.focus === 'function') {
-                            this.lastActive.focus();
-                        }
-                    });
-                },
-                onSubmit(e) {
-                    // placeholder: prevent real submit for now and close modal
-                    e.preventDefault();
-                    // minimal honeypot check could be added here
-                    this.closeModal();
-                    // TODO: implement POST /contact route
-                }
-            }
-        }
+        console.log('Alpine initialized in home.blade.php');
+        // Contact modal factory is defined earlier (before the HTML) to avoid ReferenceError and name collisions.
 
         // highlight active section in left nav using IntersectionObserver
         const navLinks = document.querySelectorAll('aside nav a');
@@ -323,5 +322,59 @@
             checkFooterStuckWindow();
         }
     });
+</script>
+<script>
+    // Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
+    window.addEventListener('open-contact', function _openContactFallback() {
+        console.log('open-contact event received (fallback listener)');
+
+        function tryOpen() {
+            const el = document.querySelector('[x-data="contactModal()"]');
+            if (!el) return false;
+            // Alpine v3 attaches __x with $data
+            try {
+                if (el.__x && el.__x.$data) {
+                    el.__x.$data.isOpen = true;
+                    // Try to focus the email input inside the modal (best-effort)
+                    setTimeout(() => {
+                        try {
+                            const email = el.querySelector('[x-ref="email"]');
+                            if (email && typeof email.focus === 'function') email.focus();
+                        } catch (e) {
+                            // ignore
+                        }
+                    }, 40);
+                    return true;
+                }
+            } catch (e) {
+                // ignore
+            }
+            return false;
+        }
+
+        if (!tryOpen()) {
+            // retry shortly in case Alpine hasn't initialised yet
+            setTimeout(tryOpen, 50);
+            setTimeout(tryOpen, 200);
+        }
+    });
+</script>
+<script>
+    // Delegated click logger: logs when a click reaches document and matches the contact button
+    (function(){
+        try {
+            if (!window.__contactClickLoggerBound) {
+                document.addEventListener('click', function (e) {
+                    const btn = e.target.closest && e.target.closest('button[aria-label="Ouvrir le contact"]');
+                    if (btn) {
+                        console.log('Delegated click detected on contact button', btn);
+                    }
+                }, {capture: true});
+                window.__contactClickLoggerBound = true;
+            }
+        } catch (e) {
+            // ignore
+        }
+    })();
 </script>
 @endpush
