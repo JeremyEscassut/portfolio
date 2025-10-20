@@ -183,8 +183,8 @@
     /* Contact/CV actions when fixed on small screens */
     #contact-cv-actions.fixed {
         position: fixed !important;
-        margin-top: 2px;
-        top: 2px !important;
+        margin-top: 0px;
+        top: 0px !important;
         right: 55px !important;
         left: auto !important;
         z-index: 60 !important;
