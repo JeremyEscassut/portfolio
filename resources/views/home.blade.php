@@ -42,7 +42,7 @@
 
             <!-- Actions: icons -->
             <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
-                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full cursor-pointer" aria-label="Ouvrir le contact" style="margin-top:2px;">
+                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-3 bg-[#1b1b18] text-white rounded-full border cursor-pointer" aria-label="Ouvrir le contact" style="margin-top:2px;">
                     <!-- simple mail icon -->
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16v16H4z" />
@@ -234,32 +234,52 @@
 <div x-data="contactModal()" @open-contact.window="isOpen = true; $nextTick(() => { if ($refs.email) $refs.email.focus(); })" :aria-hidden="!isOpen">
     <template x-if="isOpen">
         <div>
-            <div x-show="isOpen" x-cloak class="fixed inset-0 bg-black/50" aria-hidden="true"></div>
+            <div x-show="isOpen" x-cloak class="fixed inset-0 bg-black/50" aria-hidden="true" style="z-index: 9998;"></div>
 
-            <div x-show="isOpen" x-cloak class="fixed inset-0 flex items-center justify-center p-4">
-                <div @click.away="closeModal()" class="w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="Contact form">
+            <div x-show="isOpen" x-cloak class="fixed inset-0 flex items-center justify-center p-4" style="z-index: 9999;">
+                <div @click.away="closeModal()" class="w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="Contact form" style="z-index: 10000; position: relative;">
                     <div class="p-6">
                         <div class="flex justify-between items-center mb-4">
                             <h3 class="text-lg font-medium">Contact</h3>
                             <button @click="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="Fermer">✕</button>
                         </div>
 
-                        <form method="POST" action="#" class="space-y-4" @submit="onSubmit">
+                        <form method="POST" action="{{ route('contact.send') }}" class="space-y-4">
                             @csrf
+                            @if(session('status'))
+                            <div class="p-3 rounded bg-green-50 text-green-800">{{ session('status') }}</div>
+                            @endif
+                            @if(session('error'))
+                            <div class="p-3 rounded bg-red-50 text-red-800">{{ session('error') }}</div>
+                            @endif
+                            @if($errors->any())
+                            <div class="p-3 rounded bg-red-50 text-red-800">
+                                <ul class="list-disc pl-5">
+                                    @foreach($errors->all() as $err)
+                                    <li>{{ $err }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
                             <!-- honeypot -->
                             <input type="text" name="hp" tabindex="-1" autocomplete="off" style="display:none">
 
                             <div>
+                                <label class="block text-sm">Nom (optionnel)</label>
+                                <input type="text" name="name" value="{{ old('name') }}" class="mt-1 block w-full rounded border px-3 py-2" placeholder="Jean Dupont">
+                            </div>
+
+                            <div>
                                 <label class="block text-sm">Votre email</label>
-                                <input x-ref="email" type="email" name="email" class="mt-1 block w-full rounded border px-3 py-2" placeholder="prenom@exemple.com">
+                                <input x-ref="email" type="email" name="email" value="{{ old('email') }}" class="mt-1 block w-full rounded border px-3 py-2" placeholder="prenom@exemple.com" required>
                             </div>
 
                             <div>
                                 <label class="block text-sm">Message</label>
-                                <textarea x-ref="message" name="message" rows="4" class="mt-1 block w-full rounded border px-3 py-2" placeholder="Bonjour…"></textarea>
+                                <textarea x-ref="message" name="message" rows="4" class="mt-1 block w-full rounded border px-3 py-2" placeholder="Bonjour…" required>{{ old('message') }}</textarea>
                             </div>
 
-                            <div class="flex justify-end">
+                            <div class="flex justify-end items-center gap-3">
                                 <button type="button" @click="closeModal()" class="mr-2 px-4 py-2 border rounded">Annuler</button>
                                 <button type="submit" class="px-4 py-2 bg-[#1b1b18] text-white rounded">Envoyer</button>
                             </div>
