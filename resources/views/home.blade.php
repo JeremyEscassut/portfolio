@@ -223,25 +223,7 @@
     </template>
 </div>
 
-<!-- Mobile sticky buttons (Alpine) -->
-<div x-data="{ open:false }" x-cloak class="lg:hidden">
-    <div x-show="!open" class="fixed bottom-6 left-1/2 -translate-x-1/2">
-        <div class="flex gap-3">
-            <button @click="open = true" class="px-4 py-2 bg-[#1b1b18] text-white rounded-full shadow">Contact</button>
-            <a href="/cv" class="px-4 py-2 bg-white border rounded-full">CV</a>
-        </div>
-    </div>
-
-    <div x-show="open" class="fixed inset-0 bg-black/40 flex items-end">
-        <div class="w-full p-6 bg-white rounded-t-xl">
-            <div class="flex justify-between items-center mb-4">
-                <h5 class="font-medium">Contact</h5>
-                <button @click="open = false" class="text-sm text-[#706f6c]">Fermer</button>
-            </div>
-            <p class="text-sm text-[#706f6c]">Formulaire rapide (placeholder)</p>
-        </div>
-    </div>
-</div>
+<!-- Mobile sticky buttons removed; mobile behavior relies on desktop action buttons and the global open-contact event -->
 
 @endsection
 
