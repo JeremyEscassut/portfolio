@@ -15,7 +15,7 @@
 
             <!-- Section links (hidden on small screens, visible on desktop) -->
             <nav class="mt-8 mb-6 hidden lg:block">
-                <ul class="space-y-3 text-sm items-end">
+                <ul class="space-y-3 text-sm text-end">
                     <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
                     <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
                     <li><a href="#experience" class="font-medium hover:underline">Expérience</a></li>
@@ -26,13 +26,13 @@
             <!-- Social icon buttons (Tabler icons, larger, no border) -->
             <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
                 <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
-                <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center">
+                <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
                     @if($svg) {!! $svg !!} @endif
                 </a>
 
                 <!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
-                <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center">
+                <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
                     @if($svg) {!! $svg !!} @endif
                 </a>
@@ -41,13 +41,13 @@
             <!-- Actions: icons -->
             <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
                 <!-- Contact (inline from resources/svg/icon-contact.svg) -->
-                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center" aria-label="Ouvrir le contact" style="margin-top:2px;">
+                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="Ouvrir le contact" style="margin-top:2px;">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
                     @if($svg) {!! $svg !!} @endif
                 </button>
 
                 <!-- CV (inline from resources/svg/icon-cv.svg) -->
-                <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-cv.svg')); } catch (Exception $e) { } @endphp
                     @if($svg) {!! $svg !!} @endif
                 </a>
@@ -63,9 +63,9 @@
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">À propos</h2>
             </div>
             <div class="bg-[#fff2f2] rounded-md p-6">
-                <p class="text-sm text-[#706f6c]">Court paragraphe de présentation. (Content de la section À propos — sans titre ici selon vos consignes.)</p>
-                <p class="text-sm text-[#706f6c] mt-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vitae mi sed arcu pulvinar aliquet. Integer vel ligula sit amet lorem dapibus luctus. Sed a nibh non nibh feugiat ultricies. Curabitur non dui in nunc volutpat aliquet. Vivamus eget mi vel arcu lacinia aliquet.</p>
-                <p class="text-sm text-[#706f6c] mt-2">Nullam ut magna et sapien gravida pretium. Aliquam erat volutpat. Maecenas sed nisl sit amet purus dictum vulputate. Cras at arcu at sapien efficitur feugiat.</p>
+                <p class="text-sm text-[#706f6c]">Après plusieurs années passées dans la traduction et la gestion de projets IT, j’ai choisi de me tourner vers le développement pour concrétiser une passion que je nourrissais depuis longtemps. Cette transition s’est faite naturellement : j’y ai retrouvé la même rigueur, le même sens du détail et le même plaisir à transformer une idée en solution concrète et utile.</p>
+                <p class="text-sm text-[#706f6c] mt-3">Ce que j’aime dans le code, c’est l’équilibre entre logique et créativité. Je cherche toujours à optimiser, à rendre les choses plus fluides, plus claires, plus efficaces — sans jamais perdre de vue l’expérience de l’utilisateur final. La satisfaction vient pour moi d’un système qui fonctionne bien, proprement, et qui simplifie réellement la vie de ceux qui l’utilisent.</p>
+                <p class="text-sm text-[#706f6c] mt-2">J’accorde une grande importance à la bienveillance et au respect dans les relations de travail. J’aime collaborer, partager mes connaissances et apprendre des autres. Curieux, honnête et déterminé, je crois en une amélioration continue, individuelle comme collective — celle qui permet à une équipe de progresser ensemble et de construire des projets durables.</p>
             </div>
         </section>
 
@@ -102,19 +102,19 @@
             <div class="bg-[#fff7db] rounded-md p-6">
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div class="text-sm text-[#706f6c] font-medium">2024–PRESENT</div>
+                        <div class="text-sm text-[#706f6c] font-medium">Juin 2025–PRÉSENT</div>
                         <div>
-                            <h2 class="text-lg font-semibold tracking-tight">Senior Developer - Entreprise A</h2>
-                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">Autres postes occupés: Developer, Junior</h3>
-                            <p class="text-sm text-[#706f6c] mt-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ac lacus sed arcu fermentum posuere.</p>
+                            <h2 class="text-lg font-semibold tracking-tight">Formation CDA - C2RT</h2>
+                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">Titre RNCP Concepteur Développeur d'Applications</h3>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div class="text-sm text-[#706f6c] font-medium">2021–2024</div>
+                        <div class="text-sm text-[#706f6c] font-medium">2012–2024</div>
                         <div>
-                            <h2 class="text-lg font-semibold tracking-tight">Developer - Entreprise B</h2>
-                            <p class="text-sm text-[#706f6c] mt-2">Descriptif en Lorem: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent et.</p>
+                            <h2 class="text-lg font-semibold tracking-tight">Traducteur/Chef de projets - e2f</h2>
+                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">Gestion d'un parc informatique, dépannage</h3>
+                            <p class="text-sm text-[#706f6c] mt-2">Titulaire d’un Master en traduction (CETIM), j’ai assuré la traduction, la relecture et le contrôle qualité de contenus IT. J’ai géré des projets multilingues, coordonné des traducteurs et assuré le support technique local : maintenance du parc informatique, installation et dépannage logiciels, rédaction de procédures internes.</p>
                         </div>
                     </div>
                 </div>
@@ -262,8 +262,8 @@
 
     /* Enlarge PHP skill icon without forcing strokes/fills */
     .skill-php svg {
-        width: 1.8rem;
-        height: 1.8rem;
+        width: 2rem;
+        height: 2rem;
         display: inline-block;
         vertical-align: middle;
     }
@@ -288,8 +288,8 @@
     }
 
     .skills-grid svg {
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 1.9rem;
+        height: 1.9rem;
         display: block;
         max-width: 100%;
         max-height: 100%;
@@ -304,8 +304,78 @@
         }
 
         .skills-grid svg {
-            width: 2rem;
-            height: 2rem;
+            width: 2.4rem;
+            height: 2.4rem;
+        }
+    }
+
+    /* Restore outline (stroke) icons for social links.
+       Apply stroke only on the <svg> element so children with explicit stroke="none" are respected. */
+    .social-link svg {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    /* Color values: brand colors for linkedin/gitlab; black for contact/cv in light mode */
+    .social-link--linkedin {
+        color: #0A66C2 !important;
+    }
+
+    .social-link--gitlab {
+        color: #FC6D26 !important;
+    }
+
+    .social-link--contact {
+        color: #000;
+    }
+
+    .social-link--cv {
+        color: #000;
+    }
+
+    /* In dark mode, keep contact/cv visible (white) */
+    .dark .social-link--contact {
+        color: #fff;
+    }
+
+    .dark .social-link--cv {
+        color: #fff;
+    }
+
+    /* Explicitly set the SVG stroke color for contact and cv according to mode.
+       Target the svg element (not children) and avoid !important so cascade works predictably. */
+    .social-link--contact svg {
+        stroke: #000;
+    }
+
+    .dark .social-link--contact svg {
+        stroke: #fff;
+    }
+
+    .social-link--cv svg {
+        stroke: #000;
+    }
+
+    .dark .social-link--cv svg {
+        stroke: #fff;
+    }
+
+    /* More specific rules and prefers-color-scheme fallback to ensure Contact/CV svg strokes are readable
+       without using !important. These target the svg element directly and increase specificity by
+       qualifying with the social-link class. */
+    a.social-link.social-link--cv svg,
+    button.social-link.social-link--contact svg {
+        stroke: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+
+        a.social-link.social-link--cv svg,
+        button.social-link.social-link--contact svg {
+            stroke: #fff;
         }
     }
 </style>
