@@ -74,7 +74,7 @@
     <!-- RIGHT: page scroll handles content; main not an independent scroller -->
     <main id="content" class="order-2 lg:order-2 pt-24 lg:py-24 lg:w-[52%]">
 
-        <section id="about" class="mb-8 px-6 scroll-mt-24" aria-label="À propos">
+        <section id="about" class="mb-8 scroll-mt-24" aria-label="À propos">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">À propos</h2>
             </div>
@@ -85,7 +85,7 @@
             </div>
         </section>
 
-        <section id="projects" class="mb-8 px-6 scroll-mt-24" aria-label="Projets">
+        <section id="projects" class="mb-8 scroll-mt-24" aria-label="Projets">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Projets</h2>
             </div>
@@ -110,7 +110,7 @@
             </div>
         </section>
 
-        <section id="experience" class="mb-8 px-6 scroll-mt-24" aria-label="Expérience">
+        <section id="experience" class="mb-8 scroll-mt-24" aria-label="Expérience">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Expérience</h2>
             </div>
@@ -136,13 +136,22 @@
             </div>
         </section>
 
-        <section id="skills" class="mb-8 px-6 scroll-mt-24" aria-label="Compétences">
+        <section id="skills" class="mb-8 scroll-mt-24" aria-label="Compétences">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Compétences</h2>
             </div>
             <div class="bg-[#dbf7e6] rounded-md p-6">
                 <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div class="p-3 bg-white rounded">PHP / Laravel</div>
+                    <div class="p-3 bg-white rounded flex items-center skill-php">
+                        {{-- Inline PHP icon (local SVG) - no global CSS changes to avoid stroke/fill side-effects --}}
+                        @php $phpSvg = '';
+                        try { $phpSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-php.svg')); } catch (
+                        Exception $e) { }
+                        @endphp
+                        @if($phpSvg)
+                        {!! $phpSvg !!}
+                        @endif
+                    </div>
                     <div class="p-3 bg-white rounded">Tailwind CSS</div>
                     <div class="p-3 bg-white rounded">Alpine.js</div>
                     <div class="p-3 bg-white rounded">Git / CI</div>
@@ -202,6 +211,14 @@
         box-shadow: none !important;
         display: flex !important;
         align-items: center !important;
+    }
+
+    /* Enlarge PHP skill icon without forcing strokes/fills */
+    .skill-php svg {
+        width: 1.8rem;
+        height: 1.8rem;
+        display: inline-block;
+        vertical-align: middle;
     }
 </style>
 @endpush

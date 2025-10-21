@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title', config('app.name', 'Portfolio'))</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -49,35 +49,6 @@
             }
 
             /* adjust very dark backgrounds to a near-black to avoid pure-black contrast traps */
-            .bg-black,
-            .bg-gray-900,
-            .bg-neutral-900 {
-                background-color: #0b0b0b !important;
-            }
-
-            /* specific cards/aside backgrounds made slightly translucent to contrast against text */
-            .card,
-            .panel,
-            .rounded-lg {
-                background-color: rgba(20, 20, 20, 0.75) !important;
-            }
-
-            /* Ensure social/action rounded buttons keep a visible background and border in dark mode */
-            a.p-3.bg-white.border,
-            button.p-3.border {
-                background-color: rgba(255, 255, 255, 0.06) !important;
-                border-color: rgba(255, 255, 255, 0.12) !important;
-            }
-
-            /* Force svg icons inside those buttons to use full opacity and neutral color for readability */
-            a.p-3.bg-white.border svg,
-            button.p-3.border svg,
-            .p-3.border svg {
-                opacity: 1 !important;
-                color: #e6eef6 !important;
-                /* light tint to increase visibility (links like LinkedIn will still use their brand color if explicit) */
-                fill: currentColor !important;
-            }
 
             /* If an icon sets a brand color (like LinkedIn blue), ensure it's bright enough on dark bg */
             a.p-3.bg-white.border svg.text-\[\#0A66C2\] {
@@ -187,15 +158,68 @@
         }
     </style>
 
+
+    <style>
+        /* Mobile-safety helpers (<=640px) - minimal and conservative */
+        @media (max-width: 640px) {
+
+            html,
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+
+            img,
+            video,
+            iframe,
+            embed,
+            object,
+            table,
+            td,
+            blockquote,
+            code,
+            pre,
+            textarea,
+            input {
+                max-width: 100%;
+                height: auto;
+                word-wrap: break-word;
+                overflow-wrap: anywhere;
+            }
+
+            p,
+            li,
+            td,
+            th,
+            blockquote,
+            code,
+            pre,
+            samp,
+            textarea {
+                -webkit-hyphens: auto;
+                -moz-hyphens: auto;
+                hyphens: auto;
+                word-break: break-word;
+                white-space: normal;
+            }
+
+            /* Utility helpers - explicit mobile visibility helpers */
+            .u-mobile {
+                display: block !important;
+            }
+
+            .u-no-mobile {
+                display: none !important;
+            }
+        }
+    </style>
     @stack('styles')
 </head>
 
 <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] min-h-screen">
-    <!-- decorative radial background (pointer-events-none so it doesn't interfere) -->
-    <div class="pointer-events-none fixed inset-0 z-10 transition duration-300" style="background: radial-gradient(600px at 75% 10%, rgba(0,0,0,0.04), transparent 60%);"></div>
-
-    <!-- centered container (Brittany-like structure) with page scrolling -->
-    <div class="mx-auto min-h-screen max-w-screen-xl px-6 py-12 font-sans md:px-12 md:py-16 lg:py-0">
+    <!-- moved radial decorative background onto the main container to avoid a fixed overlay -->
+    <div class="mx-auto min-h-screen max-w-screen-xl px-6 py-12 font-sans md:px-12 md:py-16 lg:py-0" style="background-image: radial-gradient(600px at 75% 10%, rgba(0,0,0,0.04), transparent 60%); background-repeat: no-repeat; background-position: 75% 10%; background-size: 600px;">
         <header class="py-6 flex items-center justify-end">
             {{-- Le titre visible du site est volontairement omis (nom dans la page d'accueil). 
                  Les liens texte CV / Contact ont été retirés : les boutons icônes dans la page
