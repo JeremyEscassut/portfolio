@@ -15,7 +15,7 @@
 
             <!-- Section links (hidden on small screens, visible on desktop) -->
             <nav class="mt-8 mb-6 hidden lg:block">
-                <ul class="space-y-3 text-sm">
+                <ul class="space-y-3 text-sm items-end">
                     <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
                     <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
                     <li><a href="#experience" class="font-medium hover:underline">Expérience</a></li>
@@ -25,47 +25,31 @@
 
             <!-- Social icon buttons (Tabler icons, larger, no border) -->
             <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
-                <!-- LinkedIn (from resources/svg/icon-linkedin.svg) -->
+                <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
                 <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-[#0A66C2]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M0 0h24v24H0z" stroke="none" fill="none" />
-                        <path d="M8 11v5" />
-                        <path d="M8 8v.01" />
-                        <path d="M12 16v-5" />
-                        <path d="M16 16v-3a2 2 0 1 0 -4 0" />
-                        <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" />
-                    </svg>
+                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
+                    @if($svg) {!! $svg !!} @endif
                 </a>
 
-                <!-- GitLab (from resources/svg/icon-gitlab.svg) -->
+                <!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
                 <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center">
-                    <svg class="w-6 h-6 text-[#FC6D27]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M0 0h24v24H0z" stroke="none" fill="none" />
-                        <path d="M21 14l-9 7l-9 -7l3 -11l3 7h6l3 -7z" />
-                    </svg>
+                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
+                    @if($svg) {!! $svg !!} @endif
                 </a>
             </div>
 
             <!-- Actions: icons -->
             <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
-                <!-- Contact (from resources/svg/icon-contact.svg) -->
+                <!-- Contact (inline from resources/svg/icon-contact.svg) -->
                 <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center" aria-label="Ouvrir le contact" style="margin-top:2px;">
-                    <svg class="w-6 h-6 text-[#1b1b18] dark:text-[#e6eef6]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M0 0h24v24H0z" stroke="none" fill="none" />
-                        <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                        <path d="M3 7l9 6l9 -6" />
-                    </svg>
+                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
+                    @if($svg) {!! $svg !!} @endif
                 </button>
 
-                <!-- CV (from resources/svg/icon-cv.svg) -->
+                <!-- CV (inline from resources/svg/icon-cv.svg) -->
                 <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
-                    <svg class="w-6 h-6 text-[#1b1b18] dark:text-[#e6eef6]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M0 0h24v24H0z" stroke="none" fill="none" />
-                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                        <path d="M12 17v-6" />
-                        <path d="M9.5 14.5l2.5 2.5l2.5 -2.5" />
-                    </svg>
+                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-cv.svg')); } catch (Exception $e) { } @endphp
+                    @if($svg) {!! $svg !!} @endif
                 </a>
             </div>
         </div>
@@ -141,21 +125,83 @@
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Compétences</h2>
             </div>
-            <div class="bg-[#dbf7e6] rounded-md p-6">
-                <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div class="p-3 bg-white rounded flex items-center skill-php">
-                        {{-- Inline PHP icon (local SVG) - no global CSS changes to avoid stroke/fill side-effects --}}
-                        @php $phpSvg = '';
-                        try { $phpSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-php.svg')); } catch (
-                        Exception $e) { }
-                        @endphp
-                        @if($phpSvg)
-                        {!! $phpSvg !!}
-                        @endif
+
+            <!-- Simplified skills container: no green background, tighter gaps, centered icon tiles -->
+            <div class="p-0 skills-grid">
+                <div class="space-y-4 text-sm">
+                    <!-- Front group -->
+                    <div>
+                        <h3 class="text-sm font-semibold mb-2">Front</h3>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
+                            <div class="bg-white rounded flex items-center justify-center skill-angular skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-angular.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-html5 skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-html5.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-ionic skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-ionic.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-3 bg-white rounded">Tailwind CSS</div>
-                    <div class="p-3 bg-white rounded">Alpine.js</div>
-                    <div class="p-3 bg-white rounded">Git / CI</div>
+
+                    <!-- Back group -->
+                    <div>
+                        <h3 class="text-sm font-semibold mb-2">Back</h3>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
+                            <div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-laravel.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-nodejs skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-nodejs.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-python skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-python.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-django skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-django.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-java skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-java.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-spring-boot skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-spring-boot.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-symfony skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-symfony.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Others group -->
+                    <div>
+                        <h3 class="text-sm font-semibold mb-2">Autres</h3>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
+                            <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-jira.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-postman skill-tile">
+                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postman.svg')); } catch (Exception $e) { } @endphp
+                                @if($svg) {!! $svg !!} @endif
+                            </div>
+                            <div class="bg-white rounded flex items-center justify-center skill-php skill-tile">
+                                {{-- keep PHP inline as before --}}
+                                @php $phpSvg = ''; try { $phpSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-php.svg')); } catch (Exception $e) { } @endphp
+                                @if($phpSvg) {!! $phpSvg !!} @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -220,6 +266,47 @@
         height: 1.8rem;
         display: inline-block;
         vertical-align: middle;
+    }
+
+    /* Harmonize skill icons and force equal square tiles inside #skills */
+    .skills-grid .skill-tile {
+        /* make tile a square using aspect-ratio and a fixed min size */
+        aspect-ratio: 1 / 1;
+        min-width: 3.5rem;
+        /* ensures a reasonable tappable size on mobile */
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        box-sizing: border-box;
+    }
+
+    /* The actual grid cells (.skill-tile) will size according to their grid column width; to avoid variable heights due to surrounding content, ensure grid items don't stretch vertically */
+    .skills-grid .grid>.skill-tile {
+        height: auto;
+    }
+
+    .skills-grid svg {
+        width: 1.6rem;
+        height: 1.6rem;
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    /* Slightly larger tiles on desktop (bigger min-size and larger icons) */
+    @media (min-width: 1024px) {
+        .skills-grid .skill-tile {
+            min-width: 5rem;
+            /* larger tappable area on desktop */
+        }
+
+        .skills-grid svg {
+            width: 2rem;
+            height: 2rem;
+        }
     }
 </style>
 @endpush
