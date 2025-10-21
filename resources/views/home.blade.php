@@ -13,8 +13,8 @@
                 <p class="text-[#706f6c] mt-3">Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.</p>
             </div>
 
-            <!-- Section links -->
-            <nav class="mt-8 mb-6">
+            <!-- Section links (hidden on small screens, visible on desktop) -->
+            <nav class="mt-8 mb-6 hidden lg:block">
                 <ul class="space-y-3 text-sm">
                     <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
                     <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
