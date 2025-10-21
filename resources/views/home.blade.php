@@ -89,22 +89,23 @@
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Projets</h2>
             </div>
-            <div class="bg-[#dbdbd7] rounded-md p-6">
+            <!-- Remove gray side panel so projects use full width; images are placed below text and sized to 3:2 aspect ratio -->
+            <div class="p-0">
                 <div class="flex flex-col gap-4">
-                    <div class="w-full p-4 bg-white rounded flex items-start gap-4">
-                        <img loading="lazy" width="96" height="96" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=400&auto=format&fit=crop&crop=faces" alt="Project image" class="w-24 h-24 object-cover rounded flex-shrink-0">
+                    <div class="w-full p-4 bg-white rounded flex flex-col gap-4">
                         <div class="flex-1 text-sm text-[#706f6c]">
-                            <div class="text-base font-semibold">Projet 1</div>
+                            <a href="#" class="text-base font-semibold hover:underline">Projet 1</a>
                             <p class="mt-1 text-sm text-[#706f6c]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Description courte du projet (placeholder).</p>
                         </div>
+                        <img loading="lazy" width="600" height="400" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop&crop=faces" alt="Project image" class="rounded" style="width:100%;height:auto;object-fit:cover;aspect-ratio:3/2;">
                     </div>
 
-                    <div class="w-full p-4 bg-white rounded flex items-start gap-4">
-                        <img loading="lazy" width="96" height="96" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=400&auto=format&fit=crop&crop=faces" alt="Project image 2" class="w-24 h-24 object-cover rounded flex-shrink-0">
+                    <div class="w-full p-4 bg-white rounded flex flex-col gap-4">
                         <div class="flex-1 text-sm text-[#706f6c]">
-                            <div class="text-base font-semibold">Projet 2</div>
+                            <a href="#" class="text-base font-semibold hover:underline">Projet 2</a>
                             <p class="mt-1 text-sm text-[#706f6c]">Lorem ipsum dolor sit amet. Brève description du projet en quelques mots (placeholder).</p>
                         </div>
+                        <img loading="lazy" width="600" height="400" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1200&auto=format&fit=crop&crop=faces" alt="Project image 2" class="rounded" style="width:100%;height:auto;object-fit:cover;aspect-ratio:3/2;">
                     </div>
                 </div>
             </div>
@@ -442,6 +443,54 @@
             recalc();
             onScroll();
         }, 120);
+    })();
+</script>
+<script>
+    // Ensure footer reserved space on mobile when it becomes stuck
+    (function() {
+        const footer = document.getElementById('right-footer');
+        const main = document.querySelector('main#content') || document.querySelector('main');
+        if (!footer || !main) return;
+
+        function applyFooterPadding() {
+            // Only on small screens (mobile)
+            if (window.innerWidth > 640) {
+                main.style.paddingBottom = '';
+                return;
+            }
+            if (footer.classList.contains('stuck')) {
+                // set padding-bottom equal to footer's outer height
+                const rect = footer.getBoundingClientRect();
+                const height = Math.ceil(rect.height);
+                main.style.paddingBottom = height + 'px';
+            } else {
+                main.style.paddingBottom = '';
+            }
+        }
+
+        // Observe class attribute changes on the footer to detect 'stuck' toggles
+        const observer = new MutationObserver(mutations => {
+            for (const m of mutations) {
+                if (m.type === 'attributes' && m.attributeName === 'class') {
+                    applyFooterPadding();
+                }
+            }
+        });
+
+        observer.observe(footer, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        // Also run on resize/scroll/load to ensure initial state
+        window.addEventListener('resize', applyFooterPadding, {
+            passive: true
+        });
+        window.addEventListener('load', applyFooterPadding);
+        window.addEventListener('orientationchange', applyFooterPadding);
+
+        // initial check
+        setTimeout(applyFooterPadding, 60);
     })();
 </script>
 <script>
