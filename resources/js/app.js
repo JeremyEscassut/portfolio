@@ -8,3 +8,6 @@ import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 Alpine.start();
+
+// Ambient halo: small, non-intrusive background glow updated on scroll/mousemove
+import './halo';

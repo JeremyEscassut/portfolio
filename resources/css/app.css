@@ -1,5 +1,31 @@
 @import "tailwindcss";
 
+/* Theme variables: palette épurée, non-blanc (inspiré badminton: bleu/vert atténués) */
+:root {
+    /* Background & surfaces */
+    --bg: #f3f7f6; /* very light aqua-gray (not pure white) */
+    --surface: #fbfdfe; /* slightly brighter surface (cards) */
+    --edge: rgba(11, 23, 26, 0.06); /* subtle borders */
+
+    /* Typography */
+    --text: #0b1b20; /* dark warm-blue/charcoal for high contrast */
+    --muted: #51636a; /* muted text for secondary information */
+
+    /* Accents (muted badminton court colors) */
+    --accent-primary: #2a8fb7; /* muted court blue */
+    --accent-secondary: #7fb77e; /* soft court green */
+
+    /* Halo / ambient glow */
+    --halo-x: 50%;
+    --halo-y: 40%; /* start visible and centered lower */
+    --halo-opacity: 0.16; /* slightly stronger intensity without increasing size */
+    --halo-enabled: 1; /* can be set to 0 to disable */
+
+    /* Misc */
+    --radius: 0.5rem;
+    --shadow-subtle: 0 6px 18px rgba(11, 23, 26, 0.04);
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -11,12 +37,79 @@
         "Noto Color Emoji";
 }
 
+/* Global base styles for the light, minimal theme */
+html,
+body {
+    height: 100%;
+}
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(
+        --font-sans,
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial
+    );
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.45;
+    transition: background-color 240ms ease, color 240ms ease;
+    position: relative;
+    /* make stacking context so the halo can be placed behind content */
+    isolation: isolate;
+}
+
+/* Subtle selection color */
+::selection {
+    background: color-mix(in srgb, var(--accent-primary) 18%, transparent);
+    color: var(--text);
+}
+
+/* Ambient halo implemented with a fixed pseudo-element; updated via JS on scroll/mousemove */
+body::before {
+    content: "";
+    position: fixed;
+    inset: -20% -20% -20% -20%;
+    pointer-events: none;
+    z-index: -1;
+    /* keep gradients compact but increase visibility: intensity up, sizes moderate */
+    background: radial-gradient(
+            600px 600px at var(--halo-x) var(--halo-y),
+            rgba(42, 143, 183, var(--halo-opacity)) 0%,
+            rgba(127, 183, 126, calc(var(--halo-opacity) * 0.45)) 28%,
+            transparent 44%
+        ),
+        radial-gradient(
+            1000px 700px at calc(var(--halo-x) + 20px)
+                calc(var(--halo-y) + 60px),
+            rgba(42, 143, 183, calc(var(--halo-opacity) * 0.55)) 0%,
+            transparent 36%
+        );
+    mix-blend-mode: screen;
+    opacity: var(--halo-enabled);
+    transition: opacity 420ms ease;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        transition: none;
+    }
+}
+
 /* Project card and tag styles for portfolio project vignettes */
 .project-card {
-    background: #ffffff;
-    border-radius: 0.5rem;
+    /* transparent surface to keep layout but not heavy backgrounds */
+    background: transparent;
+    border-radius: var(--radius);
     padding: 1rem;
-    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+    /* remove border and shadow so card doesn't detach from background */
+    box-shadow: none;
+    border: none;
 }
 
 .project-image {
@@ -25,10 +118,45 @@
     height: auto;
     max-height: 48vh; /* responsive cap: near half viewport height */
     object-fit: contain; /* show whole image without cropping */
-    background-color: #f8fafc; /* light neutral background to show letterboxing */
+    /* images sit on transparent surfaces to let background show through */
+    background-color: transparent;
     display: block;
-    border-radius: 0.5rem;
+    border-radius: calc(var(--radius) - 0.125rem);
     padding: 0.25rem; /* small padding so background shows around the image */
+}
+
+/* Specific override: remove border/background for the aside panel used in layout
+   Selector targets the Tailwind-generated classes (escaped) path used in markup */
+body > div > main > div.lg\:flex.lg\:justify-between.lg\:gap-4 > aside {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* The markup actually places the shadow on the inner div inside the aside (class="shadow").
+   Remove that shadow and any bg/outline so the aside panel blends with the page. */
+.lg\:flex.lg\:justify-between.lg\:gap-4 > aside > div.shadow,
+aside > div.shadow {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Ensure project cards and specific example panels (Livret CDA, Breaking Cat) don't show borders */
+.project-card,
+#about > .bg-\[\#fff2f2\],
+#experience > .bg-\[\#fff7db\] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* More specific overrides for Tailwind JIT literal background classes (if used directly on divs) */
+#about > .bg-\[\#fff2f2\].rounded-md.p-6,
+#experience > .bg-\[\#fff7db\].rounded-md.p-6 {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .project-tags {
@@ -44,26 +172,45 @@
     padding: 0.22rem 0.6rem;
     font-size: 0.8rem;
     line-height: 1;
-    color: #0f172a;
+    color: var(--text);
     border-radius: 9999px; /* pill */
-    /* subtle contrasting background */
-    background-color: #fbfbff;
-    /* gradient border effect using double background + transparent border */
-    background-image: linear-gradient(#fbfbff, #fbfbff),
-        linear-gradient(
-            135deg,
-            rgba(96, 165, 250, 0.12),
-            rgba(124, 58, 237, 0.12)
-        );
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
-    border: 1px solid transparent;
+    /* keep tags visible: subtle green-tinted background matching accent-secondary */
+    background-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 12%,
+        var(--surface) 88%
+    );
+    border: 1px solid rgba(11, 23, 26, 0.04);
     box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* Slightly stronger contrast on hover to suggest a button-like interaction */
 .project-tag:hover {
-    filter: brightness(0.98);
+    transform: translateY(-1px);
+    transition: transform 160ms ease;
+}
+
+/* Skill icon tiles: keep a slightly different, matched light-green background */
+.skills-grid .skill-tile,
+.skill-tile {
+    background-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 14%,
+        var(--surface) 86%
+    );
+    border: 1px solid
+        color-mix(in srgb, var(--accent-secondary) 8%, rgba(11, 23, 26, 0.06));
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+/* If markup still uses explicit utility class bg-white on tiles, override it */
+.skills-grid .bg-white.skill-tile,
+.skill-tile.bg-white {
+    background-color: color-mix(
+        in srgb,
+        var(--accent-secondary) 14%,
+        var(--surface) 86%
+    ) !important;
 }
 
 @media (min-width: 1024px) {
