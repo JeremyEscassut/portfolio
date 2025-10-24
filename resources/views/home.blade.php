@@ -280,9 +280,27 @@
         bottom: 0;
         right: 0;
         left: 0;
-        background: rgba(255, 255, 255, 0.95);
-        box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.06);
+        /* keep visual appearance identical to page: transparent, no border/shadow */
+        background: transparent !important;
+        box-shadow: none !important;
         z-index: 40;
+    }
+
+    /* On large screens, constrain the fixed footer to the right column
+       (aside uses lg:w-[48%], main uses lg:w-[52%] — keep footer aligned with main) */
+    @media (min-width: 1024px) {
+        #right-footer.stuck {
+            left: 48%;
+            /* start where the left column ends */
+            right: 0;
+            /* stretch to the viewport right edge (fills main column) */
+            width: 52%;
+            /* explicit width matching main's fraction to be robust */
+            max-width: calc(100% - 48%);
+            /* remain visually identical when stuck */
+            background: transparent !important;
+            box-shadow: none !important;
+        }
     }
 
     /* Contact/CV actions when fixed on small screens */
