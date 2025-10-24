@@ -66,6 +66,7 @@
                 <p class="text-sm text-[#706f6c]">Après plusieurs années passées dans la traduction et la gestion de projets IT, j’ai choisi de me tourner vers le développement pour concrétiser une passion que je nourrissais depuis longtemps. Cette transition s’est faite naturellement : j’y ai retrouvé la même rigueur, le même sens du détail et le même plaisir à transformer une idée en solution concrète et utile.</p>
                 <p class="text-sm text-[#706f6c] mt-3">Ce que j’aime dans le code, c’est l’équilibre entre logique et créativité. Je cherche toujours à optimiser, à rendre les choses plus fluides, plus claires, plus efficaces — sans jamais perdre de vue l’expérience de l’utilisateur final. La satisfaction vient pour moi d’un système qui fonctionne bien, proprement, et qui simplifie réellement la vie de ceux qui l’utilisent.</p>
                 <p class="text-sm text-[#706f6c] mt-2">J’accorde une grande importance à la bienveillance et au respect dans les relations de travail. J’aime collaborer, partager mes connaissances et apprendre des autres. Curieux, honnête et déterminé, je crois en une amélioration continue, individuelle comme collective — celle qui permet à une équipe de progresser ensemble et de construire des projets durables.</p>
+                <p class="text-sm text-[#706f6c] mt-2">En dehors du code, je trouve mon équilibre dans le sport et la musique : badminton, course à pied, salsa et bachata rythment mon temps libre et nourrissent mon énergie au quotidien.</p>
             </div>
         </section>
 
@@ -76,20 +77,48 @@
             <!-- Remove gray side panel so projects use full width; images are placed below text and sized to 3:2 aspect ratio -->
             <div class="p-0">
                 <div class="flex flex-col gap-4">
-                    <div class="w-full p-4 bg-white rounded flex flex-col gap-4">
+                    <div class="w-full p-4 bg-white rounded flex flex-col gap-4 project-card">
                         <div class="flex-1 text-sm text-[#706f6c]">
-                            <a href="#" class="text-base font-semibold hover:underline">Projet 1</a>
-                            <p class="mt-1 text-sm text-[#706f6c]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Description courte du projet (placeholder).</p>
+                            <div class="flex items-center">
+                                <span class="text-base font-semibold">Livret CDA</span>
+                                @php $repoSvg = ''; try { $repoSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab-repo-link.svg')); } catch (Exception $e) { } @endphp
+                                <a href="https://gitlab.com/JeremyEscassut/livret-cda" target="_blank" rel="noopener noreferrer" aria-label="Voir le dépôt GitLab - Livret CDA" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                    @if($repoSvg) {!! $repoSvg !!} @endif
+                                </a>
+                            </div>
+                            <p class="mt-2 text-sm text-[#706f6c]">Application web pour gérer sessions de formation, utilisateurs (profils), compétences et espaces admin. Elle inclut des fixtures pour peupler les données, des contrôleurs et templates Twig pour l’IU, ainsi qu’une suite de tests PHPUnit avec rapports de couverture. Le code est organisé avec Doctrine pour la persistance et des outils de génération/CI.</p>
+
+                            <div class="project-tags mt-3">
+                                <span class="project-tag">PHP</span>
+                                <span class="project-tag">Symfony</span>
+                                <span class="project-tag">EasyAdmin</span>
+                                <span class="project-tag">PHPUnit</span>
+                            </div>
+
+
                         </div>
-                        <img loading="lazy" width="600" height="400" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop&crop=faces" alt="Project image" class="rounded" style="width:100%;height:auto;object-fit:cover;aspect-ratio:3/2;">
+                        <img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Livret_CDA.png'))) }}" alt="Aperçu du projet Livret CDA" class="rounded project-image">
                     </div>
 
-                    <div class="w-full p-4 bg-white rounded flex flex-col gap-4">
+                    <div class="w-full p-4 bg-white rounded flex flex-col gap-4 project-card">
                         <div class="flex-1 text-sm text-[#706f6c]">
-                            <a href="#" class="text-base font-semibold hover:underline">Projet 2</a>
-                            <p class="mt-1 text-sm text-[#706f6c]">Lorem ipsum dolor sit amet. Brève description du projet en quelques mots (placeholder).</p>
+                            <div class="flex items-center">
+                                <span class="text-base font-semibold">Breaking Cat</span>
+                                @php $repoSvg = ''; try { $repoSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab-repo-link.svg')); } catch (Exception $e) { } @endphp
+                                <a href="https://gitlab.com/JeremyEscassut/breakingcat" target="_blank" rel="noopener noreferrer" aria-label="Voir le dépôt GitLab - Breaking Cat" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                    @if($repoSvg) {!! $repoSvg !!} @endif
+                                </a>
+                            </div>
+                            <p class="mt-2 text-sm text-[#706f6c]">Mini‑jeu web accessible après authentification, avec deux modes de jeu (Normal et Hardcore, ce dernier indiqué comme inactif). Le joueur lance une partie et enregistre son score, qui alimente un tableau des meilleurs scores affiché sur l’accueil. L’interface est responsive (Bootstrap) avec un mode thème clair/sombre, et les données (utilisateurs/scores) sont persistées en base MySQL via PDO.</p>
+
+                            <div class="project-tags mt-3">
+                                <span class="project-tag">PHP</span>
+                                <span class="project-tag">MySQL</span>
+                                <span class="project-tag">PDO</span>
+                                <span class="project-tag">JavaScript</span>
+                            </div>
                         </div>
-                        <img loading="lazy" width="600" height="400" src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&w=1200&auto=format&fit=crop&crop=faces" alt="Project image 2" class="rounded" style="width:100%;height:auto;object-fit:cover;aspect-ratio:3/2;">
+                        <img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Breaking_Cat.png'))) }}" alt="Breaking Cat - aperçu" class="rounded project-image">
                     </div>
                 </div>
             </div>
@@ -192,8 +221,18 @@
                                 @if($svg) {!! $svg !!} @endif
                             </div>
                             <div class="bg-white rounded flex items-center justify-center skill-postman skill-tile">
-                                @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postman.svg')); } catch (Exception $e) { } @endphp
-                                @if($svg) {!! $svg !!} @endif
+                                @php
+                                $postmanSvg = '';
+                                try { $postmanSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postman.svg')); } catch (Exception $e) { }
+                                $postmanDarkSvg = '';
+                                try { $postmanDarkSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postman-dark.svg')); } catch (Exception $e) { }
+                                @endphp
+                                @if($postmanSvg)
+                                <span class="postman-light">{!! $postmanSvg !!}</span>
+                                @endif
+                                @if($postmanDarkSvg)
+                                <span class="postman-dark" aria-hidden="true">{!! $postmanDarkSvg !!}</span>
+                                @endif
                             </div>
                             <div class="bg-white rounded flex items-center justify-center skill-php skill-tile">
                                 {{-- keep PHP inline as before --}}
@@ -376,6 +415,34 @@
         a.social-link.social-link--cv svg,
         button.social-link.social-link--contact svg {
             stroke: #fff;
+        }
+    }
+
+    /* Ensure certain skill icons use white stroke in dark mode for better contrast */
+    .dark .skill-ionic svg,
+    .dark .skill-java svg,
+    .dark .skill-spring-boot svg,
+    .dark .skill-jira svg {
+        stroke: #fff;
+        fill: none;
+    }
+
+    /* Postman: show dark variant in dark mode, light variant in light mode */
+    .postman-dark {
+        display: none;
+    }
+
+    .postman-light {
+        display: inline-block;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .postman-dark {
+            display: inline-block;
+        }
+
+        .postman-light {
+            display: none;
         }
     }
 </style>
