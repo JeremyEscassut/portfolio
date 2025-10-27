@@ -658,59 +658,13 @@ aside nav a.font-semibold:focus::before {
     max-width: 100% !important;
 }
 
-/* DEBUG helper: when you add the class `debug-halo` to the <html> element this
-   will outline every descendant inside the target main wrapper so you can see
-   which element(s) are blocking the halo. This is intentionally opt-in — add
-   the class via the console while debugging, then remove it. NOTE: this will
-   temporarily change layout/sticky behaviour while active; use only for
-   diagnostic purposes. */
-.dark.debug-halo body > div > main > div:nth-child(1) > main,
-.dark.debug-halo body > div > main > div:nth-child(1) > main * {
-    /* Visible diagnostic outline */
-    outline: 2px dashed rgba(255, 128, 64, 0.95) !important;
-    /* Make any backgrounds invisible so halo shows through */
-    background: transparent !important;
-    background-image: none !important;
-    box-shadow: none !important;
+/* Cleaned: removed debug-only helpers and temporary z-index workarounds.
+   The debug helpers were opt-in (html.debug-halo) and are no longer needed.
+   Keep a minimal, safe rule to ensure the specific project containers in the
+   Projects section remain transparent and do not create stacking contexts that
+   could occlude the ambient halo in `.dark`. This targets the two divs you
+   reported so the rest of the page remains unaffected. */
 
-    /* Neutralize common stacking-context creators */
-    transform: none !important;
-    -webkit-transform: none !important;
-    filter: none !important;
-    opacity: 1 !important;
-    position: static !important;
-    z-index: auto !important;
-    isolation: auto !important;
-    mix-blend-mode: normal !important;
-    backface-visibility: visible !important;
-    -webkit-backface-visibility: visible !important;
-    will-change: auto !important;
-    overflow: visible !important;
-}
-
-/* Temporary targeted fix: if a specific content block (observed at
-   /html/body/div/main/div[1]/main/section[2]/div[2]/div/div[1]) rises above
-   the halo while scrolling, lower its stacking so the halo (z=12) remains
-   visible. This is intentionally narrowly scoped to the reported selector.
-   If you confirm this fixes the issue, we can keep it; otherwise I'll craft
-   a safer adjustment based on computed styles. */
-.dark
-    body
-    > div
-    > main
-    > div:nth-child(1)
-    > main
-    section:nth-child(2)
-    > div:nth-child(2)
-    > div
-    > div:first-child {
-    z-index: 11 !important; /* just below halo (12) */
-    position: relative !important;
-    transform: none !important;
-    -webkit-transform: none !important;
-}
-
-/* Also ensure any children don't create a higher stacking context */
 .dark
     body
     > div
@@ -730,133 +684,22 @@ aside nav a.font-semibold:focus::before {
     section:nth-child(2)
     > div:nth-child(2)
     > div
-    > div:first-child
-    * {
-    z-index: 11 !important;
-    backface-visibility: visible !important;
-    will-change: auto !important;
-    filter: none !important;
-}
-
-/* Quick helper to temporarily lower any z-index that might hide the halo.
-   Only active when .debug-halo is present. It will set large elements to auto
-   stacking so the halo (body::before z=12) can be visually tested. */
-.dark.debug-halo body > div > main > div:nth-child(1),
-.dark.debug-halo body > div > main > div:nth-child(1) > main,
-.dark.debug-halo body > div > main > div:nth-child(1) > main * {
+    > div:nth-child(2) {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    position: static !important;
     z-index: auto !important;
     transform: none !important;
     -webkit-transform: none !important;
     filter: none !important;
-    box-shadow: none !important;
-    position: static !important;
+    will-change: auto !important;
+    isolation: auto !important;
     overflow: visible !important;
-    opacity: 1 !important;
-    isolation: auto !important;
-    mix-blend-mode: normal !important;
-    backface-visibility: visible !important;
-    will-change: auto !important;
 }
 
-/* Extended debug & safer temporary fix
-   - When .debug-halo is enabled, additionally mark any stacking-context creators
-     (positioned/sticky/fixed, transform/will-change, perspective, filter) inside
-     the main wrapper so you can identify the true blocking node.
-   - A broader temporary rule targets the whole second section container (observed
-     as the common source) and forces its descendants to neutral stacking so the
-     halo can be validated while scrolling. This is intentionally conservative
-     (only active for .dark and for the debug class is opt-in). If this makes the
-     halo visible, we can craft a minimal permanent rule based on concrete console
-     diagnostics.
-*/
-.dark.debug-halo
-    body
-    > div
-    > main
-    > div:nth-child(1)
-    > main
-    section:nth-child(2),
-.dark.debug-halo
-    body
-    > div
-    > main
-    > div:nth-child(1)
-    > main
-    section:nth-child(2)
-    * {
-    outline: 2px dashed rgba(0, 200, 120, 0.85) !important;
-    background: transparent !important;
-    box-shadow: none !important;
-
-    /* Neutralize known stacking-context creators */
-    transform: none !important;
-    -webkit-transform: none !important;
-    filter: none !important;
-    perspective: none !important;
-    will-change: auto !important;
-    backface-visibility: visible !important;
-    position: static !important;
-    z-index: auto !important;
-    isolation: auto !important;
-}
-
-/* Broader temporary dark-mode rule: if any element in this second section becomes
-   positioned (sticky/fixed/relative) during scroll and would sit above the halo,
-   force it to sit just below the halo (z=11). This only applies in `.dark` and is
-   narrowly scoped to avoid collateral effects elsewhere on the page. Keep this
-   as a temporary test — if it fixes the issue we'll replace with a minimal rule. */
-.dark.debug-halo
-    body
-    > div
-    > main
-    > div:nth-child(1)
-    > main
-    section:nth-child(2),
-.dark.debug-halo
-    body
-    > div
-    > main
-    > div:nth-child(1)
-    > main
-    section:nth-child(2)
-    * {
-    outline: 2px dashed rgba(0, 200, 120, 0.85) !important;
-    background: transparent !important;
-    box-shadow: none !important;
-
-    /* Neutralize known stacking-context creators (diagnostic only) */
-    transform: none !important;
-    -webkit-transform: none !important;
-    filter: none !important;
-    perspective: none !important;
-    will-change: auto !important;
-    backface-visibility: visible !important;
-    position: static !important;
-    z-index: auto !important;
-    isolation: auto !important;
-}
-
-/* Minimal temporary fix: only lower the specific reported content block that
-   was occluding the halo. This mirrors the earlier narrow selector that was
-   previously used and avoids affecting all descendants (prevents visual dupes). */
-.dark
-    body
-    > div
-    > main
-    > div:nth-child(1)
-    > main
-    section:nth-child(2)
-    > div:nth-child(2)
-    > div
-    > div:first-child {
-    z-index: 11 !important; /* just below halo */
-    position: relative !important;
-    transform: none !important;
-    -webkit-transform: none !important;
-}
-
-/* Make sure project cards inside that section do not themselves carry elevated
-   stacking — keep them at auto so they don't produce a second opaque layer. */
+/* For safety, ensure project-card elements inside Projects do not elevate stacking */
 .dark
     body
     > div
@@ -865,6 +708,8 @@ aside nav a.font-semibold:focus::before {
     > main
     section:nth-child(2)
     .project-card {
-    z-index: auto !important;
     position: static !important;
+    z-index: auto !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
