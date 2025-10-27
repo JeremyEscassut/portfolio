@@ -508,27 +508,86 @@
 
 
 <style>
-    /* Contact modal form — ensure readable in dark mode: darker fields, white text */
+    /* Contact modal — green-tinted surface matching the --accent-secondary token.
+       Applies in both light and dark modes; dark-mode tweaks below. */
+    div[role="dialog"] {
+        /* explicit requested modal background color */
+        background-color: #40553f !important;
+        color: #ffffff !important;
+        border-radius: 0.5rem !important;
+        border: none !important;
+    }
+
+    /* Inner content color overrides to ensure strong contrast on labels and help text */
+    div[role="dialog"] .p-6,
+    div[role="dialog"] .p-6 *,
+    div[role="dialog"] label {
+        color: var(--text) !important;
+    }
+
+    /* Inputs: lightly transparent on top of the tinted surface so they read as fields */
+    div[role="dialog"] input,
+    div[role="dialog"] textarea,
+    div[role="dialog"] select {
+        background-color: rgba(255, 255, 255, 0.88) !important;
+        color: var(--text) !important;
+        border: 1px solid rgba(11, 23, 26, 0.06) !important;
+    }
+
+    div[role="dialog"] input::placeholder,
+    div[role="dialog"] textarea::placeholder {
+        color: rgba(11, 23, 26, 0.45) !important;
+    }
+
+    /* Button styles scoped to the dialog */
+    div[role="dialog"] .modal-cancel {
+        background: transparent !important;
+        color: color-mix(in srgb, var(--accent-secondary) 40%, var(--text) 60%) !important;
+        border: 1px solid color-mix(in srgb, var(--accent-secondary) 18%, rgba(11, 23, 26, 0.06)) !important;
+        padding: 0.5rem 1rem !important;
+        border-radius: 0.375rem !important;
+    }
+
+    div[role="dialog"] .modal-send {
+        background: var(--accent-secondary) !important;
+        color: #ffffff !important;
+        border: none !important;
+        padding: 0.5rem 1rem !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 6px 18px rgba(42, 143, 183, 0.08) !important;
+    }
+
+    /* Hover states for affordance */
+    div[role="dialog"] .modal-cancel:hover {
+        background: color-mix(in srgb, var(--accent-secondary) 6%, transparent) !important;
+    }
+
+    div[role="dialog"] .modal-send:hover {
+        filter: brightness(0.96) !important;
+    }
+
+    /* Dark mode: make the dialog slightly darker but keep the green tint
+       and ensure form fields use darker translucent inputs for legibility */
     .dark div[role="dialog"] {
-        background-color: var(--surface) !important;
-        color: var(--text) !important;
+        /* keep the same requested color in dark mode for consistency */
+        background-color: #40553f !important;
+        color: #ffffff !important;
     }
 
-    .dark div[role="dialog"] .p-6,
-    .dark div[role="dialog"] .p-6 * {
-        color: var(--text) !important;
-    }
-
-    .dark div[role="dialog"] label {
-        color: var(--text) !important;
+    /* Very-specific selector to override any utility classes (bg-white, etc.)
+       that may still apply to the dialog container in the DOM. Matches the
+       element you provided precisely and forces the requested color. */
+    body>div>main>div:nth-child(4)>div>div.fixed.inset-0.flex.items-center.justify-center.p-4>div[role="dialog"] {
+        background-color: #40553f !important;
+        color: #ffffff !important;
     }
 
     .dark div[role="dialog"] input,
     .dark div[role="dialog"] textarea,
     .dark div[role="dialog"] select {
         background-color: rgba(255, 255, 255, 0.04) !important;
-        color: #fff !important;
-        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: var(--text) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
     }
 
     .dark div[role="dialog"] input::placeholder,
@@ -536,15 +595,14 @@
         color: rgba(255, 255, 255, 0.68) !important;
     }
 
-    .dark div[role="dialog"] button.mr-2 {
-        border-color: rgba(255, 255, 255, 0.12) !important;
-        color: #fff !important;
+    .dark div[role="dialog"] .modal-cancel {
+        color: color-mix(in srgb, var(--accent-secondary) 38%, #fff 62%) !important;
+        border: 1px solid color-mix(in srgb, var(--accent-secondary) 18%, rgba(255, 255, 255, 0.06)) !important;
         background: transparent !important;
     }
 
-    /* Keep submit button readable (already dark bg) */
-    .dark div[role="dialog"] button[type="submit"] {
-        background-color: #111 !important;
+    .dark div[role="dialog"] .modal-send {
+        background: color-mix(in srgb, var(--accent-secondary) 62%, #0b1b20 38%) !important;
         color: #fff !important;
     }
 </style>
@@ -627,8 +685,8 @@
                             </div>
 
                             <div class="flex justify-end items-center gap-3">
-                                <button type="button" @click="closeModal()" class="mr-2 px-4 py-2 border rounded">Annuler</button>
-                                <button type="submit" class="px-4 py-2 bg-[#1b1b18] text-white rounded">Envoyer</button>
+                                <button type="button" @click="closeModal()" class="mr-2 px-4 py-2 border rounded modal-cancel">Annuler</button>
+                                <button type="submit" class="px-4 py-2 bg-[#1b1b18] text-white rounded modal-send">Envoyer</button>
                             </div>
                         </form>
                     </div>
