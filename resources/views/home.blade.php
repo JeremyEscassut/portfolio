@@ -316,6 +316,19 @@
         z-index: 40;
     }
 
+    /* Ensure dark-mode mirrors the same fixed/footer geometry as light mode so the
+       sticky-to-fixed transition behaves identically on desktop. This prevents the
+       footer from being shifted or resized unexpectedly when `.dark` is active. */
+    .dark #right-footer.stuck {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: transparent !important;
+        box-shadow: none !important;
+        z-index: 40;
+    }
+
     /* On large screens, constrain the fixed footer to the right column
        (aside uses lg:w-[48%], main uses lg:w-[52%] — keep footer aligned with main) */
     @media (min-width: 1024px) {
@@ -330,6 +343,26 @@
             /* remain visually identical when stuck */
             background: transparent !important;
             box-shadow: none !important;
+        }
+
+        /* Dark-mode mirror for desktop widths */
+        .dark #right-footer.stuck {
+            left: 48%;
+            right: 0;
+            width: 52%;
+            max-width: calc(100% - 48%);
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /* Prevent footer text wrapping in dark mode when fixed on desktop.
+           Mirror the light-mode layout and keep content on a single line. */
+        .dark #right-footer.stuck {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
         }
     }
 

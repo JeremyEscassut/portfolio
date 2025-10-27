@@ -261,6 +261,8 @@ open storage/coverage/index.html
    S'assurer que les 2 prochains points soient des bonnes pratiques de développement.
 9. Nettoyer le code pour éventuellement mettre les règles de style dans le fichier CSS approprié.
 10. Nettoyer le code pour placer le code javascript dans un fichier dédié.
+11. Améliorer le contraste pour les personnes à visibilité réduite
+12. Mode focus pour les boutons Contact et CV
 
 Actuellement, quand on est en mode @media, les titres des sections, ex. :
 #about > div.sticky.top-0.z-20.-mx-6.mb-4.w-screen.bg-transparent.px-6.py-3.backdrop-blur.lg\:sr-only.lg\:relative.lg\:top-auto.lg\:mx-auto.lg\:w-full.lg\:px-0.lg\:py-0.lg\:opacity-0

@@ -24,6 +24,12 @@
     /* Misc */
     --radius: 0.5rem;
     --shadow-subtle: 0 6px 18px rgba(11, 23, 26, 0.04);
+    /* Accessibility: body copy color/size tokens (used for improved contrast on body text) */
+    --body-font-size: 1rem; /* base paragraph size */
+    --body-line-height: 1.65; /* comfortable reading line-height */
+    /* body-copy is intentionally a tad darker than --text in light mode to improve contrast
+       without affecting headings (headings continue to use --text). */
+    --body-copy: color-mix(in srgb, var(--text) 92%, black 8%);
     /* per-element surfaces reused in dark mode */
     --tag-bg: color-mix(
         in srgb,
@@ -363,7 +369,8 @@ aside > div.shadow {
 .dark {
     --bg: rgb(30, 41, 32);
     --surface: color-mix(in srgb, var(--bg) 88%, white 12%);
-    --text: #ffffff;
+    /* Use a slightly softer white for --text to reduce eye strain while keeping contrast */
+    --text: #f5f7f6;
     --muted: #98a89a;
     --edge: rgba(255, 255, 255, 0.03);
     --halo-opacity: 0.08;
@@ -713,3 +720,97 @@ aside nav a.font-semibold:focus::before {
     background: transparent !important;
     box-shadow: none !important;
 }
+
+/* ==================================================================
+   Accessibility: improved contrast and readable sizes for body copy
+   - Use --body-copy as the primary color for paragraphs and list items
+   - Slightly increase base paragraph size in dark mode to aid low-vision readers
+   - A utility class .accessible-text is provided for spot-fixing in markup
+   Note: headings keep using --text to preserve their designed weight.
+   ================================================================== */
+
+:root {
+    /* safe defaults (already present above) kept here for cascade clarity */
+    --body-font-size: 1rem;
+    --body-line-height: 1.65;
+    --body-copy: color-mix(in srgb, var(--text) 92%, black 8%);
+}
+
+.dark {
+    /* slight size increase + brighter body copy for dark backgrounds */
+    --body-font-size: 1.04rem;
+    --body-line-height: 1.72;
+    --body-copy: rgba(255, 255, 255, 0.94);
+}
+
+/* Apply the improved body copy token to typical content elements inside the
+   right/main content column where body copy tends to be lighter in markup. */
+/* Include left-column copy (aside) too so small informational paragraphs like
+   "Bienvenue sur mon portfolio…" get the accessible treatment in both modes. */
+aside p,
+aside li,
+aside .text-sm,
+main#content p,
+main#content li,
+main#content .text-sm,
+.project-card p,
+section p {
+    color: var(--body-copy) !important;
+    font-size: var(--body-font-size) !important;
+    line-height: var(--body-line-height) !important;
+}
+
+/* Utility helper: add class="accessible-text" to any inline element that
+   needs a guaranteed contrast bump without changing global rules. */
+.accessible-text {
+    color: var(--body-copy) !important;
+    font-size: var(--body-font-size) !important;
+    line-height: var(--body-line-height) !important;
+}
+
+/* Ensure headings in the main content keep their intended contrast and
+   remain visually stronger than body copy. */
+main#content h1,
+main#content h2,
+main#content h3,
+main#content h4,
+main#content h5,
+main#content h6 {
+    color: var(--text) !important;
+    line-height: 1.2;
+}
+
+/* Footer / meta small text: make sure readable in dark theme as well */
+.dark footer,
+.dark #right-footer,
+.dark .text-xs {
+    color: var(--body-copy) !important;
+}
+
+/* ------------------------------------------------------------------
+   Colours specific to the aside identity block (only these two titles)
+   - We scope the selectors to the exact classes used in the markup so no
+     other global h1/h2 are affected.
+   - Variables chosen to match the existing palette and to be accessible.
+     Light mode: uses --accent-primary / a soft green for secondary.
+     Dark mode: pale, readable tints on dark background.
+ ------------------------------------------------------------------ */
+:root {
+    --aside-heading-primary: #2a8fb7; /* light: accent-primary */
+    --aside-heading-secondary: #6fa97a; /* light: muted green for H2 */
+}
+
+.dark {
+    --aside-heading-primary: #bfeef9; /* dark: pale blue for H1 */
+    --aside-heading-secondary: #dff6e6; /* dark: pale green for H2 */
+}
+
+/* Target only the specific title elements inside the left aside identity block */
+aside h1.text-3xl.font-semibold {
+    color: var(--aside-heading-primary) !important;
+}
+
+aside h2.text-xl.font-semibold {
+    color: var(--aside-heading-secondary) !important;
+}
+
