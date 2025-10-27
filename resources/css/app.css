@@ -422,3 +422,38 @@ aside > div.shadow {
     border: none !important;
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.66) !important;
 }
+
+/* Dark-mode: on hover of the Contact and CV social buttons, force their inner SVG strokes to black
+   to increase contrast against lighter icon fills inside the dark UI. Targets elements that have a
+   stroke attribute so decorative outlines are respected. */
+.dark .social-link--contact:hover svg [stroke],
+.dark .social-link--cv:hover svg [stroke],
+.dark .social-link--contact:focus svg [stroke],
+.dark .social-link--cv:focus svg [stroke] {
+    stroke: #000 !important;
+    color: #000 !important;
+}
+
+/* If the SVG uses stroke on the root element rather than children */
+.dark .social-link--contact:hover svg[stroke],
+.dark .social-link--cv:hover svg[stroke],
+.dark .social-link--contact:focus svg[stroke],
+.dark .social-link--cv:focus svg[stroke] {
+    stroke: #000 !important;
+    color: #000 !important;
+}
+
+/* Broader selectors: target the svg and all its inner elements so we cover cases
+   where stroke is inherited from the root or set on child <path> elements. This
+   ensures the icon's stroke visibly becomes black on hover/focus in dark mode. */
+.dark .social-link--contact:hover svg,
+.dark .social-link--contact:hover svg *,
+.dark .social-link--contact:focus svg,
+.dark .social-link--contact:focus svg *,
+.dark .social-link--cv:hover svg,
+.dark .social-link--cv:hover svg *,
+.dark .social-link--cv:focus svg,
+.dark .social-link--cv:focus svg * {
+    stroke: #000 !important;
+    color: #000 !important;
+}

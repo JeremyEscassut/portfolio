@@ -476,6 +476,21 @@
         fill: none;
     }
 
+    /* When hovering or focusing the Contact/CV buttons in dark mode, prefer a dark stroke
+       for better legibility against the button background. This rule is intentionally
+       specific and placed after the white-stroke block so it can override that declaration. */
+    .dark a.social-link.social-link--cv:hover svg,
+    .dark a.social-link.social-link--cv:hover svg *,
+    .dark button.social-link.social-link--contact:hover svg,
+    .dark button.social-link.social-link--contact:hover svg *,
+    .dark a.social-link.social-link--cv:focus svg,
+    .dark a.social-link.social-link--cv:focus svg *,
+    .dark button.social-link.social-link--contact:focus svg,
+    .dark button.social-link.social-link--contact:focus svg * {
+        stroke: #000 !important;
+        color: #000 !important;
+    }
+
     /* Ensure certain skill icons use white stroke in dark mode for better contrast */
     .dark .skill-ionic svg,
     .dark .skill-java svg,
