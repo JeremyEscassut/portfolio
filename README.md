@@ -250,22 +250,17 @@ open storage/coverage/index.html
 
 ## 8) Roadmap (ordre cible)
 
-1. Bloque temporairement le mode clair.
-2. Publier sur Alwaysdata
-3. Ajoute un bouton pour activer les modes clair, sombre et auto (celui défini dans les réglages) dans le Div englobant Jérémy Escassut et les titres des sections, en dessous de "Bienvenue sur mon portfolio", au-dessus de Jérémy Escassut, aligné à droite.
-4. Fais marcher le mode sombre avec un style cohérent avec le mode clair et qui permet d'afficher toutes les icônes de manière harmonisée (LinkedIn et GitLab en couleur, bleu et orange respectivement, et autres icônes en blanc vu que le fond sera sombre).
-5. Débloque tous les modes (clair, sombre, auto).
-6. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
-7. Ajuster les blocs pour faire disparaître la barre de scroll latérale (problème uniquement présent sur Safari)
-8. Build et déploiement
-9. Tests (formulaire + navigation) et conformité (SEO, A11y, W3C)
-10. Analytics (à la toute fin)
-11. Code qui prévient en cas d'injection de script dans l'Admin dashboard.
-12. Nettoyer le code pour ne mettre que des commentaires pertinents
-    S'assurer que les 2 prochains points soient des bonnes pratiques de développement.
-13. Nettoyer le code pour éventuellement mettre les règles de style dans le fichier CSS approprié.
-14. Nettoyer le code pour placer le code javascript dans un fichier dédié.
-15. En mode sombre et desktop (pas @media), fais en sorte que quand une section est "active", l'animation qui permet de voir qu'on est dans cette section affiche un effet de highlight plus clair derrière le texte.
+1. Publier sur Alwaysdata
+2. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
+3. Ajuster les blocs pour faire disparaître la barre de scroll latérale (problème uniquement présent sur Safari)
+4. Build et déploiement
+5. Tests (formulaire + navigation) et conformité (SEO, A11y, W3C)
+6. Analytics (à la toute fin)
+7. Code qui prévient en cas d'injection de script dans l'Admin dashboard.
+8. Nettoyer le code pour ne mettre que des commentaires pertinents
+   S'assurer que les 2 prochains points soient des bonnes pratiques de développement.
+9. Nettoyer le code pour éventuellement mettre les règles de style dans le fichier CSS approprié.
+10. Nettoyer le code pour placer le code javascript dans un fichier dédié.
 
 Actuellement, quand on est en mode @media, les titres des sections, ex. :
 #about > div.sticky.top-0.z-20.-mx-6.mb-4.w-screen.bg-transparent.px-6.py-3.backdrop-blur.lg\:sr-only.lg\:relative.lg\:top-auto.lg\:mx-auto.lg\:w-full.lg\:px-0.lg\:py-0.lg\:opacity-0

@@ -318,10 +318,12 @@ aside > div.shadow {
         box-shadow: none !important;
     }
 
-    /* Ensure skill-tile svgs use currentColor so they become black in dark-mode tiles */
-    .skill-tile svg {
-        fill: currentColor !important;
+    /* Ensure skill-tile svgs display stroke-only (no fills) in dark mode */
+    .skill-tile svg,
+    .skill-tile svg * {
+        fill: none !important;
         stroke: currentColor !important;
+        color: currentColor !important;
     }
 
     /* Dialogs remain solid and readable */
@@ -400,10 +402,18 @@ aside > div.shadow {
     box-shadow: none !important;
 }
 
-/* Target all inner SVG shapes so we override fills/strokes that were set inline */
+/* Target all inner SVG shapes so they render stroke-only in dark mode */
 .dark .skill-tile svg,
 .dark .skill-tile svg * {
-    fill: currentColor !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    color: currentColor !important;
+}
+
+/* Ensure skill icons render as strokes only in light mode as well */
+.skill-tile svg,
+.skill-tile svg * {
+    fill: none !important;
     stroke: currentColor !important;
     color: currentColor !important;
 }
