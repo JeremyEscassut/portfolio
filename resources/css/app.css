@@ -285,7 +285,8 @@ aside > div.shadow {
     article,
     aside,
     .content-surface {
-        background-color: var(--bg) !important;
+        /* keep sections and cards transparent so the ambient halo shows through */
+        background-color: transparent !important;
         color: var(--text) !important;
         box-shadow: none !important;
         border: none !important;
@@ -295,7 +296,9 @@ aside > div.shadow {
     .bg-white,
     [class*="bg-\[\#fff"],
     [class*="bg-\[\#0"] {
-        background-color: var(--surface) !important;
+        /* inside dark mode, literal bg utilities inside sections should be transparent
+           to avoid creating opaque tiles that hide the halo */
+        background-color: transparent !important;
         color: var(--text) !important;
         border: none !important;
         box-shadow: none !important;
@@ -371,6 +374,77 @@ aside > div.shadow {
     color: var(--text) !important;
 }
 
+/* Aggressive overlay approach: ensure the halo appears visually in front of the
+   wrapper background but behind the wrapper content. This block neutralizes any
+   explicit backgrounds on the wrapper and its immediate ancestors, creates a
+   dedicated background pseudo-layer on the wrapper, elevates the halo above
+   that layer, and keeps actual content above the halo. */
+.dark body::before {
+    /* Mirror light-mode: keep halo behind normal flow so stacking is predictable */
+    z-index: -1 !important; /* place halo behind content (same behaviour as light mode) */
+    pointer-events: none !important;
+    /* preserve subtle dark tuning */
+    opacity: var(--halo-enabled);
+    filter: blur(18px) !important;
+}
+
+.dark body > div,
+.dark body > div > main,
+.dark body > div > main > div:nth-child(1),
+.dark body > div > main > div:nth-child(1) > div {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    /* Avoid forcing stacking contexts here — keep elements in normal flow */
+    position: static !important;
+    z-index: auto !important;
+}
+
+.dark body > div > main > div:nth-child(1) {
+    /* Keep wrapper in normal flow to avoid creating a new stacking context */
+    position: static !important;
+    z-index: auto !important;
+}
+
+.dark body > div > main > div:nth-child(1)::before {
+    /* remove wrapper pseudo-layer: we prefer halo behind content like light mode */
+    content: none !important;
+    display: none !important;
+}
+
+.dark body > div > main > div:nth-child(1) > * {
+    /* children remain in normal flow; interactive elements should set their own stacking if needed */
+    position: static !important;
+    z-index: auto !important;
+}
+
+/* Restore sticky behaviour for the left pane on desktop when dark mode is active.
+   Some of the stacking/position rules above can interfere with position:sticky;
+   explicitly re-enable it on large screens and ensure the aside doesn't create
+   a new stacking context that prevents sticking. */
+@media (min-width: 1024px) {
+    .dark body > div > main > div:nth-child(1) > aside {
+        /* keep sticky behaviour but with moderate z-index so it sits above content
+           while remaining below overlays (modals) */
+        position: sticky !important;
+        top: 0 !important;
+        align-self: start !important;
+        z-index: 20 !important; /* sufficient to be above content; halo is -1 */
+        height: auto !important;
+        max-height: calc(100vh - 2rem) !important;
+        overflow: visible !important;
+    }
+
+    /* inner wrapper should not create a new stacking context */
+    .dark body > div > main > div:nth-child(1) > aside > div {
+        position: static !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        z-index: auto !important;
+    }
+}
+
 .dark main,
 .dark .project-card,
 .dark .rounded-md,
@@ -378,7 +452,8 @@ aside > div.shadow {
 .dark article,
 .dark aside,
 .dark .content-surface {
-    background-color: var(--bg) !important;
+    /* sections and cards should be transparent in dark so halo is visible */
+    background-color: transparent !important;
     color: var(--text) !important;
     box-shadow: none !important;
     border: none !important;
@@ -542,4 +617,254 @@ aside nav a.font-semibold:focus::before {
     transform: translateY(-50%) scaleX(1.01);
     background: color-mix(in srgb, var(--accent-secondary) 14%, white 86%);
     opacity: 1;
+}
+
+/* Make the inner <main> inside the first wrapper transparent in dark desktop so the halo
+   can appear in front of its background but behind its content. Targets /html/body/div/main/div[1]/main */
+.dark body > div > main > div:nth-child(1) > main {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    /* keep main in normal flow to match light-mode stacking */
+    position: static !important;
+    z-index: auto !important;
+}
+
+.dark body > div > main > div:nth-child(1) > main::before {
+    content: none !important;
+    display: none !important;
+}
+
+.dark body > div > main > div:nth-child(1) > main > * {
+    position: static !important;
+    z-index: auto !important;
+}
+
+/* Target full-width sticky helper bars (w-screen) inside sections to avoid
+   them producing a wide opaque band over the page in dark mode. Keep their
+   visual behaviour but constrain background to transparent and reset margins. */
+.dark section > .sticky.w-screen,
+.dark section .sticky.w-screen {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    max-width: 100% !important;
+}
+
+/* DEBUG helper: when you add the class `debug-halo` to the <html> element this
+   will outline every descendant inside the target main wrapper so you can see
+   which element(s) are blocking the halo. This is intentionally opt-in — add
+   the class via the console while debugging, then remove it. NOTE: this will
+   temporarily change layout/sticky behaviour while active; use only for
+   diagnostic purposes. */
+.dark.debug-halo body > div > main > div:nth-child(1) > main,
+.dark.debug-halo body > div > main > div:nth-child(1) > main * {
+    /* Visible diagnostic outline */
+    outline: 2px dashed rgba(255, 128, 64, 0.95) !important;
+    /* Make any backgrounds invisible so halo shows through */
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+
+    /* Neutralize common stacking-context creators */
+    transform: none !important;
+    -webkit-transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    position: static !important;
+    z-index: auto !important;
+    isolation: auto !important;
+    mix-blend-mode: normal !important;
+    backface-visibility: visible !important;
+    -webkit-backface-visibility: visible !important;
+    will-change: auto !important;
+    overflow: visible !important;
+}
+
+/* Temporary targeted fix: if a specific content block (observed at
+   /html/body/div/main/div[1]/main/section[2]/div[2]/div/div[1]) rises above
+   the halo while scrolling, lower its stacking so the halo (z=12) remains
+   visible. This is intentionally narrowly scoped to the reported selector.
+   If you confirm this fixes the issue, we can keep it; otherwise I'll craft
+   a safer adjustment based on computed styles. */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    > div:nth-child(2)
+    > div
+    > div:first-child {
+    z-index: 11 !important; /* just below halo (12) */
+    position: relative !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+}
+
+/* Also ensure any children don't create a higher stacking context */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    > div:nth-child(2)
+    > div
+    > div:first-child,
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    > div:nth-child(2)
+    > div
+    > div:first-child
+    * {
+    z-index: 11 !important;
+    backface-visibility: visible !important;
+    will-change: auto !important;
+    filter: none !important;
+}
+
+/* Quick helper to temporarily lower any z-index that might hide the halo.
+   Only active when .debug-halo is present. It will set large elements to auto
+   stacking so the halo (body::before z=12) can be visually tested. */
+.dark.debug-halo body > div > main > div:nth-child(1),
+.dark.debug-halo body > div > main > div:nth-child(1) > main,
+.dark.debug-halo body > div > main > div:nth-child(1) > main * {
+    z-index: auto !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    position: static !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    isolation: auto !important;
+    mix-blend-mode: normal !important;
+    backface-visibility: visible !important;
+    will-change: auto !important;
+}
+
+/* Extended debug & safer temporary fix
+   - When .debug-halo is enabled, additionally mark any stacking-context creators
+     (positioned/sticky/fixed, transform/will-change, perspective, filter) inside
+     the main wrapper so you can identify the true blocking node.
+   - A broader temporary rule targets the whole second section container (observed
+     as the common source) and forces its descendants to neutral stacking so the
+     halo can be validated while scrolling. This is intentionally conservative
+     (only active for .dark and for the debug class is opt-in). If this makes the
+     halo visible, we can craft a minimal permanent rule based on concrete console
+     diagnostics.
+*/
+.dark.debug-halo
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2),
+.dark.debug-halo
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    * {
+    outline: 2px dashed rgba(0, 200, 120, 0.85) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    /* Neutralize known stacking-context creators */
+    transform: none !important;
+    -webkit-transform: none !important;
+    filter: none !important;
+    perspective: none !important;
+    will-change: auto !important;
+    backface-visibility: visible !important;
+    position: static !important;
+    z-index: auto !important;
+    isolation: auto !important;
+}
+
+/* Broader temporary dark-mode rule: if any element in this second section becomes
+   positioned (sticky/fixed/relative) during scroll and would sit above the halo,
+   force it to sit just below the halo (z=11). This only applies in `.dark` and is
+   narrowly scoped to avoid collateral effects elsewhere on the page. Keep this
+   as a temporary test — if it fixes the issue we'll replace with a minimal rule. */
+.dark.debug-halo
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2),
+.dark.debug-halo
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    * {
+    outline: 2px dashed rgba(0, 200, 120, 0.85) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    /* Neutralize known stacking-context creators (diagnostic only) */
+    transform: none !important;
+    -webkit-transform: none !important;
+    filter: none !important;
+    perspective: none !important;
+    will-change: auto !important;
+    backface-visibility: visible !important;
+    position: static !important;
+    z-index: auto !important;
+    isolation: auto !important;
+}
+
+/* Minimal temporary fix: only lower the specific reported content block that
+   was occluding the halo. This mirrors the earlier narrow selector that was
+   previously used and avoids affecting all descendants (prevents visual dupes). */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    > div:nth-child(2)
+    > div
+    > div:first-child {
+    z-index: 11 !important; /* just below halo */
+    position: relative !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+}
+
+/* Make sure project cards inside that section do not themselves carry elevated
+   stacking — keep them at auto so they don't produce a second opaque layer. */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    .project-card {
+    z-index: auto !important;
+    position: static !important;
 }
