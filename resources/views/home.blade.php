@@ -496,8 +496,8 @@
     .dark .skill-java svg,
     .dark .skill-spring-boot svg,
     .dark .skill-jira svg {
-        stroke: #fff;
-        fill: none;
+        stroke: #000;
+
     }
 
     /* Postman: show dark variant in dark mode, light variant in light mode */

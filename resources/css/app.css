@@ -318,12 +318,17 @@ aside > div.shadow {
         box-shadow: none !important;
     }
 
-    /* Ensure skill-tile svgs display stroke-only (no fills) in dark mode */
-    .skill-tile svg,
-    .skill-tile svg * {
+    /* Only convert outline SVGs (those that already use stroke) to stroke-only in dark mode.
+       Do NOT strip fills from icons that are designed as filled shapes (Ionic, Java, etc.).
+       We target svg elements that declare a stroke attribute or have child elements with stroke. */
+    .skill-tile svg[stroke],
+    .skill-tile svg[stroke] *,
+    .skill-tile svg [stroke] {
         fill: none !important;
         stroke: currentColor !important;
         color: currentColor !important;
+        /* slight increase to stroke width for visibility in both themes */
+        stroke-width: 1.8 !important;
     }
 
     /* Dialogs remain solid and readable */
@@ -402,21 +407,17 @@ aside > div.shadow {
     box-shadow: none !important;
 }
 
-/* Target all inner SVG shapes so they render stroke-only in dark mode */
-.dark .skill-tile svg,
-.dark .skill-tile svg * {
+/* For the persisted dark class we mirror the same targeted behavior (outline svgs only) */
+.dark .skill-tile svg[stroke],
+.dark .skill-tile svg[stroke] *,
+.dark .skill-tile svg [stroke] {
     fill: none !important;
     stroke: currentColor !important;
     color: currentColor !important;
+    stroke-width: 1.8 !important;
 }
 
-/* Ensure skill icons render as strokes only in light mode as well */
-.skill-tile svg,
-.skill-tile svg * {
-    fill: none !important;
-    stroke: currentColor !important;
-    color: currentColor !important;
-}
+/* Leave filled SVGs (no stroke attribute) alone so icons like Ionic/Java retain their fills */
 
 /* Ensure repo-link brand svgs keep their colors (not affected by currentColor rule) */
 .dark .repo-link svg,
