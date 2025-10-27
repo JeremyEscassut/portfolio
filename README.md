@@ -243,14 +243,27 @@ open storage/coverage/index.html
 -   Cibles possibles: hébergement PHP classique (Apache/Nginx) ou plateformes compatibles (Laravel Forge + VPS, Render, Railway, Fly.io).
 -   Variables d’environnement: `APP_ENV`, `APP_KEY`, `APP_URL`, `MAIL_*`, éventuels `DB_*`.
 
-## 7) Roadmap (ordre cible)
+## 7) Guidelines
 
-1. Faire marcher le formulaire de contact
-2. Ajouter des infobulles en attribut title pour les icônes des compétences (affichage au hover)
-3. Contenu statique et layout de base (FR UI / EN code)
-4. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
-5. Ajuster les blocs pour faire disparaître la barre de scroll latérale
-6. Build et déploiement
-7. Tests (formulaire + navigation) et conformité (SEO, A11y, W3C)
-8. Analytics (à la toute fin)
-9. Code qui prévient en cas d'injection de script dans l'Admin dashboard.
+1. Contenu statique et layout de base (FR UI / EN code)
+2. Réponses dans le chat courtes et "to the point".
+
+## 8) Roadmap (ordre cible)
+
+1. Bloque temporairement le mode clair.
+2. Publier sur Alwaysdata
+3. Ajoute un bouton pour activer les modes clair, sombre et auto (celui défini dans les réglages) dans le Div englobant Jérémy Escassut et les titres des sections, en dessous de "Bienvenue sur mon portfolio", au-dessus de Jérémy Escassut, aligné à droite.
+4. Fais marcher le mode sombre avec un style cohérent avec le mode clair et qui permet d'afficher toutes les icônes de manière harmonisée (LinkedIn et GitLab en couleur, bleu et orange respectivement, et autres icônes en blanc vu que le fond sera sombre).
+5. Débloque tous les modes (clair, sombre, auto).
+6. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
+7. Ajuster les blocs pour faire disparaître la barre de scroll latérale (problème uniquement présent sur Safari)
+8. Build et déploiement
+9. Tests (formulaire + navigation) et conformité (SEO, A11y, W3C)
+10. Analytics (à la toute fin)
+11. Code qui prévient en cas d'injection de script dans l'Admin dashboard.
+
+Actuellement, quand on est en mode @media, les titres des sections, ex. :
+#about > div.sticky.top-0.z-20.-mx-6.mb-4.w-screen.bg-transparent.px-6.py-3.backdrop-blur.lg\:sr-only.lg\:relative.lg\:top-auto.lg\:mx-auto.lg\:w-full.lg\:px-0.lg\:py-0.lg\:opacity-0
+
+débordent du cadre body > div > main
+Est-ce que tu peux corriger ça ?

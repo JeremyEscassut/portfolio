@@ -8,6 +8,32 @@
         <div class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
             <!-- Name -->
             <div class="mb-8">
+                <!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
+                <div class="mt-3 flex justify-end" x-data="{ theme: localStorage.getItem('theme') || 'auto', init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else if(this.theme==='light'){ document.documentElement.classList.remove('dark') } else { document.documentElement.classList.toggle('dark', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) } }, set(t){ this.theme=t; if(t==='auto'){ localStorage.removeItem('theme'); document.documentElement.classList.toggle('dark', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) } else if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['auto','light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()">
+                    <button type="button" @click="cycle()" :title="(theme==='auto' ? 'Auto — respecte les réglages système' : (theme==='light' ? 'Mode clair' : 'Mode sombre')) + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
+                        <template x-if="theme==='auto'">
+                            <!-- system icon -->
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+                                <path d="M8 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                            </svg>
+                        </template>
+                        <template x-if="theme==='light'">
+                            <!-- sun icon -->
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+                            </svg>
+                        </template>
+                        <template x-if="theme==='dark'">
+                            <!-- moon icon -->
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </template>
+                    </button>
+                </div>
+
                 <h1 class="text-3xl font-semibold">Jérémy Escassut</h1>
                 <h2 class="text-xl font-semibold">Développeur Full Stack</h2>
                 <p class="text-[#706f6c] mt-3">Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.</p>
@@ -22,6 +48,23 @@
                     <li><a href="#skills" class="font-medium hover:underline">Compétences</a></li>
                 </ul>
             </nav>
+
+
+            <!-- Social icon buttons (Tabler icons, larger, no border) -->
+            <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
+                <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
+                <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
+                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
+                    @if($svg) {!! $svg !!} @endif
+                </a>
+
+                <!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
+                <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
+                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
+                    @if($svg) {!! $svg !!} @endif
+                </a>
+            </div>
+
 
             <!-- Actions: icons -->
             <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
@@ -395,12 +438,12 @@
         stroke: #000;
     }
 
-    .dark .social-link--contact svg {
-        stroke: #fff;
-    }
-
-    .social-link--cv svg {
-        stroke: #000;
+    /* Only apply stroke override to SVG child elements that already have a stroke attribute
+       (keeps outer SVG wrapper and decorative borders untouched). This ensures only
+       internal stroke paths become white in dark mode. */
+    .dark .social-link--contact svg *[stroke],
+    .dark a.social-link.social-link--cv svg *[stroke] {
+        stroke: #fff !important;
     }
 
     .dark .social-link--cv svg {
@@ -421,6 +464,16 @@
         button.social-link.social-link--contact svg {
             stroke: #fff;
         }
+    }
+
+    /* Stronger override: ensure contact & CV svgs (including inner paths) render white in dark mode.
+       This covers cases where SVG children have inline fills/strokes. We keep hover backgrounds intact. */
+    .dark .social-link--contact svg,
+    .dark .social-link--contact svg *,
+    .dark a.social-link.social-link--cv svg,
+    .dark a.social-link.social-link--cv svg * {
+        stroke: #fff !important;
+        fill: none;
     }
 
     /* Ensure certain skill icons use white stroke in dark mode for better contrast */
@@ -453,6 +506,48 @@
 </style>
 @endpush
 
+
+<style>
+    /* Contact modal form — ensure readable in dark mode: darker fields, white text */
+    .dark div[role="dialog"] {
+        background-color: var(--surface) !important;
+        color: var(--text) !important;
+    }
+
+    .dark div[role="dialog"] .p-6,
+    .dark div[role="dialog"] .p-6 * {
+        color: var(--text) !important;
+    }
+
+    .dark div[role="dialog"] label {
+        color: var(--text) !important;
+    }
+
+    .dark div[role="dialog"] input,
+    .dark div[role="dialog"] textarea,
+    .dark div[role="dialog"] select {
+        background-color: rgba(255, 255, 255, 0.04) !important;
+        color: #fff !important;
+        border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .dark div[role="dialog"] input::placeholder,
+    .dark div[role="dialog"] textarea::placeholder {
+        color: rgba(255, 255, 255, 0.68) !important;
+    }
+
+    .dark div[role="dialog"] button.mr-2 {
+        border-color: rgba(255, 255, 255, 0.12) !important;
+        color: #fff !important;
+        background: transparent !important;
+    }
+
+    /* Keep submit button readable (already dark bg) */
+    .dark div[role="dialog"] button[type="submit"] {
+        background-color: #111 !important;
+        color: #fff !important;
+    }
+</style>
 
 
 <!-- Contact modal (Alpine) -->

@@ -24,6 +24,20 @@
     /* Misc */
     --radius: 0.5rem;
     --shadow-subtle: 0 6px 18px rgba(11, 23, 26, 0.04);
+    /* per-element surfaces reused in dark mode */
+    --tag-bg: color-mix(
+        in srgb,
+        var(--accent-secondary) 12%,
+        var(--surface) 88%
+    );
+    --tile-bg: color-mix(
+        in srgb,
+        var(--accent-secondary) 14%,
+        var(--surface) 86%
+    );
+    /* Fixed light-mode surface colors for tags/tiles so they don't shift in dark mode */
+    --tag-bg-light: #ecf5ef;
+    --tile-bg-light: #eaf3ec;
 }
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -235,4 +249,176 @@ aside > div.shadow {
     width: auto;
     display: inline-block;
     vertical-align: middle;
+    /* Preserve original SVG colors (LinkedIn/GitLab) unless explicitly overridden */
+    color: initial !important;
+    fill: initial !important;
+    stroke: initial !important;
+}
+
+/* ------------------------------------------------------------------
+   Dark-mode harmony
+   - Provide a single, soft dark surface color with a gentle green tint
+   - Remove borders globally except for project tags and skill tiles
+   - Preserve readable text and accessible contrast
+   ------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: rgb(30, 41, 32); /* requested dark background */
+        --surface: color-mix(in srgb, var(--bg) 88%, white 12%);
+        --text: #ffffff; /* body text white */
+        --muted: #98a89a; /* gentle green-gray */
+        --edge: rgba(255, 255, 255, 0.03);
+        --halo-opacity: 0.08; /* make halo more subtle in dark */
+    }
+
+    /* Page baseline */
+    body {
+        background: var(--bg) !important;
+        color: var(--text) !important;
+    }
+
+    /* Make sections use the same background as the page background (flat, uniform) */
+    main,
+    .project-card,
+    .rounded-md,
+    section,
+    article,
+    aside,
+    .content-surface {
+        background-color: var(--bg) !important;
+        color: var(--text) !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    /* Normalize literal white/bg utilities used in markup */
+    .bg-white,
+    [class*="bg-\[\#fff"],
+    [class*="bg-\[\#0"] {
+        background-color: var(--surface) !important;
+        color: var(--text) !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Project tags keep a fixed light-mode background color so their appearance
+       doesn't shift when switching to dark mode. Text/icons remain black. */
+    .project-tag {
+        border: 1px solid rgba(127, 183, 126, 0.18) !important;
+        background-color: var(--tag-bg-light) !important;
+        color: #000 !important;
+        box-shadow: none !important;
+    }
+
+    /* Skill tiles keep the light-mode tile color and black content to ensure icon legibility */
+    .skill-tile {
+        border: 1px solid rgba(127, 183, 126, 0.12) !important;
+        background-color: var(--tile-bg-light) !important;
+        color: #000 !important;
+        box-shadow: none !important;
+    }
+
+    /* Ensure skill-tile svgs use currentColor so they become black in dark-mode tiles */
+    .skill-tile svg {
+        fill: currentColor !important;
+        stroke: currentColor !important;
+    }
+
+    /* Dialogs remain solid and readable */
+    [role="dialog"] {
+        background-color: var(--surface) !important;
+        color: var(--text) !important;
+        border: none !important;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.66) !important;
+    }
+
+    /* Subtle halo tuning for dark mode */
+    body::before {
+        opacity: 0.9 !important;
+        filter: blur(18px) !important;
+    }
+
+    /* Ensure interactive elements remain readable */
+    a,
+    button,
+    input,
+    textarea,
+    select {
+        color: var(--text) !important;
+    }
+}
+
+/* Mirror the same rules when the documentElement has the `dark` class so
+   toggling the class via JS has an immediate visual effect (button cycling). */
+.dark {
+    --bg: rgb(30, 41, 32);
+    --surface: color-mix(in srgb, var(--bg) 88%, white 12%);
+    --text: #ffffff;
+    --muted: #98a89a;
+    --edge: rgba(255, 255, 255, 0.03);
+    --halo-opacity: 0.08;
+}
+
+.dark body {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+}
+
+.dark main,
+.dark .project-card,
+.dark .rounded-md,
+.dark section,
+.dark article,
+.dark aside,
+.dark .content-surface {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.dark .bg-white,
+.dark [class*="bg-\[\#fff"],
+.dark [class*="bg-\[\#0"] {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.dark .project-tag {
+    border: 1px solid rgba(127, 183, 126, 0.18) !important;
+    background-color: var(--tag-bg-light) !important;
+    color: #000 !important;
+    box-shadow: none !important;
+}
+
+.dark .skill-tile {
+    border: 1px solid rgba(127, 183, 126, 0.12) !important;
+    background-color: var(--tile-bg-light) !important;
+    color: #000 !important;
+    box-shadow: none !important;
+}
+
+/* Target all inner SVG shapes so we override fills/strokes that were set inline */
+.dark .skill-tile svg,
+.dark .skill-tile svg * {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+    color: currentColor !important;
+}
+
+/* Ensure repo-link brand svgs keep their colors (not affected by currentColor rule) */
+.dark .repo-link svg,
+.repo-link svg {
+    color: initial !important;
+    fill: initial !important;
+    stroke: initial !important;
+}
+
+.dark [role="dialog"] {
+    background-color: var(--surface) !important;
+    color: var(--text) !important;
+    border: none !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.66) !important;
 }
