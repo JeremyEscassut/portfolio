@@ -23,21 +23,6 @@
                 </ul>
             </nav>
 
-            <!-- Social icon buttons (Tabler icons, larger, no border) -->
-            <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
-                <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
-                <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
-                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
-                    @if($svg) {!! $svg !!} @endif
-                </a>
-
-                <!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
-                <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
-                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
-                    @if($svg) {!! $svg !!} @endif
-                </a>
-            </div>
-
             <!-- Actions: icons -->
             <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
                 <!-- Contact (inline from resources/svg/icon-contact.svg) -->
@@ -47,7 +32,7 @@
                 </button>
 
                 <!-- CV (inline from resources/svg/icon-cv.svg) -->
-                <a href="/cv/jeremy-escassut-v0.1.pdf" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                <a href="/cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-cv.svg')); } catch (Exception $e) { } @endphp
                     @if($svg) {!! $svg !!} @endif
                 </a>
@@ -57,6 +42,8 @@
 
     <!-- RIGHT: page scroll handles content; main not an independent scroller -->
     <main id="content" class="order-2 lg:order-2 pt-24 lg:py-24 lg:w-[52%]">
+
+
 
         <section id="about" class="mb-8 scroll-mt-24" aria-label="À propos">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
@@ -162,15 +149,15 @@
                     <div>
                         <h3 class="text-sm font-semibold mb-2">Front</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
-                            <div class="bg-white rounded flex items-center justify-center skill-angular skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-angular skill-tile" title="Angular" aria-label="Angular">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-angular.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-html5 skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-html5 skill-tile" title="HTML5" aria-label="HTML5">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-html5.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-ionic skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-ionic skill-tile" title="Ionic" aria-label="Ionic">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-ionic.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
@@ -181,31 +168,31 @@
                     <div>
                         <h3 class="text-sm font-semibold mb-2">Back</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
-                            <div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile" title="Laravel" aria-label="Laravel">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-laravel.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-nodejs skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-nodejs skill-tile" title="Node.js" aria-label="Node.js">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-nodejs.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-python skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-python skill-tile" title="Python" aria-label="Python">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-python.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-django skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-django skill-tile" title="Django" aria-label="Django">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-django.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-java skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-java skill-tile" title="Java" aria-label="Java">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-java.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-spring-boot skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-spring-boot skill-tile" title="Spring Boot" aria-label="Spring Boot">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-spring-boot.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-symfony skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-symfony skill-tile" title="Symfony" aria-label="Symfony">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-symfony.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
@@ -216,11 +203,11 @@
                     <div>
                         <h3 class="text-sm font-semibold mb-2">Autres</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
-                            <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile" title="Jira" aria-label="Jira">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-jira.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-postman skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-postman skill-tile" title="Postman" aria-label="Postman">
                                 @php
                                 $postmanSvg = '';
                                 try { $postmanSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postman.svg')); } catch (Exception $e) { }
@@ -234,7 +221,7 @@
                                 <span class="postman-dark" aria-hidden="true">{!! $postmanDarkSvg !!}</span>
                                 @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-php skill-tile">
+                            <div class="bg-white rounded flex items-center justify-center skill-php skill-tile" title="PHP" aria-label="PHP">
                                 {{-- keep PHP inline as before --}}
                                 @php $phpSvg = ''; try { $phpSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-php.svg')); } catch (Exception $e) { } @endphp
                                 @if($phpSvg) {!! $phpSvg !!} @endif
@@ -466,15 +453,16 @@
 </style>
 @endpush
 
+
+
 <!-- Contact modal (Alpine) -->
 <script>
-    // Ensure contactModal factory exists before Alpine initialises. Use `isOpen` to avoid collision with window.open.
+    // Ensure contactModal factory exists before Alpine initialises.
     window.contactModal = function() {
         return {
             isOpen: false,
             lastActive: null,
             openModal() {
-                console.log('contactModal.openModal called');
                 this.lastActive = document.activeElement;
                 this.isOpen = true;
                 this.$nextTick(() => {
@@ -485,17 +473,11 @@
                 });
             },
             closeModal() {
-                console.log('contactModal.closeModal called');
                 this.isOpen = false;
                 document.removeEventListener('keydown', this._escHandler);
                 this.$nextTick(() => {
                     if (this.lastActive && typeof this.lastActive.focus === 'function') this.lastActive.focus();
                 });
-            },
-            onSubmit(e) {
-                console.log('contactModal.onSubmit called');
-                e.preventDefault();
-                this.closeModal();
             }
         }
     }
@@ -568,7 +550,6 @@
 @push('scripts')
 <script>
     document.addEventListener('alpine:init', () => {
-        console.log('Alpine initialized in home.blade.php');
         // Contact modal factory is defined earlier (before the HTML) to avoid ReferenceError and name collisions.
 
         // highlight active section in left nav using IntersectionObserver
@@ -738,8 +719,6 @@
 <script>
     // Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
     window.addEventListener('open-contact', function _openContactFallback() {
-        console.log('open-contact event received (fallback listener)');
-
         function tryOpen() {
             const el = document.querySelector('[x-data="contactModal()"]');
             if (!el) return false;
@@ -772,23 +751,6 @@
     });
 </script>
 <script>
-    // Delegated click logger: logs when a click reaches document and matches the contact button
-    (function() {
-        try {
-            if (!window.__contactClickLoggerBound) {
-                document.addEventListener('click', function(e) {
-                    const btn = e.target.closest && e.target.closest('button[aria-label="Ouvrir le contact"]');
-                    if (btn) {
-                        console.log('Delegated click detected on contact button', btn);
-                    }
-                }, {
-                    capture: true
-                });
-                window.__contactClickLoggerBound = true;
-            }
-        } catch (e) {
-            // ignore
-        }
-    })();
+
 </script>
 @endpush

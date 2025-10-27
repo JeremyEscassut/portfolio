@@ -17,7 +17,8 @@ class ContactController extends Controller
             'hp' => ['nullable', 'string']
         ]);
         if (!empty($data['hp'])) {
-            return redirect()->back()->with('status', 'Message envoyé, merci !');
+            // Honeypot triggered — pretend success to avoid giving feedback to bots
+            return redirect()->back()->with('status', "Votre message a bien été envoyé. Merci !");
         }
 
         $nameForMessage = $data['name'] ?? null;
@@ -35,6 +36,8 @@ class ContactController extends Controller
             return redirect()->back()->withInput()->with('error', 'Une erreur est survenue lors de l\'envoi du message.')->with('openContact', true);
         }
         $displayName = $nameForMessage ? ' ' . trim($nameForMessage) : '';
-        return redirect()->back()->with('status', 'Message envoyé, merci' . $displayName . ' !');
+        $personal = $displayName ? " {$displayName}" : '';
+        // Friendly, clear success message for the user
+        return redirect()->back()->with('status', "Votre message a bien été envoyé. Merci{$personal} — je vous répondrai dès que possible.");
     }
 }

@@ -84,6 +84,114 @@ MAIL_MAILER=log
 # DB_PASSWORD=<your_password>   # ex. root en local MAMP
 ```
 
+### Mail en développement — MailHog (recommandé)
+
+Pour capter facilement les e-mails en local sans config SMTP externe, utilisez MailHog. Voici deux méthodes courantes pour le lancer et la config `.env` associée.
+
+-   Installation via Homebrew (macOS) :
+
+```bash
+# Installer (une seule fois)
+brew update && brew install mailhog
+
+# Lancer MailHog (méthode recommandée via Homebrew)
+# Sur macOS (Homebrew), la commande pour lancer MailHog en tant que service est :
+mailhog start
+
+# Alternative : lancer MailHog en arrière-plan dans le shell
+mailhog &
+```
+
+-   Ou via Docker :
+
+```bash
+docker run -d -p 1025:1025 -p 8025:8025 mailhog/mailhog
+```
+
+Configuration `.env` pour utiliser MailHog :
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=null
+```
+
+Tester :
+
+1. Lancer l'app Laravel (php artisan serve) et Vite (npm run dev).
+2. Ouvrir MailHog UI à l'URL http://127.0.0.1:8025 pour voir les e-mails reçus.
+3. Soumettre le formulaire de contact depuis la page d'accueil et vérifier que le message apparaît dans MailHog.
+
+Remarque : en développement, la valeur par défaut du projet est `MAIL_MAILER=log`. Si vous activez MailHog, mettez à jour `.env` comme ci-dessus puis redémarrez le serveur Laravel si nécessaire.
+
+### En production — choix du provider et bonnes pratiques (Symfony Mailer)
+
+Pour la mise en ligne du portfolio, Symfony Mailer (utilisé par Laravel) est un choix pérenne et sécurisé. Je recommande d'utiliser un provider transactionnel (Postmark recommandé pour les petits sites/portfolios) afin d'améliorer la délivrabilité, faciliter la configuration et recevoir des webhooks sur les bounces/complaints.
+
+Exemples `.env` pour différents scénarios :
+
+-   Postmark (recommandé — API, pratique pour Vercel / serverless) :
+
+```env
+MAIL_MAILER=postmark
+POSTMARK_TOKEN=your-postmark-server-token
+MAIL_FROM_ADDRESS=hello@yourdomain.com
+MAIL_FROM_NAME="Your Name"
+```
+
+-   Mailgun (SMTP ou HTTP API) :
+
+```env
+# via smtp
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailgun.org
+MAIL_PORT=587
+MAIL_USERNAME=postmaster@mg.yourdomain.com
+MAIL_PASSWORD=secret
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=hello@yourdomain.com
+MAIL_FROM_NAME="Your Name"
+
+# ou via le driver mailgun (HTTP) :
+# MAIL_MAILER=mailgun
+# MAILGUN_DOMAIN=mg.yourdomain.com
+# MAILGUN_SECRET=your-mailgun-api-key
+```
+
+-   AWS SES (via `ses` / `ses-v2`) :
+
+```env
+MAIL_MAILER=ses
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=eu-west-1
+MAIL_FROM_ADDRESS=hello@yourdomain.com
+```
+
+Notes opérationnelles :
+
+-   Vercel / serverless : privilégiez les providers API (Postmark, Mailgun HTTP, SendGrid) plutôt que SMTP sortant (les fonctions serverless ont des limitations réseau). Stockez les clés API dans les variables d'environnement de Vercel.
+-   Alwaysdata / hébergement classique : SMTP est généralement autorisé — utilisez SMTP ou le transport natif du provider et configurez les ports (587/465) selon le provider.
+-   Security : ne committez jamais vos clés dans le repo. Utilisez les variables d'environnement, et activez 2FA / App Passwords sur vos comptes si nécessaire.
+-   Deliverability : configurez SPF/DKIM/DMARC pour le domaine d'envoi afin d'éviter que vos mails soient marqués comme spam.
+-   Asynchrone : en production, placez les envois dans une queue (ex : database/redis queue). Lancer un worker (supervisor, systemd ou `php artisan queue:work`) pour traiter les envois de manière fiable.
+
+Commandes utiles pour la mise en prod :
+
+```bash
+# Cacher la config et les routes
+php artisan config:cache
+php artisan route:cache
+
+# Lancer un worker (exécution manuelle / debug)
+php artisan queue:work --sleep=3 --tries=3
+
+# Pour la supervision en production, utiliser supervisor / systemd et relancer le worker au boot
+```
+
 ## Changements récents (rapide résumé)
 
 -   Modal de contact : le fond (`overlay`) et le conteneur du modal ont maintenant des z-index très élevés pour garantir que le modal reste toujours au premier plan (corrige les titres de sections qui pouvaient apparaître devant le modal).
@@ -137,9 +245,12 @@ open storage/coverage/index.html
 
 ## 7) Roadmap (ordre cible)
 
-1. Contenu statique et layout de base (FR UI / EN code)
-2. Version mobile minimaliste (pas de form ni animations)
-3. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
-4. Formulaire de contact (SMTP Gmail, CSRF, validation, honeypot)
-5. Tests (form + nav) et conformité (SEO, A11y, W3C)
-6. Build, déploiement, analytics (optionnel)
+1. Faire marcher le formulaire de contact
+2. Ajouter des infobulles en attribut title pour les icônes des compétences (affichage au hover)
+3. Contenu statique et layout de base (FR UI / EN code)
+4. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
+5. Ajuster les blocs pour faire disparaître la barre de scroll latérale
+6. Build et déploiement
+7. Tests (formulaire + navigation) et conformité (SEO, A11y, W3C)
+8. Analytics (à la toute fin)
+9. Code qui prévient en cas d'injection de script dans l'Admin dashboard.
