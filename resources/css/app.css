@@ -423,6 +423,44 @@ aside > div.shadow {
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.66) !important;
 }
 
+/* Highlight active section link in dark mode: a subtle, lighter band behind the link text.
+   This uses the presence of the 'font-semibold' class (added by the IntersectionObserver)
+   as the 'active' marker. We avoid @media by relying on the nav being hidden on mobile
+   (so the effect is naturally visible on desktop where the nav is shown). */
+.dark aside nav a.font-semibold {
+    position: relative;
+    color: var(--tile-bg-light) !important; /* ensure text remains visible */
+    display: inline-block; /* keep size driven by text */
+    z-index: 1;
+}
+
+.dark aside nav a.font-semibold::before {
+    content: "";
+    position: absolute;
+    /* increase lateral padding so the band sits further from the text */
+    left: -0.5rem;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    /* slightly taller band to better surround larger headings */
+    height: 1.6em;
+    border-radius: 0.5rem;
+    /* lighter highlight against the dark background */
+    background: color-mix(in srgb, white 10%, var(--bg) 90%);
+    opacity: 0.95;
+    z-index: -1;
+    transition: background-color 220ms ease, transform 180ms ease,
+        opacity 180ms ease;
+}
+
+/* Slightly more pronounced when hovered or focused for clarity */
+.dark aside nav a.font-semibold:hover::before,
+.dark aside nav a.font-semibold:focus::before {
+    transform: translateY(-50%) scaleX(1.01);
+    background: color-mix(in srgb, white 16%, var(--bg) 84%);
+    opacity: 1;
+}
+
 /* Dark-mode: on hover of the Contact and CV social buttons, force their inner SVG strokes to black
    to increase contrast against lighter icon fills inside the dark UI. Targets elements that have a
    stroke attribute so decorative outlines are respected. */
