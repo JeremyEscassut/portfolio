@@ -495,3 +495,40 @@ aside > div.shadow {
     stroke: #000 !important;
     color: #000 !important;
 }
+
+/* ------------------------------------------------------------------
+   Light-mode nav active highlight (mirror of the .dark band)
+   - Uses a very subtle green-tinted band that reads on the light background
+   - Geometry matches the dark-mode band for consistent layout
+   ------------------------------------------------------------------ */
+aside nav a.font-semibold {
+    position: relative;
+    color: var(--text) !important; /* keep default text color in light mode */
+    display: inline-block;
+    z-index: 1;
+}
+
+aside nav a.font-semibold::before {
+    content: "";
+    position: absolute;
+    left: -0.5rem;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 1.6em;
+    border-radius: 0.5rem;
+    /* pale green band that is visible but muted on the light background */
+    background: color-mix(in srgb, var(--accent-secondary) 50%, white 90%);
+    opacity: 0.95;
+    z-index: -1;
+    transition: background-color 220ms ease, transform 180ms ease,
+        opacity 180ms ease;
+}
+
+/* Slightly stronger on hover/focus for clarity */
+aside nav a.font-semibold:hover::before,
+aside nav a.font-semibold:focus::before {
+    transform: translateY(-50%) scaleX(1.01);
+    background: color-mix(in srgb, var(--accent-secondary) 14%, white 86%);
+    opacity: 1;
+}
