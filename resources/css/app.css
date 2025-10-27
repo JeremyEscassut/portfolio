@@ -509,6 +509,233 @@ aside > div.shadow {
     stroke: initial !important;
 }
 
+/* ------------------------------------------------------------------
+   Modal Contact - page-scoped, highly-specific rules
+   Target: /html/body/div/main/div[2]/div/div[2]/div (dialog container)
+   IMPORTANT: only change the modal; do not modify other surfaces.
+   ------------------------------------------------------------------ */
+
+/* Light mode: soft pastel green background, readable dark text, larger font */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"] {
+    background-color: #eef7ef !important; /* soft, light green */
+    color: #0b1b20 !important; /* richer black for readability */
+    font-size: 1.02rem !important; /* slightly larger than body */
+    line-height: 1.6 !important;
+    border-radius: 0.5rem !important;
+    padding: 0 !important; /* keep inner layout untouched; inner .p-6 handles spacing */
+}
+
+/* Inputs and placeholders inside the targeted modal (light mode) */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    input,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    textarea,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    select {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    color: #0b1b20 !important;
+    border: 1px solid rgba(11, 23, 26, 0.06) !important;
+    font-size: 1rem !important;
+}
+
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    input::placeholder,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    textarea::placeholder {
+    color: rgba(11, 23, 26, 0.48) !important;
+}
+
+/* Buttons inside targeted modal - Annuler and Envoyer */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    .modal-cancel {
+    background: transparent !important;
+    color: #0b1b20 !important;
+    border: 1px solid
+        color-mix(in srgb, var(--accent-secondary) 20%, rgba(11, 23, 26, 0.06)) !important;
+    padding: 0.5rem 0.9rem !important;
+    border-radius: 0.375rem !important;
+    font-weight: 600 !important;
+}
+
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    .modal-send {
+    background-color: var(
+        --accent-secondary
+    ) !important; /* soft green accent */
+    color: #ffffff !important;
+    border: none !important;
+    padding: 0.5rem 0.9rem !important;
+    border-radius: 0.375rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 6px 18px rgba(42, 143, 183, 0.08) !important;
+}
+
+/* Hover states for buttons (light mode) */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    .modal-cancel:hover {
+    background: color-mix(
+        in srgb,
+        var(--accent-secondary) 6%,
+        transparent
+    ) !important;
+}
+
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    .modal-send:hover {
+    filter: brightness(0.96) !important;
+}
+
+/* Dark mode: align dialog text color/size with page for better accessibility */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"] {
+    background-color: #40553f !important; /* keep requested stronger green in dark */
+    color: var(--text) !important; /* align with rest of page */
+    font-size: 1.04rem !important; /* slightly larger for low-vision users */
+    line-height: 1.7 !important;
+}
+
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    .modal-cancel {
+    color: color-mix(in srgb, var(--accent-secondary) 38%, #fff 62%) !important;
+    border: 1px solid
+        color-mix(
+            in srgb,
+            var(--accent-secondary) 18%,
+            rgba(255, 255, 255, 0.06)
+        ) !important;
+    background: transparent !important;
+}
+
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    .modal-send {
+    background: color-mix(
+        in srgb,
+        var(--accent-secondary) 62%,
+        #0b1b20 38%
+    ) !important;
+    color: #fff !important;
+}
+
+/* Ensure inner heading and paragraph in dialog are readable and slightly larger */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    h3,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    p,
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    h3,
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    p {
+    color: inherit !important;
+    font-size: 1.02rem !important;
+    line-height: 1.5 !important;
+}
+
 .dark [role="dialog"] {
     background-color: var(--surface) !important;
     color: var(--text) !important;
@@ -557,19 +784,17 @@ aside > div.shadow {
 /* Dark-mode: on hover of the Contact and CV social buttons, force their inner SVG strokes to black
    to increase contrast against lighter icon fills inside the dark UI. Targets elements that have a
    stroke attribute so decorative outlines are respected. */
+/* On hover we force inner SVG strokes to black for contrast. We intentionally
+   do NOT apply this on :focus so the icon stays white after clicking. */
 .dark .social-link--contact:hover svg [stroke],
-.dark .social-link--cv:hover svg [stroke],
-.dark .social-link--contact:focus svg [stroke],
-.dark .social-link--cv:focus svg [stroke] {
+.dark .social-link--cv:hover svg [stroke] {
     stroke: #000 !important;
     color: #000 !important;
 }
 
 /* If the SVG uses stroke on the root element rather than children */
 .dark .social-link--contact:hover svg[stroke],
-.dark .social-link--cv:hover svg[stroke],
-.dark .social-link--contact:focus svg[stroke],
-.dark .social-link--cv:focus svg[stroke] {
+.dark .social-link--cv:hover svg[stroke] {
     stroke: #000 !important;
     color: #000 !important;
 }
@@ -579,12 +804,8 @@ aside > div.shadow {
    ensures the icon's stroke visibly becomes black on hover/focus in dark mode. */
 .dark .social-link--contact:hover svg,
 .dark .social-link--contact:hover svg *,
-.dark .social-link--contact:focus svg,
-.dark .social-link--contact:focus svg *,
 .dark .social-link--cv:hover svg,
-.dark .social-link--cv:hover svg *,
-.dark .social-link--cv:focus svg,
-.dark .social-link--cv:focus svg * {
+.dark .social-link--cv:hover svg * {
     stroke: #000 !important;
     color: #000 !important;
 }
@@ -814,3 +1035,75 @@ aside h2.text-xl.font-semibold {
     color: var(--aside-heading-secondary) !important;
 }
 
+/* Boutons du modal — couleurs spécifiques en mode clair (ne pas impacter .dark) */
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-send {
+    background-color: #68ab67 !important; /* Envoyer: vert demandé */
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(42, 143, 183, 0.06) !important;
+}
+
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-send:hover {
+    filter: brightness(0.96);
+}
+
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-cancel {
+    background-color: #d6be97 !important; /* Annuler: beige chaud demandé */
+    color: #0b1b20 !important; /* texte noir riche pour lisibilité */
+    border: 1px solid color-mix(in srgb, #d6be97 24%, rgba(11, 23, 26, 0.06)) !important;
+    font-weight: 600 !important;
+}
+
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-cancel:hover {
+    filter: brightness(0.98);
+}
+
+/* S'assurer que le texte du modal en mode clair est bien lisible */
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"] {
+    /* laisse le background que vous avez fixé dans home.blade.php (#cbdfca) ;
+       on renforce simplement la lisibilité du texte et la taille */
+    color: #0b1b20 !important;
+    font-size: 1.02rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Garder les règles dark existantes inchangées — ces sélecteurs ne touchent pas .dark */

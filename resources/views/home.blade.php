@@ -449,11 +449,13 @@
     }
 
     .social-link--contact {
-        color: #000;
+        color: #0b1b20;
+        /* richer black for better legibility in light mode */
     }
 
     .social-link--cv {
-        color: #000;
+        color: #0b1b20;
+        /* richer black for better legibility in light mode */
     }
 
     /* In dark mode, keep contact/cv visible (white) */
@@ -516,10 +518,12 @@
     .dark a.social-link.social-link--cv:hover svg *,
     .dark button.social-link.social-link--contact:hover svg,
     .dark button.social-link.social-link--contact:hover svg *,
-    .dark a.social-link.social-link--cv:focus svg,
-    .dark a.social-link.social-link--cv:focus svg *,
-    .dark button.social-link.social-link--contact:focus svg,
-    .dark button.social-link.social-link--contact:focus svg * {
+    /* Use :focus-visible for keyboard focus indicators only so mouse clicks
+       that focus the element do not permanently change the icon colour. */
+    .dark a.social-link.social-link--cv:focus-visible svg,
+    .dark a.social-link.social-link--cv:focus-visible svg *,
+    .dark button.social-link.social-link--contact:focus-visible svg,
+    .dark button.social-link.social-link--contact:focus-visible svg * {
         stroke: #000 !important;
         color: #000 !important;
     }
@@ -556,12 +560,13 @@
 
 
 <style>
-    /* Contact modal — green-tinted surface matching the --accent-secondary token.
-       Applies in both light and dark modes; dark-mode tweaks below. */
+    /* Contact modal — lighter surface in light mode, green-tinted but soft.
+       Dark mode keeps the stronger green (defined later). */
     div[role="dialog"] {
-        /* explicit requested modal background color */
-        background-color: #40553f !important;
-        color: #ffffff !important;
+        /* softer, lighter surface in light mode (soft green) */
+        background-color: #eef7ef !important;
+        /* use the page text color in light mode for consistency */
+        color: var(--text) !important;
         border-radius: 0.5rem !important;
         border: none !important;
     }
@@ -590,15 +595,17 @@
     /* Button styles scoped to the dialog */
     div[role="dialog"] .modal-cancel {
         background: transparent !important;
-        color: color-mix(in srgb, var(--accent-secondary) 40%, var(--text) 60%) !important;
+        /* use the normal text color so cancel reads like a neutral action */
+        color: var(--text) !important;
         border: 1px solid color-mix(in srgb, var(--accent-secondary) 18%, rgba(11, 23, 26, 0.06)) !important;
         padding: 0.5rem 1rem !important;
         border-radius: 0.375rem !important;
     }
 
     div[role="dialog"] .modal-send {
+        /* keep a clear primary affordance: use accent-secondary with white text */
         background: var(--accent-secondary) !important;
-        color: #ffffff !important;
+        color: #fff !important;
         border: none !important;
         padding: 0.5rem 1rem !important;
         border-radius: 0.375rem !important;
@@ -614,10 +621,8 @@
         filter: brightness(0.96) !important;
     }
 
-    /* Dark mode: make the dialog slightly darker but keep the green tint
-       and ensure form fields use darker translucent inputs for legibility */
+    /* Dark mode: keep the stronger requested green tint for the dialog */
     .dark div[role="dialog"] {
-        /* keep the same requested color in dark mode for consistency */
         background-color: #40553f !important;
         color: #ffffff !important;
     }
@@ -626,8 +631,12 @@
        that may still apply to the dialog container in the DOM. Matches the
        element you provided precisely and forces the requested color. */
     body>div>main>div:nth-child(4)>div>div.fixed.inset-0.flex.items-center.justify-center.p-4>div[role="dialog"] {
-        background-color: #40553f !important;
+        background-color: #cbdfca !important;
         color: #ffffff !important;
+    }
+
+    .dark body>div>main>div:nth-child(4)>div>div.fixed.inset-0.flex.items-center.justify-center.p-4>div[role="dialog"] {
+        background-color: #425941ff !important;
     }
 
     .dark div[role="dialog"] input,
