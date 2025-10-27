@@ -1035,6 +1035,55 @@ aside h2.text-xl.font-semibold {
     color: var(--aside-heading-secondary) !important;
 }
 
+/* ==================================================================
+   Ensure modal dialog text and sizing match the rest of the page for both
+   modal instances the project uses (nth-child(2) and nth-child(4)). We use
+   the theme tokens so dark mode variables apply automatically.
+   These rules are intentionally appended to avoid conflicting with earlier
+   page-scoped overrides and to keep the modal text consistent with the
+   rest of the site for accessibility.
+   ================================================================== */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"],
+body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"] {
+    color: var(--text) !important;
+    font-size: var(--body-font-size) !important;
+    line-height: var(--body-line-height) !important;
+}
+
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"],
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"] {
+    /* in dark mode the tokens are adjusted (see :root and .dark definitions) */
+    color: var(--text) !important;
+    font-size: var(--body-font-size) !important;
+    line-height: var(--body-line-height) !important;
+}
+
 /* Boutons du modal — couleurs spécifiques en mode clair (ne pas impacter .dark) */
 html:not(.dark)
     body

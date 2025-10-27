@@ -632,7 +632,10 @@
        element you provided precisely and forces the requested color. */
     body>div>main>div:nth-child(4)>div>div.fixed.inset-0.flex.items-center.justify-center.p-4>div[role="dialog"] {
         background-color: #cbdfca !important;
-        color: #ffffff !important;
+        /* align dialog text with page text variables so light/dark modes match */
+        color: var(--text) !important;
+        font-size: var(--body-font-size) !important;
+        line-height: var(--body-line-height) !important;
     }
 
     .dark body>div>main>div:nth-child(4)>div>div.fixed.inset-0.flex.items-center.justify-center.p-4>div[role="dialog"] {

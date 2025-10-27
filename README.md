@@ -261,6 +261,7 @@ open storage/coverage/index.html
    S'assurer que les 2 prochains points soient des bonnes pratiques de développement.
 9. Nettoyer le code pour éventuellement mettre les règles de style dans le fichier CSS approprié.
 10. Nettoyer le code pour placer le code javascript dans un fichier dédié.
+
 11. Améliorer le contraste pour les personnes à visibilité réduite
 12. Couleur et taille du texte du modal Contact en mode clair et sombre à ajuster
 13. Faire en sorte que le hover puisse suivre la souris partout sur la page
