@@ -161,6 +161,35 @@ MAIL_FROM_NAME="Your Name"
 # MAILGUN_SECRET=your-mailgun-api-key
 ```
 
+#### Notes rapides pour Mailgun
+
+1. Créez un compte Mailgun et ajoutez votre domaine d'envoi (ex: `mg.yourdomain.com`).
+2. Vérifiez les enregistrements DNS (SPF/DKIM) fournis par Mailgun pour améliorer la délivrabilité.
+3. Dans l'environnement de production, définissez ces variables (NE PAS committer les clés) :
+
+```env
+MAIL_MAILER=mailgun
+MAILGUN_DOMAIN=mg.yourdomain.com
+MAILGUN_SECRET=your-mailgun-api-key
+MAIL_FROM_ADDRESS=hello@yourdomain.com
+MAIL_FROM_NAME="Your Name"
+MAIL_CONTACT_ADDRESS=j.losaint@gmail.com
+```
+
+4. Préférez le driver HTTP (`MAIL_MAILER=mailgun`) pour plus de fiabilité. Si vous utilisez SMTP, utilisez les identifiants SMTP fournis.
+
+5. Après mise à jour des variables d'environnement en production :
+
+```bash
+php artisan config:cache
+php artisan route:cache
+```
+
+6. Testez l'envoi : en dev utilisez `MAIL_MAILER=log` ou MailHog ; en prod déclenchez un test et contrôlez la réception.
+
+Sécurité : n'ajoutez jamais `MAILGUN_SECRET` dans le dépôt Git ; utilisez le gestionnaire de secrets de votre hébergeur / CI.
+
+
 -   AWS SES (via `ses` / `ses-v2`) :
 
 ```bash
@@ -272,17 +301,16 @@ Actuellement, quand on est en mode @media, les titres des sections, ex. :
 débordent du cadre body > div > main
 Est-ce que tu peux corriger ça ?
 
-````
-
 ## Conventions — emplacement du code
 
 Pour faciliter la maintenance et la chaîne de build (Vite / PostCSS / Tailwind) :
 
-- Placer tout le CSS (même les overrides page-scoped) dans `resources/css/app.css`.
-- Placer tout le code JavaScript lié au comportement de page dans `resources/js/app.js`.
-- Dans les vues Blade, ne laisser que le HTML et les directives Blade ; utilisez `@push('styles')` / `@push('scripts')` uniquement pour documenter que le code a été centralisé.
+-   Placer tout le CSS (même les overrides page-scoped) dans `resources/css/app.css`.
+-   Placer tout le code JavaScript lié au comportement de page dans `resources/js/app.js`.
+-   Dans les vues Blade, ne laisser que le HTML et les directives Blade ; utilisez `@push('styles')` / `@push('scripts')` uniquement pour documenter que le code a été centralisé.
 
 Cette convention évite les conflits d'ordre de chargement, facilite la minification et les sourcemaps, et améliore la maintenabilité.
+
 # Portfolio CDA — Laravel 12 + TailwindCSS + Alpine.js
 
 > Cible: réalisation en 5–7 jours. Interface en français, code en anglais. Mobile minimaliste, desktop complet avec option “Pro/Fun”.
@@ -556,4 +584,7 @@ Actuellement, quand on est en mode @media, les titres des sections, ex. :
 
 débordent du cadre body > div > main
 Est-ce que tu peux corriger ça ?
-````
+
+```
+
+```
