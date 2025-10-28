@@ -75,7 +75,7 @@
                 </button>
 
                 <!-- CV (inline from resources/svg/icon-cv.svg) -->
-                <a href="/cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-cv.svg')); } catch (Exception $e) { } @endphp
                     @if($svg) {!! $svg !!} @endif
                 </a>
