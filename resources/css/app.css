@@ -1156,3 +1156,456 @@ html:not(.dark)
 }
 
 /* Garder les règles dark existantes inchangées — ces sélecteurs ne touchent pas .dark */
+
+/* =============================================================== */
+/* Page-scoped: home.blade.php overrides (migrés depuis @push('styles')) */
+/* Canonicalisé : footer sticky, skills, social-link svgs, modal Contact, */
+/* accessibility tokens, and targeted dark-mode fixes. Keep this block at */
+/* the end of the file so it can safely override Tailwind utilities.     */
+/* =============================================================== */
+
+/* Footer / right-column sticky behaviour */
+#right-footer {
+    position: relative;
+}
+#right-footer.stuck {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+    z-index: 40;
+}
+
+/* Desktop: constrain stuck footer to main column */
+@media (min-width: 1024px) {
+    #right-footer.stuck {
+        left: 48%;
+        right: 0;
+        width: 52%;
+        max-width: calc(100% - 48%);
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Dark-mode mirror for desktop widths */
+    .dark #right-footer.stuck {
+        left: 48%;
+        right: 0;
+        width: 52%;
+        max-width: calc(100% - 48%);
+        background: transparent !important;
+        box-shadow: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+    }
+}
+
+/* Contact/CV actions when fixed on small screens */
+#contact-cv-actions.fixed {
+    position: fixed !important;
+    top: 0 !important;
+    right: 55px !important;
+    left: auto !important;
+    z-index: 60 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Skills / tiles */
+.skill-php svg {
+    width: 2rem;
+    height: 2rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+.skills-grid .skill-tile {
+    aspect-ratio: 1/1;
+    min-width: 3.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+.skills-grid .grid > .skill-tile {
+    height: auto;
+}
+.skills-grid svg {
+    width: 1.9rem;
+    height: 1.9rem;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+@media (min-width: 1024px) {
+    .skills-grid .skill-tile {
+        min-width: 5rem;
+    }
+    .skills-grid svg {
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+}
+
+/* Social icons : prefer stroke = currentColor so color controls them */
+.social-link svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Social brand colors */
+.social-link--linkedin {
+    color: #0a66c2 !important;
+}
+.social-link--gitlab {
+    color: #fc6d26 !important;
+}
+
+/* Contact / CV: light mode richer black, dark mode white */
+.social-link--contact {
+    color: #0b1b20;
+}
+.social-link--cv {
+    color: #0b1b20;
+}
+.dark .social-link--contact,
+.dark .social-link--cv {
+    color: #fff !important;
+}
+
+/* Ensure svg strokes match mode; prefer :focus-visible for keyboard focus */
+a.social-link.social-link--cv svg,
+button.social-link.social-link--contact svg {
+    stroke: #000;
+}
+@media (prefers-color-scheme: dark) {
+    a.social-link.social-link--cv svg,
+    button.social-link.social-link--contact svg {
+        stroke: #fff;
+    }
+}
+
+/* Stronger override for dark mode to cover inner path/stroke attributes */
+.dark .social-link--contact svg,
+.dark .social-link--contact svg *,
+.dark a.social-link.social-link--cv svg,
+.dark a.social-link.social-link--cv svg * {
+    stroke: #fff !important;
+    fill: none;
+}
+
+/* On hover / keyboard focus-visible make icon strokes darker for contrast (dark mode) */
+.dark a.social-link.social-link--cv:hover svg,
+.dark a.social-link.social-link--cv:focus-visible svg,
+.dark button.social-link.social-link--contact:hover svg,
+.dark button.social-link.social-link--contact:focus-visible svg,
+.dark a.social-link.social-link--cv:hover svg *,
+.dark a.social-link.social-link--cv:focus-visible svg * {
+    stroke: #000 !important;
+    color: #000 !important;
+}
+
+/* Postman light/dark variants */
+.postman-dark {
+    display: none;
+}
+.postman-light {
+    display: inline-block;
+}
+@media (prefers-color-scheme: dark) {
+    .postman-dark {
+        display: inline-block;
+    }
+    .postman-light {
+        display: none;
+    }
+}
+
+/* ------------------------------------------------------------------
+   Modal Contact (page-scoped) — cible explicite pour éviter effets globaux.
+   Two modal locations handled: nth-child(2) and nth-child(4)
+   (keep selectors specific to avoid unintended overrides).
+   ------------------------------------------------------------------ */
+
+/* Light-mode dialog: soft green background and readable text */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"],
+body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"] {
+    background-color: #eef7ef !important;
+    color: #0b1b20 !important;
+    font-size: 1.02rem !important;
+    line-height: 1.6 !important;
+    border-radius: 0.5rem !important;
+    padding: 0 !important;
+}
+
+/* Inputs/textarea/select inside targeted modal (light) */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    input,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    textarea,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    select {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    color: #0b1b20 !important;
+    border: 1px solid rgba(11, 23, 26, 0.06) !important;
+    font-size: 1rem !important;
+}
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    input::placeholder,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    textarea::placeholder {
+    color: rgba(11, 23, 26, 0.48) !important;
+}
+
+/* Modal buttons (light) — colors for nth-child(4) location */
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-send {
+    background-color: #68ab67 !important; /* Envoyer */
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 6px 18px rgba(42, 143, 183, 0.06) !important;
+}
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-cancel {
+    background-color: #d6be97 !important; /* Annuler */
+    color: #0b1b20 !important;
+    border: 1px solid color-mix(in srgb, #d6be97 24%, rgba(11, 23, 26, 0.06)) !important;
+    font-weight: 600 !important;
+}
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-send:hover {
+    filter: brightness(0.96);
+}
+html:not(.dark)
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"]
+    .modal-cancel:hover {
+    filter: brightness(0.98);
+}
+
+/* Dark-mode dialog alignment with page tokens (accessible) */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"],
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(4)
+    > div
+    > div.fixed.inset-0.flex.items-center.justify-center.p-4
+    > div[role="dialog"] {
+    background-color: #40553f !important;
+    color: var(--text) !important;
+    font-size: 1.04rem !important;
+    line-height: 1.7 !important;
+}
+
+/* Dialog inner headings & paragraphs: inherit readable tokens */
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    h3,
+body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    p,
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    h3,
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2)
+    > div[role="dialog"]
+    p {
+    color: inherit !important;
+    font-size: 1.02rem !important;
+    line-height: 1.5 !important;
+}
+
+/* ------------------------------------------------------------------
+   Small targeted dark-mode fixes to avoid wide opaque w-screen sticky bars
+   and project-card stacking contexts that hid the halo.
+   ------------------------------------------------------------------ */
+.dark section > .sticky.w-screen,
+.dark section .sticky.w-screen {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    left: auto !important;
+    right: auto !important;
+    max-width: 100% !important;
+}
+
+/* Neutralize specific project card wrappers that caused stacking contexts in .dark */
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    > div:nth-child(2)
+    > div
+    > div:first-child,
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    > div:nth-child(2)
+    > div
+    > div:nth-child(2),
+.dark
+    body
+    > div
+    > main
+    > div:nth-child(1)
+    > main
+    section:nth-child(2)
+    .project-card {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    position: static !important;
+    z-index: auto !important;
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
+    isolation: auto !important;
+    overflow: visible !important;
+}
+
+/* Accessibility: body copy tokens applied to typical content elements */
+aside p,
+aside li,
+aside .text-sm,
+main#content p,
+main#content li,
+main#content .text-sm,
+.project-card p,
+section p {
+    color: var(--body-copy) !important;
+    font-size: var(--body-font-size) !important;
+    line-height: var(--body-line-height) !important;
+}
+
+/* Aside identity titles (only these two selectors) */
+aside h1.text-3xl.font-semibold {
+    color: var(--aside-heading-primary) !important;
+}
+aside h2.text-xl.font-semibold {
+    color: var(--aside-heading-secondary) !important;
+}
+
+/* End of page-scoped home.blade.php overrides */
