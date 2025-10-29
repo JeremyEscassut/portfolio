@@ -86,9 +86,8 @@ body::before {
     position: fixed;
     inset: -20% -20% -20% -20%;
     pointer-events: none;
-    /* bring the halo into a neutral stacking layer so it can appear above
-       plain wrapper backgrounds but remain behind interactive content */
-    z-index: 0 !important;
+    /* keep the halo behind normal content by default */
+    z-index: -1 !important;
     /* keep gradients compact but increase visibility: intensity up, sizes moderate */
     background: radial-gradient(
             600px 600px at var(--halo-x) var(--halo-y),
@@ -2211,46 +2210,16 @@ html:not(.dark) .social-link--cv:focus-visible svg * {
     .dark {
         --halo-opacity: 0.16 !important;
     }
+
+    /* Slightly stronger halo in light mode on desktop only (preserve desktop-only behavior) */
+    html:not(.dark) {
+        --halo-opacity: 0.18 !important;
+    }
 }
 
-/* ------------------------------------------------------------------
-   Light-mode: increase halo visibility and allow it to show through
-   by making top-level wrappers and main panels slightly translucent on desktop.
-   This mirrors the dark-mode approach while keeping the light color tones.
-   ------------------------------------------------------------------ */
-/* Apply halo visibility and wrapper translucency on all viewports
-   (previously limited to desktop). The slight translucency allows the
-   halo to be perceived even behind top-level wrappers while preserving
-   the light look. */
-html:not(.dark) {
-    /* slightly stronger halo in light so it's perceptible over pale surfaces */
-    --halo-opacity: 0.18 !important;
-}
-
-/* Allow the halo to show by softening the most common opaque wrappers */
-html:not(.dark) body > div:first-child,
-html:not(.dark) main .rounded-md,
-html:not(.dark) main .bg-white,
-html:not(.dark) .content-surface {
-    /* make top-level wrappers fully transparent in light mode so the halo is not hidden */
-    background: transparent !important;
-    background-image: none !important;
-}
-
-/* Ensure content layers sit above the halo pseudo-element */
-html:not(.dark) body > div:first-child {
-    z-index: 1 !important;
-}
-
-/* Project cards and panels - keep a touch more translucency to let halo show */
-html:not(.dark) .project-card,
-html:not(.dark) .rounded-md.p-6,
-html:not(.dark) #about > .bg-\[\#fff2f2\],
-html:not(.dark) #experience > .bg-\[\#fff7db\] {
-    background-color: rgba(251, 253, 254, 0.9) !important;
-    box-shadow: none !important;
-    border: none !important;
-}
+/* Light-mode halo/visual tweaks were intentionally removed per request.
+   Keep halo enabled on desktop and its opacity adjustments intact elsewhere.
+*/
 
 /* ------------------------------------------------------------------
    Fix: Ensure the two project wrapper divs under #projects are fully
