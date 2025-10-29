@@ -102,7 +102,7 @@ tail -n 200 storage/logs/laravel.log
 ## 8) Roadmap & éléments ouverts
 
 -   Faire fonctionner les envois d'e‑mail asynchrones via queue et faire en sorte que le message de réussite ou d'erreur soit affiché en dehors du formulaire, parce qu'actuellement, il faut rouvrir le formulaire pour voir si l'envoi a réussi ou échoué.
--   Pour les titres des sections en mode mobile, faire en sorte que le cadre ne dépasse pas de l'écran et surtout que le titre ait plus de marge par rapport au bord gauche de l'écran.
+-   Pour les titres des sections en mode mobile, faire en sorte que le cadre ne dépasse pas de l'écran
 -   Ajouter un bouton [EN | FR] à gauche du bouton mode clair/sombre pour permettre de changer la langue du site.
 -   Ajouter une photo de moi à gauche des boutons dans la section Accueil
 -   Améliorer le contraste et l'accessibilité

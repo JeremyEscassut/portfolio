@@ -33,7 +33,15 @@ class ContactController extends Controller
                 'body' => $data['message']
             ]));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());
+            // Log the full exception including stack trace to help debugging
+            \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage(), ['exception' => $e]);
+
+            // In debug mode, surface the real exception message in the flash so it's visible
+            // during troubleshooting (do NOT keep this in production).
+            if (config('app.debug')) {
+                return redirect()->back()->withInput()->with('error', 'Erreur lors de l\'envoi : ' . $e->getMessage())->with('openContact', true);
+            }
+
             return redirect()->back()->withInput()->with('error', 'Une erreur est survenue lors de l\'envoi du message.')->with('openContact', true);
         }
         $displayName = $nameForMessage ? ' ' . trim($nameForMessage) : '';
