@@ -26,10 +26,11 @@ class ContactController extends Controller
         $to = config('mail.contact_address') ?? env('MAIL_CONTACT_ADDRESS');
 
         try {
+            // avoid passing a key named "message" (conflicts with Mail\Message in Blade)
             Mail::to($to)->send(new ContactMessage([
                 'name' => $nameForMessage,
                 'email' => $data['email'],
-                'message' => $data['message']
+                'body' => $data['message']
             ]));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Mail sending failed: ' . $e->getMessage());

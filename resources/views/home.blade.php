@@ -86,6 +86,47 @@
     <!-- RIGHT: page scroll handles content; main not an independent scroller -->
     <main id="content" class="order-2 lg:order-2 pt-24 lg:py-24 lg:w-[52%]">
 
+        {{-- Global flash messages (visible outside the modal) --}}
+        <div x-data="{ show: true }" x-cloak class="mx-6 mb-4">
+            @if(session('status'))
+            <div x-show="show" role="status" class="flex items-start justify-between gap-4 p-4 rounded-lg border border-green-200 bg-green-50 text-green-800 dark:bg-green-900 dark:border-green-800 dark:text-green-100 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 flex-shrink-0 text-green-600 dark:text-green-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414L9 13.414l4.707-4.707z" clip-rule="evenodd" />
+                    </svg>
+                    <div class="text-sm">{!! session('status') !!}</div>
+                </div>
+                <button @click="show=false" class="text-sm text-green-700 dark:text-green-200 opacity-80 hover:opacity-100" aria-label="Fermer le message">✕</button>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div x-show="show" role="alert" class="flex items-start justify-between gap-4 p-4 rounded-lg border border-red-200 bg-red-50 text-red-800 dark:bg-red-900 dark:border-red-800 dark:text-red-100 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 flex-shrink-0 text-red-600 dark:text-red-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zm-1 8a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" clip-rule="evenodd" />
+                    </svg>
+                    <div class="text-sm">{!! session('error') !!}</div>
+                </div>
+                <button @click="show=false" class="text-sm text-red-700 dark:text-red-200 opacity-80 hover:opacity-100" aria-label="Fermer le message">✕</button>
+            </div>
+            @endif
+
+            @if($errors->any())
+            <div x-show="show" role="alert" class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800 dark:bg-red-900 dark:border-red-800 dark:text-red-100 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div class="text-sm">Veuillez corriger les erreurs suivantes :</div>
+                    <button @click="show=false" class="text-sm text-red-700 dark:text-red-200 opacity-80 hover:opacity-100" aria-label="Fermer le message">✕</button>
+                </div>
+                <ul class="mt-2 list-disc pl-5 text-sm">
+                    @foreach($errors->all() as $err)
+                    <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>
+
 
 
         <section id="about" class="mb-8 scroll-mt-24" aria-label="À propos">
@@ -308,21 +349,7 @@
 
                         <form method="POST" action="{{ route('contact.send') }}" class="space-y-4">
                             @csrf
-                            @if(session('status'))
-                            <div class="p-3 rounded bg-green-50 text-green-800">{{ session('status') }}</div>
-                            @endif
-                            @if(session('error'))
-                            <div class="p-3 rounded bg-red-50 text-red-800">{{ session('error') }}</div>
-                            @endif
-                            @if($errors->any())
-                            <div class="p-3 rounded bg-red-50 text-red-800">
-                                <ul class="list-disc pl-5">
-                                    @foreach($errors->all() as $err)
-                                    <li>{{ $err }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @endif
+                            {{-- flash messages moved to top-level so they are visible outside the modal after redirect --}}
                             <!-- honeypot -->
                             <input type="text" name="hp" tabindex="-1" autocomplete="off" style="display:none">
 

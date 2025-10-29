@@ -32,6 +32,7 @@ class ContactMessage extends Mailable
         return $this->subject($subject)
             ->replyTo($this->payload['email'])
             ->view('emails.contact')
-            ->with('payload', $this->payload);
+            // pass payload keys directly to the view so $name, $email, $body are available
+            ->with($this->payload);
     }
 }
