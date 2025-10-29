@@ -6,6 +6,9 @@ import './bootstrap';
 // Alpine.js initialization
 import Alpine from 'alpinejs';
 
+// Ensure theme from localStorage is applied immediately (no 'auto' option):
+{ const stored = localStorage.getItem('theme'); if (stored === 'dark') { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); } }
+
 // Register contact modal factory and other small page behaviors here so markup can remain clean.
 // We keep a window.contactModal factory for compatibility with existing x-data="contactModal()" usage.
 window.contactModal = function () {
@@ -92,7 +95,8 @@ document.addEventListener('alpine:init', () => {
 
 // Contact/CV actions: make them fixed on small screens when scrolled past their original top
 (function () {
-    const target = document.getElementById('contact-cv-actions');
+    // support legacy id 'contact-cv-actions' or new id 'home-contact-cv-icons'
+    const target = document.getElementById('home-contact-cv-icons') || document.getElementById('contact-cv-actions');
     if (!target) return;
 
     let origRect = null;
@@ -133,7 +137,8 @@ document.addEventListener('alpine:init', () => {
 
 // Ensure footer reserved space on mobile when it becomes stuck
 (function () {
-    const footer = document.getElementById('right-footer');
+    // support legacy id 'right-footer' or new id 'footer'
+    const footer = document.getElementById('footer') || document.getElementById('right-footer');
     const main = document.querySelector('main#content') || document.querySelector('main');
     if (!footer || !main) return;
 

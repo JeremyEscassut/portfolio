@@ -101,11 +101,51 @@ tail -n 200 storage/logs/laravel.log
 
 ## 8) Roadmap & éléments ouverts
 
--   Publier sur Alwaysdata (déploiement automatisé si souhaité)
--   Rendre les envois d'e‑mail asynchrones via queue
+-   Faire fonctionner les envois d'e‑mail asynchrones via queue et faire en sorte que le message de réussite ou d'erreur soit affiché en dehors du formulaire, parce qu'actuellement, il faut rouvrir le formulaire pour voir si l'envoi a réussi ou échoué.
+-   Pour les titres des sections en mode mobile, faire en sorte que le cadre ne dépasse pas de l'écran et surtout que le titre ait plus de marge par rapport au bord gauche de l'écran.
+-   Ajouter un bouton [EN | FR] à gauche du bouton mode clair/sombre pour permettre de changer la langue du site.
+-   Ajouter une photo de moi à gauche des boutons dans la section Accueil
 -   Améliorer le contraste et l'accessibilité
--   Nettoyer les styles et regrouper les règles page‑scoped
+-   Utiliser un arrière-plan en mode clair plus marqué. Le visuel actuellement est trop "boring".
 -   Ajouter CI/CD (GitHub Actions) : build + upload des assets
+
+---
+
+## 9) Consignation des solutions (fichier : README_Solutions.md)
+
+Règle obligatoire — Dès qu'un problème est résolu (bug, incident d'infra, test qui a cassé, décision d'architecture, etc.), consigner systématiquement la description et la solution dans le fichier `README_Solutions.md` à la racine du projet.
+
+But : garder un registre réutilisable des problèmes rencontrés et des solutions appliquées afin de pouvoir extraire des guidelines générales pour d'autres projets.
+
+Contenu minimum requis pour chaque entrée :
+
+-   Titre : court et explicite
+-   Date : YYYY-MM-DD
+-   Contexte / reproduction : comment reproduire le problème (étapes, environnement)
+-   Cause racine : diagnostic bref
+-   Solution : commandes, patches, fichiers modifiés, et justification technique
+-   Référence : commit SHA, numéro de PR/issue, ou fichier(s) modifié(s)
+-   Tags : bug | infra | tests | perf | doc | build | sécurité | autre
+
+Template recommandé (copier/coller pour chaque nouveau cas) :
+
+```
+- Titre :
+- Date :
+- Contexte :
+- Cause :
+- Solution :
+- Référence :
+- Tags :
+```
+
+Processus / règle :
+
+-   Ne pas fermer ou archiver une tâche/problème sans avoir ajouté une entrée dans `README_Solutions.md`.
+-   Garder les descriptions claires et concises — l'objectif est la réutilisabilité des solutions.
+-   Conserver les guidelines générales dans cette section du `README.md` pour pouvoir les réutiliser facilement dans de futurs projets.
+
+Cette section sert de référence rapide pour les bonnes pratiques de consignation et doit rester concise ; les détails techniques (patches, diff, logs) vont dans l'entrée correspondante de `README_Solutions.md`.
 
 ---
 

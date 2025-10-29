@@ -5,14 +5,23 @@
 (function () {
     if (typeof window === 'undefined' || !document.documentElement) return;
 
+    const root = document.documentElement;
+
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) {
         // Lower the intensity for reduced-motion users
-        document.documentElement.style.setProperty('--halo-opacity', '0.02');
+        root.style.setProperty('--halo-opacity', '0.02');
+        root.style.setProperty('--halo-enabled', '0');
         return;
     }
 
-    const root = document.documentElement;
+    // Only enable the halo effect on desktop widths (>= 1024px).
+    // On smaller viewports we keep it disabled to avoid useless motion on touch devices.
+    if (window.innerWidth < 1024) {
+        root.style.setProperty('--halo-enabled', '0');
+        // do not initialize the animated halo on mobile
+        return;
+    }
 
     // Start halo centered-ish so it's visible and behaves the same before any scroll
     let lastX = window.innerWidth * 0.5;
@@ -37,11 +46,6 @@
     function onMove(e) {
         const mx = (e.clientX / window.innerWidth - 0.5) * 20; // -10..10
         const my = (e.clientY / window.innerHeight - 0.5) * 12; // -6..6
-        // convert to px offset from the percent base
-        // we'll store as calc expressions for CSS: use pixel offsets
-        // but to keep things simple, apply small pixel offsets to computed percent
-        // Here we compute additional px and mix with percent via JS by converting target to px
-        // We'll just nudge targetX/targetY via tiny pixel offsets appended in JS loop.
         // Save small values on window for rAF loop
         window.__haloMouseOffset = { mx, my };
     }

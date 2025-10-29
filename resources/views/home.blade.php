@@ -5,12 +5,12 @@
     <!-- LEFT: navigation / identity (centré verticalement sur grand écran) -->
     <!-- LEFT: like Brittany, sticky on large screens within page scroll -->
     <aside class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
-        <div class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
+        <div id="home" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
             <!-- Name -->
-            <div class="mb-8">
+            <div id="home-title" class="mb-8">
                 <!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
-                <div class="mt-3 flex justify-end" x-data="{ theme: localStorage.getItem('theme') || 'auto', init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else if(this.theme==='light'){ document.documentElement.classList.remove('dark') } else { document.documentElement.classList.toggle('dark', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) } }, set(t){ this.theme=t; if(t==='auto'){ localStorage.removeItem('theme'); document.documentElement.classList.toggle('dark', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) } else if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['auto','light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()">
-                    <button type="button" @click="cycle()" :title="(theme==='auto' ? 'Auto — respecte les réglages système' : (theme==='light' ? 'Mode clair' : 'Mode sombre')) + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
+                <div id="home-icons" class="mt-3 flex justify-end" x-data="{ theme: localStorage.getItem('theme') || 'light', init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()">
+                    <button type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
                         <template x-if="theme==='auto'">
                             <!-- system icon -->
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -34,8 +34,8 @@
                     </button>
                 </div>
 
-                <h1 class="text-3xl font-semibold">Jérémy Escassut</h1>
-                <h2 class="text-xl font-semibold">Développeur Full Stack</h2>
+                <h1 class="text-3xl ml-6 font-semibold">Jérémy Escassut</h1>
+                <h2 class="text-xl ml-6 font-semibold">Développeur Full Stack</h2>
                 <p class="text-[#706f6c] mt-3">Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.</p>
             </div>
 
@@ -51,7 +51,7 @@
 
 
             <!-- Social icon buttons (Tabler icons, larger, no border) -->
-            <div class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
+            <div id="home-social-icons" class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
                 <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
                 <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
@@ -67,7 +67,7 @@
 
 
             <!-- Actions: icons -->
-            <div id="contact-cv-actions" class="mt-6 flex items-center gap-3 justify-end">
+            <div id="home-contact-cv-icons" class="contact-cv-actions mt-6 flex items-center gap-3 justify-end">
                 <!-- Contact (inline from resources/svg/icon-contact.svg) -->
                 <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="Ouvrir le contact" style="margin-top:2px;">
                     @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
@@ -186,21 +186,21 @@
             </div>
 
             <!-- Simplified skills container: no green background, tighter gaps, centered icon tiles -->
-            <div class="p-0 skills-grid">
+            <div id="skills-icons" class="p-0 skills-grid">
                 <div class="space-y-4 text-sm">
                     <!-- Front group -->
                     <div>
                         <h3 class="text-sm font-semibold mb-2">Front</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
-                            <div class="bg-white rounded flex items-center justify-center skill-angular skill-tile" title="Angular" aria-label="Angular">
+                            <div class="bg-white rounded flex items-center justify-center skill-angular skill-tile" aria-label="Angular" data-name="Angular">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-angular.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-html5 skill-tile" title="HTML5" aria-label="HTML5">
+                            <div class="bg-white rounded flex items-center justify-center skill-html5 skill-tile" aria-label="HTML5" data-name="HTML5">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-html5.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-ionic skill-tile" title="Ionic" aria-label="Ionic">
+                            <div class="bg-white rounded flex items-center justify-center skill-ionic skill-tile" aria-label="Ionic" data-name="Ionic">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-ionic.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
@@ -211,31 +211,31 @@
                     <div>
                         <h3 class="text-sm font-semibold mb-2">Back</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
-                            <div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile" title="Laravel" aria-label="Laravel">
+                            <div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile" aria-label="Laravel" data-name="Laravel">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-laravel.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-nodejs skill-tile" title="Node.js" aria-label="Node.js">
+                            <div class="bg-white rounded flex items-center justify-center skill-nodejs skill-tile" aria-label="Node.js" data-name="Node.js">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-nodejs.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-python skill-tile" title="Python" aria-label="Python">
+                            <div class="bg-white rounded flex items-center justify-center skill-python skill-tile" aria-label="Python" data-name="Python">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-python.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-django skill-tile" title="Django" aria-label="Django">
+                            <div class="bg-white rounded flex items-center justify-center skill-django skill-tile" aria-label="Django" data-name="Django">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-django.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-java skill-tile" title="Java" aria-label="Java">
+                            <div class="bg-white rounded flex items-center justify-center skill-java skill-tile" aria-label="Java" data-name="Java">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-java.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-spring-boot skill-tile" title="Spring Boot" aria-label="Spring Boot">
+                            <div class="bg-white rounded flex items-center justify-center skill-spring-boot skill-tile" aria-label="Spring Boot" data-name="Spring Boot">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-spring-boot.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-symfony skill-tile" title="Symfony" aria-label="Symfony">
+                            <div class="bg-white rounded flex items-center justify-center skill-symfony skill-tile" aria-label="Symfony" data-name="Symfony">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-symfony.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
@@ -243,14 +243,14 @@
                     </div>
 
                     <!-- Others group -->
-                    <div>
+                    <div id="other">
                         <h3 class="text-sm font-semibold mb-2">Autres</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
-                            <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile" title="Jira" aria-label="Jira">
+                            <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile" aria-label="Jira" data-name="Jira">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-jira.svg')); } catch (Exception $e) { } @endphp
                                 @if($svg) {!! $svg !!} @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-postman skill-tile" title="Postman" aria-label="Postman">
+                            <div class="bg-white rounded flex items-center justify-center skill-postman skill-tile" aria-label="Postman" data-name="Postman">
                                 @php
                                 $postmanSvg = '';
                                 try { $postmanSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postman.svg')); } catch (Exception $e) { }
@@ -264,7 +264,7 @@
                                 <span class="postman-dark" aria-hidden="true">{!! $postmanDarkSvg !!}</span>
                                 @endif
                             </div>
-                            <div class="bg-white rounded flex items-center justify-center skill-php skill-tile" title="PHP" aria-label="PHP">
+                            <div class="bg-white rounded flex items-center justify-center skill-php skill-tile" aria-label="PHP" data-name="PHP">
                                 {{-- keep PHP inline as before --}}
                                 @php $phpSvg = ''; try { $phpSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-php.svg')); } catch (Exception $e) { } @endphp
                                 @if($phpSvg) {!! $phpSvg !!} @endif
@@ -276,7 +276,7 @@
         </section>
 
         <!-- Footer within right column: becomes sticky only when scrolled to bottom -->
-        <footer id="right-footer" class="mt-6 p-6 text-sm text-[#706f6c] bg-transparent right-footer">
+        <footer id="footer" class="right-footer mt-6 p-6 text-sm text-[#706f6c] bg-transparent">
             &copy; {{ date('Y') }} {{ config('app.name') }} — Conçu avec Laravel, Tailwind et Alpine.
         </footer>
 
