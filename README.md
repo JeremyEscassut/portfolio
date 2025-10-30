@@ -4,7 +4,7 @@ Résumé rapide
 
 -   Projet: site portfolio (FR UI, code EN).
 -   Stack: Laravel 12 (PHP 8.3), Vite 7, TailwindCSS v4, Alpine.js.
--   Objectif: site statique côté contenu + formulaire de contact envoyé via Mailgun.
+-   Objectif: site statique côté contenu + formulaire de contact envoyé via SMTP (Alwaysdata recommandé) — Mailgun possible en option.
 
 Table des matières
 
@@ -38,7 +38,7 @@ Le front est rendu via Blade + TailwindCSS et des interactions légères gérée
 -   Node LTS (nvm recommandé)
 -   npm
 -   (Optionnel) MailHog pour capturer les e‑mails en dev
--   Utilisation de Mailgun pour gérer les e-mails via le formulaire de contact
+-   Utilisation du SMTP d'Alwaysdata (recommandé) pour l'envoi d'e‑mails via le formulaire de contact. Mailgun reste une option si tu souhaites un provider externe.
 -   Déploiement en build via alwaysdata.net
 
 ## 5) Build et déploiement (Alwaysdata)
@@ -70,7 +70,6 @@ php artisan config:cache
 php artisan route:clear
 php artisan route:cache
 php artisan view:clear
-# si vous utilisez les queues
 php artisan queue:restart
 ```
 
@@ -90,7 +89,25 @@ php artisan test
 tail -n 200 storage/logs/laravel.log
 ```
 
--   Pour vérifier la délivrabilité Mailgun: consultez les events dans le dashboard Mailgun.
+    -   Pour vérifier la délivrabilité des e‑mails : vérifier la boîte de destination (ex. j.losaint@gmail.com).
+
+    -   Note importante : ce projet n'utilise plus Mailgun en production — les messages de contact sont envoyés via le SMTP d'Alwaysdata vers une boîte hébergée (`jeremyescassut@alwaysdata.net`) configurée côté alwaysdata pour rediriger automatiquement vers `j.losaint@gmail.com`.
+
+    -   Configuration recommandée pour la production (dans `.env`, valeurs d'exemple) :
+
+    ```env
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp-jeremyescassut.alwaysdata.net
+    MAIL_PORT=587
+    MAIL_USERNAME=jeremyescassut@alwaysdata.net
+    MAIL_PASSWORD=VotreMotDePasseMailbox
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS=jeremyescassut@alwaysdata.net
+    MAIL_FROM_NAME="Portfolio"
+    MAIL_CONTACT_ADDRESS=j.losaint@gmail.com
+    ```
+
+    -   Si tu veux bypasser l'envoi réel pour du debug ou en local, définis `MAIL_MAILER=log` ou `array` en dev.
 
 ## 7) Conventions de code
 
@@ -101,8 +118,8 @@ tail -n 200 storage/logs/laravel.log
 
 ## 8) Roadmap & éléments ouverts
 
--   Faire fonctionner les envois d'e‑mail asynchrones via queue et faire en sorte que le message de réussite ou d'erreur soit affiché en dehors du formulaire, parce qu'actuellement, il faut rouvrir le formulaire pour voir si l'envoi a réussi ou échoué.
 -   Pour les titres des sections en mode mobile, faire en sorte que le cadre ne dépasse pas de l'écran
+-   Rétablir la mobilité du halo en mode desktop
 -   Ajouter un bouton [EN | FR] à gauche du bouton mode clair/sombre pour permettre de changer la langue du site.
 -   Ajouter une photo de moi à gauche des boutons dans la section Accueil
 -   Améliorer le contraste et l'accessibilité

@@ -129,3 +129,37 @@ Si tu veux, je peux :
 -   ou commiter `README_Solutions.md` et pousser la branche pour toi (indique la branche).
 
 Fin de la synthèse.
+
+---
+
+-   Titre : Avast / extension Chrome bloquant l'envoi des mails (false positive)
+-   Date : 2025-10-29
+-   Contexte : tests de formulaire de contact en production. Les envois semblaient échouer côté client avec des erreurs console `MessageNotSentError` et `runtime.lastError: The message port closed before a response was received`.
+-   Cause : extension Avast/secure browser extension sur le poste de test (Chrome) injectait un script de gestion des cookies/privacité qui bloquait ou interrompait les appels réseau nécessaires à l'upload des formulaires (fausse alerte côté client). Les logs serveur contenaient aussi des traces montrant des références à Mailgun — il s'agissait d'une configuration legacy/ancienne qui n'est plus utilisée en production.
+-   Solution :
+    -   Vérifier côté serveur que la configuration `.env` et la config Laravel sont correctes (APP_URL, MAIL_MAILER, MAIL_HOST...).
+    -   Vider les caches Laravel (depuis le dossier du projet sur le serveur) :
+
+```bash
+php artisan config:clear
+php artisan cache:clear || true
+php artisan view:clear
+php artisan config:cache
+php artisan route:cache
+```
+
+-   Tester l'envoi depuis la machine cliente sans extensions (nouvel onglet incognito sans extension) ou désactiver temporairement l'extension Avast. Après désactivation, le formulaire s'est soumis correctement et les mails ont bien été redirigés vers `j.losaint@gmail.com`.
+-   Mesure préventive : documenter dans ce fichier l'incident et ajouter un court guide de debug client/serveur (console, network, logs Laravel) — ci‑dessous.
+
+-   Checklist debug (client) :
+
+    -   Ouvrir DevTools (Console + Network) et surveiller les erreurs JS et les requêtes POST (status, location, cookies).
+    -   Tester en mode Incognito sans extensions.
+    -   Si erreurs liées à la communication avec une extension, désactiver l'extension et retester.
+
+-   Checklist debug (serveur) :
+    -   Vérifier `storage/logs/laravel.log` pour exceptions (ex: Mailer [mailgun] is not defined). Si des traces Mailgun apparaissent, c'est probablement un vestige de configuration précédente — vérifie `MAIL_MAILER` dans `.env` et la présence de `services.mailgun` dans `config/services.php` si tu comptes utiliser Mailgun à nouveau.
+    -   Vérifier `bootstrap/cache/config.php` — supprimer si corrompu et régénérer la config si nécessaire.
+    -   S'assurer que `MAIL_MAILER=smtp` (ou `log` pour debug) et que `MAIL_HOST`/`MAIL_PORT` correspondent au provider (Alwaysdata : `smtp-jeremyescassut.alwaysdata.net`, port 587 pour STARTTLS, 465 pour SSL direct).
+
+Référence : ticket local, test manuel 2025-10-29. Redirection confirmée vers `j.losaint@gmail.com`.

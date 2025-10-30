@@ -693,6 +693,27 @@ div[role="dialog"].bg-white,
     opacity: 0.95 !important;
 }
 
+/* Ensure skill labels are also visible in light mode on small screens.
+   The earlier media rule hid labels on mobile; mirror the dark-mode
+   legibility guarantees for html:not(.dark) so names remain visible
+   on light-mode mobile devices as well. */
+html:not(.dark) .skill-tile[data-name]::after {
+    display: block !important;
+    color: #081218 !important; /* deep charcoal for contrast */
+    background: rgba(255, 255, 255, 0.92) !important;
+    padding: 0.125rem 0.5rem !important;
+    border-radius: 0.375rem !important;
+    bottom: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 60 !important;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06) !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+}
+
 /* For the persisted dark class we mirror the same targeted behavior (outline svgs only) */
 .dark .skill-tile svg[stroke],
 .dark .skill-tile svg[stroke] *,
