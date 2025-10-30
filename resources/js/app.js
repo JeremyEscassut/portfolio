@@ -168,5 +168,59 @@ document.addEventListener('alpine:init', () => {
 window.Alpine = Alpine;
 Alpine.start();
 
+// Fix persistant highlight on the CV link by replacing the clicked link
+// with a clone shortly after interaction. This removes any lingering
+// :active/:focus/:hover visual state without changing CSS rules.
+(function () {
+    function replaceWithClone(el) {
+        if (!el || !el.parentNode) return;
+        try {
+            const clone = el.cloneNode(true);
+            // preserve id if present
+            if (el.id) clone.id = el.id;
+            // replace in DOM
+            el.parentNode.replaceChild(clone, el);
+            try { clone.blur && clone.blur(); } catch (e) { /* ignore */ }
+        } catch (e) {
+            // ignore failures to clone
+        }
+    }
+
+    function clearCvVisuals() {
+        try {
+            const links = document.querySelectorAll('a.social-link--cv, a.social-link.social-link--cv');
+            links.forEach((a) => replaceWithClone(a));
+
+            // briefly focus body to remove any focus ring
+            try {
+                const b = document.body;
+                const had = b.hasAttribute('tabindex');
+                const prev = b.getAttribute('tabindex');
+                b.setAttribute('tabindex', '-1');
+                b.focus();
+                if (had) b.setAttribute('tabindex', prev); else b.removeAttribute('tabindex');
+            } catch (e) { /* ignore */ }
+        } catch (e) { /* ignore */ }
+    }
+
+    // Replace the clicked link shortly after the event so the browser can
+    // open the target _blank, then we swap the node to clear visual state.
+    document.addEventListener('click', (e) => {
+        try {
+            const a = e.target && e.target.closest && e.target.closest('a.social-link--cv, a.social-link.social-link--cv');
+            if (!a) return;
+            // tag for debugging if needed
+            a.dataset._cvClicked = String(Date.now());
+            setTimeout(() => replaceWithClone(a), 120);
+        } catch (err) { /* ignore */ }
+    }, true);
+
+    // Clean up when the page regains visibility or focus
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') clearCvVisuals();
+    });
+    window.addEventListener('focus', clearCvVisuals);
+})();
+
 // Ambient halo: small, non-intrusive background glow updated on scroll/mousemove
 import './halo';
