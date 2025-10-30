@@ -4,6 +4,10 @@
     </IfModule>
 
     RewriteEngine On
+    # When serving the app from a subdirectory (example: /portfolio/ on Alwaysdata)
+    # set the RewriteBase so relative asset and front-controller rules work correctly.
+    # If you later serve from root, change/remove this line.
+    RewriteBase /portfolio/
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
@@ -18,7 +22,7 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Send Requests To Front Controller (respecting the RewriteBase)
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

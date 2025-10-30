@@ -1,105 +1,175 @@
-# Portfolio CDA — Laravel 12 + TailwindCSS + Alpine.js
+# Portfolio — Laravel 12 + Vite + TailwindCSS
 
-> Cible: réalisation en 5–7 jours. Interface en français, code en anglais. Mobile minimaliste, desktop complet avec option “Pro/Fun”.
+Résumé rapide
 
-## 1) Supports et UX
+-   Projet: site portfolio (FR UI, code EN).
+-   Stack: Laravel 12 (PHP 8.3), Vite 7, TailwindCSS v4, Alpine.js.
+-   Objectif: site statique côté contenu + formulaire de contact envoyé via SMTP (Alwaysdata recommandé) — Mailgun possible en option.
 
-| Support | Comportement                                                                                                                                     |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Mobile  | Interface minimaliste: texte court, lien CV (PDF), lien mail (`mailto:`), LinkedIn, Indeed. Pas d’animation, pas de formulaire.                  |
-| Desktop | Version complète avec choix “Pro/Fun”. “Pro” → accès direct. “Fun” → animation d’intro optionnelle (bouton “Ignorer”). Fallback si JS désactivé. |
+Table des matières
 
-## 2) Contenus
+1. But et portée
+2. Prérequis locaux
+3. Installation & dev
+4. Configuration des mails
+5. Build et déploiement (Alwaysdata)
+6. Tests & vérifications
+7. Conventions de code
+8. Roadmap & éléments ouverts
 
--   Accueil: présentation, valeurs, objectifs.
--   Projets: liens GitLab.
--   Contact (optionnel au début): envoi email vers Gmail via SMTP, validation front/back, confirmation utilisateur.
--   CV: lien vers PDF.
--   Réseaux: LinkedIn, Indeed.
--   Footer: mentions légales, politique de confidentialité (version minimaliste).
+---
 
-## 3) Stack technique et contraintes
+## 1) But et portée
 
-| Élément         | Choix                                                                                           |
-| --------------- | ----------------------------------------------------------------------------------------------- |
-| Backend         | Laravel 12 (PHP 8.3 via MAMP)                                                                   |
-| Front           | Vite 7, TailwindCSS v4 (@tailwindcss/vite), Alpine.js                                           |
-| Animations      | Optionnelles: CSS/Alpine transitions, GSAP possible (pas de Framer Motion)                      |
-| Base de données | Aucune initialement (SQLite dispo pour sessions/tests). Bascule MySQL MAMP possible (port 8889) |
-| Mail            | SMTP Gmail via `.env` (en dev: `MAIL_MAILER=log`)                                               |
-| SEO             | `<title>`, `<meta>` description, balises alt, structure sémantique                              |
-| Accessibilité   | Contraste, navigation clavier, aria basiques, responsive                                        |
-| Sécurité        | CSRF, validation serveur, honeypot, HTML/CSS valides W3C                                        |
-| Analytics       | Optionnel, à la toute fin                                                                       |
+Ce repository contient le code source du portfolio. L'objectif est de fournir:
 
-Contraintes: pas de frameworks non prévus (ex: React/shadcn/framer-motion). Interface FR, code EN.
+-   une page d'accueil descriptive,
+-   une section Projets,
+-   un lien CV (PDF),
+-   un formulaire de contact simple (envoi d'e‑mail vers une adresse de contact),
+-   un design responsive et accessible (contraste, navigation clavier).
 
-## 4) Démarrage local
+Le front est rendu via Blade + TailwindCSS et des interactions légères gérées par Alpine.js.
 
-Prérequis: MAMP (PHP 8.3), Composer 2, Node LTS (nvm), npm.
+## 2) Prérequis locaux
+
+-   PHP 8.3 (MAMP ou autre)
+-   Composer 2
+-   Node LTS (nvm recommandé)
+-   npm
+-   (Optionnel) MailHog pour capturer les e‑mails en dev
+-   Utilisation du SMTP d'Alwaysdata (recommandé) pour l'envoi d'e‑mails via le formulaire de contact. Mailgun reste une option si tu souhaites un provider externe.
+-   Déploiement en build via alwaysdata.net
+
+## 5) Build et déploiement (Alwaysdata)
+
+Recommandation: générer le build localement puis uploader `public/build` sur le serveur.
+
+Build local
 
 ```bash
-# Lancer le serveur Laravel et Vite (hot reload)
-npm run dev:all
-
-# Ou séparément
-php artisan serve --host=127.0.0.1 --port=8000
-npm run dev
-
-# Build de production
+npm ci
 npm run build
+# vérifiez public/build/manifest.json
 ```
 
-Configuration `.env` (extraits utiles):
+Uploader les assets
 
-```env
-APP_NAME=Portfolio
-APP_URL=http://127.0.0.1:8000
-
-# Mails (dev)
-MAIL_MAILER=log
-
-# Option MySQL MAMP (quand nécessaire)
-# DB_CONNECTION=mysql
-# DB_HOST=127.0.0.1
-# DB_PORT=8889
-# DB_DATABASE=portfolio
-# DB_USERNAME=<your_user>   # ex. root en local MAMP
-# DB_PASSWORD=<your_password>   # ex. root en local MAMP
-```
-
-Note sécurité:
-
--   Ne pas committer le fichier `.env` (il est ignoré par défaut par Laravel).
--   Utiliser des variables d’environnement ou des secrets CI/CD pour la production.
-
-## 5) Qualité et tests
-
--   Tests unitaires et fonctionnels: navigation et formulaire de contact.
--   Validation W3C (HTML/CSS), règles d’accessibilité de base.
--   Éviter tout commentaire laissant transparaître l’usage d’IA.
-
-Commandes:
+-   Par SFTP/FTP ou `rsync` :
 
 ```bash
-# Tests Laravel (recommandé)
-php artisan test
-
-# PHPUnit direct
-vendor/bin/phpunit --coverage-html storage/coverage
-open storage/coverage/index.html
+rsync -avz --delete public/build/ user@ssh.alwaysdata.net:/home/<user>/www/<site>/public/build/
 ```
 
-## 6) Déploiement
+Actions à exécuter côté serveur (Alwaysdata)
 
--   Cibles possibles: hébergement PHP classique (Apache/Nginx) ou plateformes compatibles (Laravel Forge + VPS, Render, Railway, Fly.io).
--   Variables d’environnement: `APP_ENV`, `APP_KEY`, `APP_URL`, `MAIL_*`, éventuels `DB_*`.
+```bash
+cd /home/<user>/www/<site>
+php artisan config:clear
+php artisan config:cache
+php artisan route:clear
+php artisan route:cache
+php artisan view:clear
+php artisan queue:restart
+```
 
-## 7) Roadmap (ordre cible)
+Test final: soumettre le formulaire et vérifier la réception sur `MAIL_CONTACT_ADDRESS`.
 
-1. Contenu statique et layout de base (FR UI / EN code)
-2. Version mobile minimaliste (pas de form ni animations)
-3. Version desktop complète + switch “Pro/Fun” (+ animation optionnelle)
-4. Formulaire de contact (SMTP Gmail, CSRF, validation, honeypot)
-5. Tests (form + nav) et conformité (SEO, A11y, W3C)
-6. Build, déploiement, analytics (optionnel)
+## 6) Tests & vérifications
+
+-   Tests Laravel:
+
+```bash
+php artisan test
+```
+
+-   Vérifier les logs en cas d’erreur:
+
+```bash
+tail -n 200 storage/logs/laravel.log
+```
+
+    -   Pour vérifier la délivrabilité des e‑mails : vérifier la boîte de destination (ex. j.losaint@gmail.com).
+
+    -   Note importante : ce projet n'utilise plus Mailgun en production — les messages de contact sont envoyés via le SMTP d'Alwaysdata vers une boîte hébergée (`jeremyescassut@alwaysdata.net`) configurée côté alwaysdata pour rediriger automatiquement vers `j.losaint@gmail.com`.
+
+    -   Configuration recommandée pour la production (dans `.env`, valeurs d'exemple) :
+
+    ```env
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp-jeremyescassut.alwaysdata.net
+    MAIL_PORT=587
+    MAIL_USERNAME=jeremyescassut@alwaysdata.net
+    MAIL_PASSWORD=VotreMotDePasseMailbox
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS=jeremyescassut@alwaysdata.net
+    MAIL_FROM_NAME="Portfolio"
+    MAIL_CONTACT_ADDRESS=j.losaint@gmail.com
+    ```
+
+    -   Si tu veux bypasser l'envoi réel pour du debug ou en local, définis `MAIL_MAILER=log` ou `array` en dev.
+
+## 7) Conventions de code
+
+-   CSS: tout le CSS (y compris overrides page‑scoped) -> `resources/css/app.css`.
+-   JS: tout le JS spécifique au site -> `resources/js/app.js`.
+-   Blade views: ne garder que le HTML et les directives Blade. Centraliser CSS/JS dans les fichiers mentionnés.
+-   Ne committer **jamais** de secrets dans le repo (.env, clés API, mots de passe).
+
+## 8) Roadmap & éléments ouverts
+
+-   Pour les titres des sections en mode mobile, faire en sorte que le cadre ne dépasse pas de l'écran
+-   Rétablir la mobilité du halo en mode desktop
+-   Ajouter un bouton [EN | FR] à gauche du bouton mode clair/sombre pour permettre de changer la langue du site.
+-   Ajouter une photo de moi à gauche des boutons dans la section Accueil
+-   Améliorer le contraste et l'accessibilité
+-   Utiliser un arrière-plan en mode clair plus marqué. Le visuel actuellement est trop "boring".
+-   Ajouter CI/CD (GitHub Actions) : build + upload des assets
+
+---
+
+## 9) Consignation des solutions (fichier : README_Solutions.md)
+
+Règle obligatoire — Dès qu'un problème est résolu (bug, incident d'infra, test qui a cassé, décision d'architecture, etc.), consigner systématiquement la description et la solution dans le fichier `README_Solutions.md` à la racine du projet.
+
+But : garder un registre réutilisable des problèmes rencontrés et des solutions appliquées afin de pouvoir extraire des guidelines générales pour d'autres projets.
+
+Contenu minimum requis pour chaque entrée :
+
+-   Titre : court et explicite
+-   Date : YYYY-MM-DD
+-   Contexte / reproduction : comment reproduire le problème (étapes, environnement)
+-   Cause racine : diagnostic bref
+-   Solution : commandes, patches, fichiers modifiés, et justification technique
+-   Référence : commit SHA, numéro de PR/issue, ou fichier(s) modifié(s)
+-   Tags : bug | infra | tests | perf | doc | build | sécurité | autre
+
+Template recommandé (copier/coller pour chaque nouveau cas) :
+
+```
+- Titre :
+- Date :
+- Contexte :
+- Cause :
+- Solution :
+- Référence :
+- Tags :
+```
+
+Processus / règle :
+
+-   Ne pas fermer ou archiver une tâche/problème sans avoir ajouté une entrée dans `README_Solutions.md`.
+-   Garder les descriptions claires et concises — l'objectif est la réutilisabilité des solutions.
+-   Conserver les guidelines générales dans cette section du `README.md` pour pouvoir les réutiliser facilement dans de futurs projets.
+
+Cette section sert de référence rapide pour les bonnes pratiques de consignation et doit rester concise ; les détails techniques (patches, diff, logs) vont dans l'entrée correspondante de `README_Solutions.md`.
+
+---
+
+Si tu veux, je peux:
+
+-   générer un snippet GitHub Actions (build + upload via rsync) ; ou
+-   préparer un script `deploy.sh` local qui build puis upload ; ou
+-   exécuter les commandes d'upload si tu me donnes ton user Alwaysdata.
+
+Dis‑moi ce que tu préfères et je m'en occupe.
