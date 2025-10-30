@@ -10,12 +10,10 @@ Table des matières
 
 1. But et portée
 2. Prérequis locaux
-3. Installation & dev
-4. Configuration des mails
-5. Build et déploiement (Alwaysdata)
-6. Tests & vérifications
-7. Conventions de code
-8. Roadmap & éléments ouverts
+3. Tests & vérifications
+4. Conventions de code
+5. Roadmap & éléments ouverts
+6. Consignation des solutions
 
 ---
 
@@ -38,42 +36,8 @@ Le front est rendu via Blade + TailwindCSS et des interactions légères gérée
 -   Node LTS (nvm recommandé)
 -   npm
 -   (Optionnel) MailHog pour capturer les e‑mails en dev
--   Utilisation du SMTP d'Alwaysdata (recommandé) pour l'envoi d'e‑mails via le formulaire de contact. Mailgun reste une option si tu souhaites un provider externe.
+-   Utilisation du SMTP d'Alwaysdata (recommandé) pour l'envoi d'e‑mails via le formulaire de contact.
 -   Déploiement en build via alwaysdata.net
-
-## 5) Build et déploiement (Alwaysdata)
-
-Recommandation: générer le build localement puis uploader `public/build` sur le serveur.
-
-Build local
-
-```bash
-npm ci
-npm run build
-# vérifiez public/build/manifest.json
-```
-
-Uploader les assets
-
--   Par SFTP/FTP ou `rsync` :
-
-```bash
-rsync -avz --delete public/build/ user@ssh.alwaysdata.net:/home/<user>/www/<site>/public/build/
-```
-
-Actions à exécuter côté serveur (Alwaysdata)
-
-```bash
-cd /home/<user>/www/<site>
-php artisan config:clear
-php artisan config:cache
-php artisan route:clear
-php artisan route:cache
-php artisan view:clear
-php artisan queue:restart
-```
-
-Test final: soumettre le formulaire et vérifier la réception sur `MAIL_CONTACT_ADDRESS`.
 
 ## 6) Tests & vérifications
 
@@ -82,32 +46,6 @@ Test final: soumettre le formulaire et vérifier la réception sur `MAIL_CONTACT
 ```bash
 php artisan test
 ```
-
--   Vérifier les logs en cas d’erreur:
-
-```bash
-tail -n 200 storage/logs/laravel.log
-```
-
-    -   Pour vérifier la délivrabilité des e‑mails : vérifier la boîte de destination (ex. j.losaint@gmail.com).
-
-    -   Note importante : ce projet n'utilise plus Mailgun en production — les messages de contact sont envoyés via le SMTP d'Alwaysdata vers une boîte hébergée (`jeremyescassut@alwaysdata.net`) configurée côté alwaysdata pour rediriger automatiquement vers `j.losaint@gmail.com`.
-
-    -   Configuration recommandée pour la production (dans `.env`, valeurs d'exemple) :
-
-    ```env
-    MAIL_MAILER=smtp
-    MAIL_HOST=smtp-jeremyescassut.alwaysdata.net
-    MAIL_PORT=587
-    MAIL_USERNAME=jeremyescassut@alwaysdata.net
-    MAIL_PASSWORD=VotreMotDePasseMailbox
-    MAIL_ENCRYPTION=tls
-    MAIL_FROM_ADDRESS=jeremyescassut@alwaysdata.net
-    MAIL_FROM_NAME="Portfolio"
-    MAIL_CONTACT_ADDRESS=j.losaint@gmail.com
-    ```
-
-    -   Si tu veux bypasser l'envoi réel pour du debug ou en local, définis `MAIL_MAILER=log` ou `array` en dev.
 
 ## 7) Conventions de code
 
@@ -124,9 +62,6 @@ tail -n 200 storage/logs/laravel.log
 -   Ajouter une photo de moi à gauche des boutons dans la section Accueil
 -   Améliorer le contraste et l'accessibilité
 -   Utiliser un arrière-plan en mode clair plus marqué. Le visuel actuellement est trop "boring".
--   Ajouter CI/CD (GitHub Actions) : build + upload des assets
-
----
 
 ## 9) Consignation des solutions (fichier : README_Solutions.md)
 
@@ -165,11 +100,3 @@ Processus / règle :
 Cette section sert de référence rapide pour les bonnes pratiques de consignation et doit rester concise ; les détails techniques (patches, diff, logs) vont dans l'entrée correspondante de `README_Solutions.md`.
 
 ---
-
-Si tu veux, je peux:
-
--   générer un snippet GitHub Actions (build + upload via rsync) ; ou
--   préparer un script `deploy.sh` local qui build puis upload ; ou
--   exécuter les commandes d'upload si tu me donnes ton user Alwaysdata.
-
-Dis‑moi ce que tu préfères et je m'en occupe.

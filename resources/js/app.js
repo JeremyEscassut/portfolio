@@ -209,8 +209,8 @@ Alpine.start();
         try {
             const a = e.target && e.target.closest && e.target.closest('a.social-link--cv, a.social-link.social-link--cv');
             if (!a) return;
-            // tag for debugging if needed
-            a.dataset._cvClicked = String(Date.now());
+            // replace shortly after click so the browser can open the target _blank,
+            // then we swap the node to clear any lingering visual state.
             setTimeout(() => replaceWithClone(a), 120);
         } catch (err) { /* ignore */ }
     }, true);
