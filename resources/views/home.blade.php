@@ -5,11 +5,11 @@
     <!-- LEFT: navigation / identity (centré verticalement sur grand écran) -->
     <!-- LEFT: like Brittany, sticky on large screens within page scroll -->
     <aside class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
-        <div id="home" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
+        <div id="home" x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
             <!-- Name -->
             <div id="home-title" class="mb-8">
                 <!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
-                <div id="home-icons" class="mt-3 flex justify-end" x-data="{ theme: localStorage.getItem('theme') || 'light', init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()">
+                <div id="home-icons" class="mt-3 flex justify-end">
                     <button type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
                         <template x-if="theme==='auto'">
                             <!-- system icon -->
@@ -74,10 +74,14 @@
                     @if($svg) {!! $svg !!} @endif
                 </button>
 
-                <!-- CV (inline from resources/svg/icon-cv.svg) -->
-                <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
-                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-cv.svg')); } catch (Exception $e) { } @endphp
-                    @if($svg) {!! $svg !!} @endif
+                <!-- CV (PNG light/dark variants placed in resources/png) -->
+                <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer" @mouseenter="hoverCV = true" @mouseleave="hoverCV = false" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                    {{-- icône pour mode clair (noir sur fond clair) --}}
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='light'" x-cloak>
+                    {{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && !hoverCV" x-cloak>
+                    {{-- icône pour mode sombre lors du hover (utilise la variante noire fournie) --}}
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && hoverCV" x-cloak>
                 </a>
             </div>
         </div>

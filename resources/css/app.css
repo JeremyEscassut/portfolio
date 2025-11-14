@@ -2014,26 +2014,34 @@ html:not(.dark) .social-link:focus-visible {
     background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
-/* stronger dark highlight for contact / CV buttons but keep icon visible as white */
-html:not(.dark) .social-link--contact:hover,
-html:not(.dark) .social-link--contact:focus-visible,
+/* Stronger hover highlight for CV button in light mode: keep icon white for contrast */
 html:not(.dark) .social-link--cv:hover,
 html:not(.dark) .social-link--cv:focus-visible {
-    /* soften the contrast while keeping a clear highlight; slightly darker so white icons pop */
     background-color: rgba(0, 0, 0, 0.18) !important;
     color: #ffffff !important;
 }
-html:not(.dark) .social-link--contact:hover svg,
 html:not(.dark) .social-link--cv:hover svg,
-html:not(.dark) .social-link--contact:focus-visible svg,
 html:not(.dark) .social-link--cv:focus-visible svg,
-html:not(.dark) .social-link--contact:hover svg *,
 html:not(.dark) .social-link--cv:hover svg *,
-html:not(.dark) .social-link--contact:focus-visible svg *,
 html:not(.dark) .social-link--cv:focus-visible svg * {
-    /* Keep the icon visible: remove fills and use white stroke when hovered */
+    /* CV icon: white stroke on hover in light mode */
     fill: none !important;
     stroke: #ffffff !important;
+}
+
+/* Separate hover behaviour for Contact button in light mode: keep icon strokes dark/black */
+html:not(.dark) .social-link--contact:hover,
+html:not(.dark) .social-link--contact:focus-visible {
+    background-color: rgba(0, 0, 0, 0.18) !important;
+    /* keep icon/text dark so stroke remains visible as black */
+    color: #0b1b20 !important;
+}
+html:not(.dark) .social-link--contact:hover svg,
+html:not(.dark) .social-link--contact:focus-visible svg,
+html:not(.dark) .social-link--contact:hover svg *,
+html:not(.dark) .social-link--contact:focus-visible svg * {
+    fill: none !important;
+    stroke: #0b1b20 !important;
 }
 
 /* Ensure social svgs follow currentColor when possible */
