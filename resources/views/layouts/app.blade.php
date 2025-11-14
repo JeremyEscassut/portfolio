@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>@yield('title', 'Portfolio')</title>
+    <title>@yield('title', 'Portfolio - Jérémy Escassut')</title>
     <!-- Prefer raster PNG (explicit sizes) to ensure correct tab rendering; keep SVG as fallback. -->
     <!-- Ensure public/favicon-32.png and public/favicon-16.png exist and contain the artwork filling the canvas. -->
     @php

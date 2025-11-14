@@ -10,7 +10,7 @@ set -euo pipefail
 #   REMOTE_PATH (default: /home/jeremyescassut/www/Portfolio/)
 
 : ${REMOTE_USER:="jeremyescassut"}
-: ${REMOTE_HOST:="ssh1"}
+: ${REMOTE_HOST:="alwaysdata"}
 : ${REMOTE_PATH:="/home/jeremyescassut/www/Portfolio/"}
 
 DRY_RUN=0
@@ -49,6 +49,18 @@ echo "  Dry run: ${DRY_RUN}"
 echo "  Build step skipped: ${NO_BUILD}"
 
 timestamp() { date +"%Y-%m-%d_%H%M%S"; }
+
+# Quick connectivity check: avoid starting a build if the remote host is wrong/unreachable.
+# Skip this check during a dry-run so the script can still show planned actions.
+if [ "$DRY_RUN" -eq 0 ]; then
+  echo "==> Checking SSH connectivity to ${REMOTE_HOST}..."
+  if ! ssh -o BatchMode=yes -o ConnectTimeout=5 "${REMOTE_USER}@${REMOTE_HOST}" true 2>/dev/null; then
+    echo "ERROR: Cannot reach ${REMOTE_USER}@${REMOTE_HOST}." >&2
+    echo "Check that REMOTE_HOST is correct (see Alwaysdata control panel) and that your network/DNS can resolve it." >&2
+    echo "If you don't know the host, try the panel's SSH/Access section or add an SSH alias in ~/.ssh/config." >&2
+    exit 4
+  fi
+fi
 
 # Build locally unless requested not to
 if [ "$NO_BUILD" -eq 0 ]; then

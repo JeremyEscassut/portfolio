@@ -75,7 +75,14 @@
                 </button>
 
                 <!-- CV (PNG light/dark variants placed in resources/png) -->
-                <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer" @mouseenter="hoverCV = true" @mouseleave="hoverCV = false" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv" aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer"
+                    @mouseenter="hoverCV = true"
+                    @mouseleave="hoverCV = false"
+                    @click="hoverCV = false"
+                    @focus="hoverCV = true"
+                    @blur="hoverCV = false"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
+                    aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
                     {{-- icône pour mode clair (noir sur fond clair) --}}
                     <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='light'" x-cloak>
                     {{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
