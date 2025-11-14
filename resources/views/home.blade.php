@@ -318,7 +318,14 @@
 
         <!-- Footer within right column: becomes sticky only when scrolled to bottom -->
         <footer id="footer" class="right-footer mt-6 p-6 text-sm text-[#706f6c] bg-transparent">
-            &copy; {{ date('Y') }} {{ config('app.name') }} — Conçu avec Laravel, Tailwind et Alpine.
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
+                <div class="text-center lg:text-left">
+                    &copy; {{ date('Y') }} Jérémy Escassut — <a href="{{ url('/mentions') }}" class="underline" aria-label="Mentions légales">Mentions légales</a>
+                </div>
+                <div class="text-center lg:text-right text-xs text-[#8b8a88]">
+                    Conçu avec Laravel, Tailwind et Alpine.
+                </div>
+            </div>
         </footer>
 
     </main>

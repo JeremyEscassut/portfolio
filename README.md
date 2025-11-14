@@ -62,6 +62,7 @@ php artisan test
 -   Ajouter une photo de moi à gauche des boutons dans la section Accueil
 -   Améliorer le contraste et l'accessibilité
 -   Utiliser un arrière-plan en mode clair plus marqué. Le visuel actuellement est trop "boring".
+-   Remplacer l'icône dans la barre d'onglets par une icône plus stylée
 
 ## 9) Consignation des solutions (fichier : README_Solutions.md)
 

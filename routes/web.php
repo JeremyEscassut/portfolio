@@ -13,6 +13,11 @@ Route::get('/cv', function () {
     return view('cv');
 });
 
+// Page mentions légales
+Route::get('/mentions', function () {
+    return view('mentions');
+});
+
 // Safety fallback when the app is served under a subdirectory (e.g. /portfolio/)
 // Some hosts forward the subpath to Laravel which then sees `/portfolio` as the
 // requested path. Provide a GET fallback so the homepage is served correctly.
