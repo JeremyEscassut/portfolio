@@ -16,10 +16,10 @@
                 <p class="text-[#706f6c] mt-3">Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.</p>
             </div>
 
-            <div class="lg:flex lg:gap-4 mt-4">
-                <!-- LEFT column: photo (grows to fill available space) -->
-                <div class="left-col flex-1 flex items-center justify-center">
-                    <div id="home-photo" class="w-full">
+            <div id="home-interactions" class="flex gap-4 mt-4 items-start">
+                <!-- LEFT column: photo (fixed width on mobile, centered on lg) -->
+                <div id="home-left-col" class="left-col flex-1 min-w-0 flex items-center justify-center">
+                    <div id="home-photo" class="w-full min-w-0">
                         @php
                         $origData = '';
                         $aiData = '';
@@ -31,19 +31,19 @@
                         } catch (Exception $e) { }
                         @endphp
 
-                        <div id="profilePhotoContainer" class="relative cursor-pointer group mx-auto w-[200px] lg:w-[320px] max-w-full text-center" role="button" tabindex="0"
+                        <div id="profilePhotoContainer" class="relative cursor-pointer group w-full lg:mx-auto lg:w-full max-w-full text-center" role="button" tabindex="0"
                             data-original="{{ $origData ? 'data:image/jpeg;base64,' . $origData : asset('images/je_profile.jpeg') }}"
                             data-ai="{{ $aiData ? 'data:image/jpeg;base64,' . $aiData : asset('images/je_ia_profile.jpg') }}">
-                            <canvas id="photoCanvas" width="320" height="320" class="block w-full h-auto rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]"></canvas>
+                            <canvas id="photoCanvas" class="block w-full rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]" style="aspect-ratio:1/1; width:100%; height:auto;"></canvas>
                             <p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">Original<br>Cliquez si vous aimez Arcane</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- RIGHT column: stacked list, social icons, contact/CV -->
-                <div id="home-right-col" class="right-col w-full lg:w-[40%] flex flex-col gap-4">
+                <!-- RIGHT column: stacked list, social icons, contact/CV (fills remaining space on mobile) -->
+                <div id="home-right-col" class="right-col flex-none w-auto max-w-[140px] sm:max-w-[180px] flex flex-col gap-4">
                     <nav class="mt-0 mb-0 hidden lg:block">
-                        <ul id="home-sections-list" class="space-y-3 text-sm text-end lg:text-left">
+                        <ul id="home-sections-list" class="space-y-3 text-sm lg:text-right">
                             <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
                             <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
                             <li><a href="#experience" class="font-medium hover:underline">Expérience</a></li>
@@ -51,7 +51,7 @@
                         </ul>
                     </nav>
 
-                    <div id="home-social-icons" class="w-full flex gap-3 items-center text-sm text-[#706f6c] justify-end">
+                    <div id="home-social-icons" class="flex gap-3 items-center text-sm text-[#706f6c] justify-end">
                         <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
                         <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
                             @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
@@ -67,7 +67,7 @@
 
                     </div>
 
-                    <div id="home-contact-cv-icons" class="contact-cv-actions mt-0 flex items-center gap-3 justify-end w-full">
+                    <div id="home-contact-cv-icons" class="contact-cv-actions mt-0 flex items-center gap-3 justify-end">
                         <!-- Contact (inline from resources/svg/icon-contact.svg) -->
                         <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="Ouvrir le contact" style="margin-top:2px;">
                             @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
@@ -93,7 +93,7 @@
                     </div>
 
                     <!-- Theme cycle button placed under contact/CV actions -->
-                    <div id="theme-toggle-wrapper" class="mt-2 flex justify-end w-full">
+                    <div id="theme-toggle-wrapper" class="mt-2 flex justify-end">
                         <button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
                             <template x-if="theme==='auto'">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
