@@ -2381,3 +2381,20 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
 .dark .theme-lang-button .lang-badge {
     background: rgba(255, 255, 255, 0.08);
 }
+
+/* Custom: mobile offset for theme toggle
+     - small screens: apply a subtle translateX to visually offset the button
+     - large screens (>=1024px): remove this transform so Tailwind's `lg:-translate-x-2` applies
+*/
+@media (max-width: 1023px) {
+    /* apply mobile offset to any element carrying the helper class */
+    .mobile-offset {
+        transform: translateX(6px) !important;
+    }
+    /* Ensure the theme button also moves on mobile (higher specificity) */
+    #themeToggleButton.mobile-offset {
+        transform: translateX(15px) !important;
+    }
+}
+
+/* Note: do not reset .mobile-offset on large screens here so Tailwind `lg:` utilities can apply. */
