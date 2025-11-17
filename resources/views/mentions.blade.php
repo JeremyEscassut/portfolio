@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mentions légales')
+@section('title', __('legal.title'))
 
 @section('content')
 <!-- Back button for desktop (top-left) -->
@@ -25,72 +25,50 @@
 </div>
 
 <main class="prose prose-sm lg:prose-lg mx-auto p-6 pb-28 lg:pb-6 lg:max-w-4xl lg:px-8">
-    <h1 class="mt-2 text-2xl lg:text-3xl font-bold tracking-tight text-[#111] mb-4">Mentions légales</h1>
+    <h1 class="mt-2 text-2xl lg:text-3xl font-bold tracking-tight text-[#111] mb-4">{{ __('legal.title') }}</h1>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Éditeur du site</h2>
-        <p class="text-base text-[#222] leading-relaxed">
-            Nom : <strong>Jérémy Escassut</strong><br>
-            Statut : <strong>Particulier</strong><br>
-            Adresse : 1801, route de Ridounel, 47510 Foulayronnes<br>
-            E‑mail : <a class="underline decoration-dotted" href="mailto:j.losaint@gmail.com">j.losaint@gmail.com</a>
-        </p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.editor.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed">{!! nl2br(e(__('mentions.editor.content'))) !!}</p>
     </section>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Directeur de la publication</h2>
-        <p class="text-base text-[#222] leading-relaxed">Directeur de la publication : <strong>Jérémy Escassut</strong> (responsable du contenu publié sur ce site).</p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.publisher.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed">{{ __('mentions.publisher.content') }}</p>
     </section>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Hébergeur</h2>
-        <p class="text-base text-[#222] leading-relaxed">
-            Nom : <strong>Alwaysdata</strong><br>
-            Siège social : 91 rue du Faubourg Saint Honoré - 75008 Paris<br>
-            Site web : <a class="underline decoration-dotted" href="https://www.alwaysdata.com/fr/" target="_blank" rel="noopener">https://www.alwaysdata.com/fr/</a>
-        </p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.host.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed">{!! nl2br(e(__('mentions.host.content'))) !!}</p>
     </section>
 
     <hr class="my-6">
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Propriété intellectuelle</h2>
-        <p class="text-base text-[#222] leading-relaxed text-justify w-full">
-            L’ensemble des contenus (textes, images, logos, code, maquettes, etc.) publiés sur ce site est protégé par le droit d’auteur.
-            Toute reproduction, représentation, modification ou exploitation totale ou partielle est interdite sans autorisation écrite préalable de l’éditeur.
-            Pour toute demande d’utilisation ou de reproduction : <a class="underline decoration-dotted" href="mailto:j.losaint@gmail.com">j.losaint@gmail.com</a>.
-        </p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.ip.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed text-justify w-full">{!! nl2br(e(__('mentions.ip.content'))) !!}</p>
     </section>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Données personnelles (RGPD)</h2>
-        <p class="text-base text-[#222] leading-relaxed text-justify w-full">
-            Responsable du traitement : <strong>Jérémy Escassut</strong> — contact : <a class="underline decoration-dotted" href="mailto:j.losaint@gmail.com">j.losaint@gmail.com</a>.<br>
-            Finalités : gestion des demandes de contact transmises via le formulaire de contact (réponse aux messages reçus).
-            <br>
-            Base légale : traitement nécessaire à l'exécution de la demande de l'utilisateur.
-            <br>
-            Droits : vous pouvez demander l'accès, la rectification ou la suppression des données vous concernant en contactant : <a class="underline decoration-dotted" href="mailto:j.losaint@gmail.com">j.losaint@gmail.com</a>.
-        </p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.data_protection.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed text-justify w-full">{!! nl2br(e(__('mentions.data_protection'))) !!}</p>
     </section>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Cookies</h2>
-        <p class="text-base text-[#222] leading-relaxed text-justify w-full">Le site lui‑même ne place pas de cookies. Aucune solution analytique tierce n'est activée par le site.
-            L'hébergeur (<strong>Alwaysdata</strong>) collecte toutefois des données d'usage agrégées pour l'exploitation du service (par exemple : nombre de visites uniques par mois). Ces données sont agrégées et ne permettent pas d'identifier personnellement les visiteurs.
-        </p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.cookies.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed text-justify w-full">{!! nl2br(e(__('mentions.cookies'))) !!}</p>
     </section>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Responsabilité</h2>
-        <p class="text-base text-[#222] leading-relaxed text-justify w-full">Les informations publiées sur ce site sont fournies à titre informatif. L’éditeur met en œuvre ses meilleurs efforts pour assurer l’exactitude et la mise à jour des contenus, mais ne peut garantir l’exhaustivité ni l’absence d’erreurs. L’éditeur décline toute responsabilité pour les dommages directs ou indirects résultant de l’accès ou de l’utilisation du site.</p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.responsibility.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed text-justify w-full">{!! nl2br(e(__('mentions.responsibility'))) !!}</p>
     </section>
 
     <section class="mb-6 lg:mb-8">
-        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">Loi applicable et juridiction</h2>
-        <p class="text-base text-[#222] leading-relaxed text-justify w-full">Les présentes mentions sont régies par le droit français. En cas de litige, compétence des tribunaux français compétents, sauf disposition impérative contraire.</p>
+        <h2 class="text-lg lg:text-xl font-semibold mt-2 mb-2 text-[#111]">{{ __('mentions.law.heading') }}</h2>
+        <p class="text-base text-[#222] leading-relaxed text-justify w-full">{!! nl2br(e(__('mentions.law'))) !!}</p>
     </section>
 
-    <p class="text-sm text-gray-500 mt-6">Dernière mise à jour : {{ date('d/m/Y') }}</p>
+    <p class="text-sm text-gray-500 mt-6">{{ __('mentions.last_updated') }} {{ date('d/m/Y') }}</p>
 </main>
 @endsection

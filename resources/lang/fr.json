@@ -1,0 +1,81 @@
+{
+  "portfolio.welcome": "Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.",
+  "contact.open": "Ouvrir le contact",
+  "cv.view": "Voir le CV",
+  "nav.about": "À propos",
+  "nav.projects": "Projets",
+  "nav.experience": "Expérience",
+  "nav.skills": "Compétences",
+  "cv.preview": "Aperçu du CV",
+  "cv.preview_pdf": "Aperçu du CV en PDF",
+  "cv.open_new_tab": "Ouvrir le CV (nouvel onglet)",
+  "cv.download": "Télécharger le CV",
+  "cv.intro": "Vous pouvez consulter ou télécharger mon CV au format PDF.",
+
+  "home.job_title": "Développeur Full Stack",
+
+  "about.p1": "Après plusieurs années passées dans la traduction et la gestion de projets IT, j’ai choisi de me tourner vers le développement pour concrétiser une passion que je nourrissais depuis longtemps. Cette transition s’est faite naturellement : j’y ai retrouvé la même rigueur, le même sens du détail et le même plaisir à transformer une idée en solution concrète et utile.",
+  "about.p2": "Ce que j’aime dans le code, c’est l’équilibre entre logique et créativité. Je cherche toujours à optimiser, à rendre les choses plus fluides, plus claires, plus efficaces — sans jamais perdre de vue l’expérience de l’utilisateur final. La satisfaction vient pour moi d’un système qui fonctionne bien, proprement, et qui simplifie réellement la vie de ceux qui l’utilisent.",
+  "about.p3": "J’accorde une grande importance à la bienveillance et au respect dans les relations de travail. J’aime collaborer, partager mes connaissances et apprendre des autres. Curieux, honnête et déterminé, je crois en une amélioration continue, individuelle comme collective — celle qui permet à une équipe de progresser ensemble et de construire des projets durables.",
+  "about.p4": "En dehors du code, je trouve mon équilibre dans le sport et la musique : badminton, course à pied, salsa et bachata rythment mon temps libre et nourrissent mon énergie au quotidien.",
+
+  "projects.repo.livret": "Voir le dépôt GitLab - Livret CDA",
+  "projects.preview.livret": "Aperçu du projet Livret CDA",
+  "projects.repo.breakingcat": "Voir le dépôt GitLab - Breaking Cat",
+  "projects.preview.breakingcat": "Breaking Cat - aperçu",
+
+  "projects.livret.title": "Livret CDA",
+  "projects.livret.description": "Application web pour gérer sessions de formation, utilisateurs (profils), compétences et espaces admin. Elle inclut des fixtures pour peupler les données, des contrôleurs et templates Twig pour l’IU, ainsi qu’une suite de tests PHPUnit avec rapports de couverture. Le code est organisé avec Doctrine pour la persistance et des outils de génération/CI.",
+
+  "projects.breakingcat.title": "Breaking Cat",
+  "projects.breakingcat.description": "Mini‑jeu web accessible après authentification, avec deux modes de jeu (Normal et Hardcore, ce dernier indiqué comme inactif). Le joueur lance une partie et enregistre son score, qui alimente un tableau des meilleurs scores affiché sur l’accueil. L’interface est responsive (Bootstrap) avec un mode thème clair/sombre, et les données (utilisateurs/scores) sont persistées en base MySQL via PDO.",
+
+  "ui.theme.selector": "Sélecteur de thème",
+  "ui.lang.change": "Changer la langue",
+  "ui.message.close": "Fermer le message",
+  "ui.close": "Fermer",
+
+  "legal.title": "Mentions légales",
+  "ui.back": "Retour",
+  "cv.icon_alt": "Icône CV",
+
+  "skills.other": "Autres",
+  "footer.built_with": "Conçu avec Laravel, Tailwind et Alpine.",
+
+  "place.example.name": "Jean Dupont",
+  "place.example.email": "prenom@exemple.com",
+  "place.greeting": "Bonjour…",
+
+  "experience.current.dates": "Juin 2025–PRÉSENT",
+  "experience.current.title": "Formation CDA - C2RT",
+  "experience.current.subtitle": "Titre RNCP Concepteur Développeur d'Applications",
+
+  "experience.previous.dates": "2012–2024",
+  "experience.previous.title": "Traducteur/Chef de projets - e2f",
+  "experience.previous.subtitle": "Gestion d'un parc informatique, dépannage",
+  "experience.previous.description": "Titulaire d’un Master en traduction (CETIM), j’ai assuré la traduction, la relecture et le contrôle qualité de contenus IT. J’ai géré des projets multilingues, coordonné des traducteurs et assuré le support technique local : maintenance du parc informatique, installation et dépannage logiciels, rédaction de procédures internes.",
+
+  "mentions.editor.heading": "Éditeur du site",
+  "mentions.publisher.heading": "Directeur de la publication",
+  "mentions.host.heading": "Hébergeur",
+  "mentions.ip.heading": "Propriété intellectuelle",
+  "mentions.data_protection.heading": "Données personnelles (RGPD)",
+  "mentions.cookies.heading": "Cookies",
+  "mentions.responsibility.heading": "Responsabilité",
+  "mentions.law.heading": "Loi applicable et juridiction",
+  "mentions.editor.content": "Nom : Jérémy Escassut\nStatut : Particulier\nAdresse : 1801, route de Ridounel, 47510 Foulayronnes\nE‑mail : j.losaint@gmail.com",
+  "mentions.publisher.content": "Directeur de la publication : Jérémy Escassut (responsable du contenu publié sur ce site).",
+  "mentions.host.content": "Nom : Alwaysdata\nSiège social : 91 rue du Faubourg Saint Honoré - 75008 Paris\nSite web : https://www.alwaysdata.com/fr/",
+
+  "mentions.ip.content": "L’ensemble des contenus (textes, images, logos, code, maquettes, etc.) publiés sur ce site est protégé par le droit d’auteur. Toute reproduction, représentation, modification ou exploitation totale ou partielle est interdite sans autorisation écrite préalable de l’éditeur. Pour toute demande d’utilisation ou de reproduction : j.losaint@gmail.com.",
+
+  "mentions.data_protection": "Responsable du traitement : Jérémy Escassut — contact : j.losaint@gmail.com. Finalités : gestion des demandes de contact transmises via le formulaire de contact (réponse aux messages reçus). Base légale : traitement nécessaire à l'exécution de la demande de l'utilisateur. Droits : vous pouvez demander l'accès, la rectification ou la suppression des données vous concernant en contactant : j.losaint@gmail.com.",
+
+  "mentions.cookies": "Le site lui‑même ne place pas de cookies. Aucune solution analytique tierce n'est activée par le site. L'hébergeur (Alwaysdata) collecte toutefois des données d'usage agrégées pour l'exploitation du service (par exemple : nombre de visites uniques par mois). Ces données sont agrégées et ne permettent pas d'identifier personnellement les visiteurs.",
+
+  "mentions.responsibility": "Les informations publiées sur ce site sont fournies à titre informatif. L’éditeur met en œuvre ses meilleurs efforts pour assurer l’exactitude et la mise à jour des contenus, mais ne peut garantir l’exhaustivité ni l’absence d’erreurs. L’éditeur décline toute responsabilité pour les dommages directs ou indirects résultant de l’accès ou de l’utilisation du site.",
+
+  "mentions.law": "Les présentes mentions sont régies par le droit français. En cas de litige, compétence des tribunaux français compétents, sauf disposition impérative contraire.",
+
+  "mentions.last_updated": "Dernière mise à jour :"
+}

@@ -1,0 +1,81 @@
+{
+  "portfolio.welcome": "Welcome to my portfolio. Here is an overview of my work and experience.",
+  "contact.open": "Open contact",
+  "cv.view": "View CV",
+  "nav.about": "About",
+  "nav.projects": "Projects",
+  "nav.experience": "Experience",
+  "nav.skills": "Skills",
+  "cv.preview": "CV preview",
+  "cv.preview_pdf": "CV preview (PDF)",
+  "cv.open_new_tab": "Open CV (new tab)",
+  "cv.download": "Download CV",
+  "cv.intro": "You can view or download my CV in PDF format.",
+
+  "home.job_title": "Full Stack Developer",
+
+  "about.p1": "After several years working in translation and IT project management, I chose to move into development to realise a long-held passion. The transition happened naturally: I found the same rigor, attention to detail and the same pleasure in turning an idea into a practical, useful solution.",
+  "about.p2": "What I love about code is the balance between logic and creativity. I always strive to optimise, to make things smoother, clearer and more efficient—without ever losing sight of the end-user experience. Satisfaction for me comes from a system that works well, cleanly, and genuinely simplifies people's lives.",
+  "about.p3": "I place great value on kindness and respect in working relationships. I enjoy collaborating, sharing knowledge and learning from others. Curious, honest and determined, I believe in continuous improvement, both individual and collective—the kind that allows a team to progress together and build sustainable projects.",
+  "about.p4": "Outside of coding, I find balance in sport and music: badminton, running, salsa and bachata punctuate my free time and fuel my daily energy.",
+
+  "projects.repo.livret": "View GitLab repo - Livret CDA",
+  "projects.preview.livret": "Project Livret CDA preview",
+  "projects.repo.breakingcat": "View GitLab repo - Breaking Cat",
+  "projects.preview.breakingcat": "Breaking Cat - preview",
+
+  "projects.livret.title": "Livret CDA",
+  "projects.livret.description": "Web application to manage training sessions, users (profiles), skills and admin areas. It includes fixtures to populate data, controllers and Twig templates for the UI, as well as a PHPUnit test suite with coverage reports. The code is organised with Doctrine for persistence and includes generation/CI tooling.",
+
+  "projects.breakingcat.title": "Breaking Cat",
+  "projects.breakingcat.description": "Web mini-game accessible after authentication, with two game modes (Normal and Hardcore, the latter marked as inactive). The player starts a game and records their score, which feeds a leaderboard displayed on the homepage. The interface is responsive (Bootstrap) with a light/dark theme, and data (users/scores) are persisted in a MySQL database via PDO.",
+
+  "ui.theme.selector": "Theme selector",
+  "ui.lang.change": "Change language",
+  "ui.message.close": "Close message",
+  "ui.close": "Close",
+
+  "legal.title": "Legal notice",
+  "ui.back": "Back",
+  "cv.icon_alt": "CV icon",
+
+  "skills.other": "Others",
+  "footer.built_with": "Built with Laravel, Tailwind and Alpine.",
+
+  "place.example.name": "John Doe",
+  "place.example.email": "name@example.com",
+  "place.greeting": "Hello…",
+
+  "experience.current.dates": "June 2025–PRESENT",
+  "experience.current.title": "CDA Training - C2RT",
+  "experience.current.subtitle": "RNCP Qualification: Application Designer-Developer",
+
+  "experience.previous.dates": "2012–2024",
+  "experience.previous.title": "Translator/Project Manager - e2f",
+  "experience.previous.subtitle": "IT infrastructure management, troubleshooting",
+  "experience.previous.description": "Holder of a Master's degree in Translation (CETIM), I carried out translation, proofreading and quality control of IT content. I managed multilingual projects, coordinated translators and provided local technical support: IT infrastructure maintenance, software installation and troubleshooting, and the drafting of internal procedures.",
+
+  "mentions.editor.content": "Name: Jérémy Escassut\nStatus: Individual\nAddress: 1801, route de Ridounel, 47510 Foulayronnes\nEmail: j.losaint@gmail.com",
+  "mentions.publisher.content": "Publication director: Jérémy Escassut (responsible for the content published on this site).",
+  "mentions.host.content": "Host: Alwaysdata\nHeadquarters: 91 rue du Faubourg Saint Honoré - 75008 Paris\nWebsite: https://www.alwaysdata.com/fr/",
+
+  "mentions.ip.content": "All content (texts, images, logos, code, mockups, etc.) published on this site is protected by copyright. Any reproduction, representation, modification or exploitation in whole or in part is prohibited without prior written permission from the publisher. For any request for use or reproduction: j.losaint@gmail.com.",
+
+  "mentions.data_protection": "Data controller: Jérémy Escassut — contact: j.losaint@gmail.com. Purposes: handling contact requests submitted via the contact form (responding to received messages). Legal basis: processing necessary to respond to the user's request. Rights: you may request access, rectification or deletion of data concerning you by contacting: j.losaint@gmail.com.",
+
+  "mentions.cookies": "The site itself does not set cookies. No third-party analytics solution is activated by the site. The host (Alwaysdata) however collects aggregated usage data for service operation (for example: number of unique visits per month). These data are aggregated and cannot be used to identify visitors personally.",
+
+  "mentions.responsibility": "The information published on this site is provided for informational purposes. The publisher makes every effort to ensure accuracy and keep content up to date, but cannot guarantee completeness or the absence of errors. The publisher disclaims all liability for direct or indirect damages resulting from access to or use of the site.",
+
+  "mentions.law": "These legal notices are governed by French law. In the event of a dispute, the French courts have jurisdiction, unless otherwise required by mandatory law.",
+
+  "mentions.last_updated": "Last update :"
+  ,"mentions.editor.heading": "Site owner",
+  "mentions.publisher.heading": "Publication director",
+  "mentions.host.heading": "Host",
+  "mentions.ip.heading": "Intellectual property",
+  "mentions.data_protection.heading": "Personal data (GDPR)",
+  "mentions.cookies.heading": "Cookies",
+  "mentions.responsibility.heading": "Liability",
+  "mentions.law.heading": "Governing law and jurisdiction"
+}

@@ -12,8 +12,8 @@
                 <div id="home-icons" class="mt-3 flex justify-end"></div>
 
                 <h1 class="text-3xl ml-6 font-semibold">Jérémy Escassut</h1>
-                <h2 class="text-xl ml-6 font-semibold">Développeur Full Stack</h2>
-                <p class="text-[#706f6c] mt-3">Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.</p>
+                <h2 class="text-xl ml-6 font-semibold">{{ __('home.job_title') }}</h2>
+                <p class="text-[#706f6c] mt-3">{{ __('portfolio.welcome') }}</p>
             </div>
 
             <div id="home-interactions" class="flex gap-4 mt-4 items-start">
@@ -47,10 +47,10 @@
                 <div id="home-right-col" class="right-col flex-none w-auto max-w-[140px] sm:max-w-[180px] flex flex-col gap-4">
                     <nav class="mt-0 mb-0 hidden lg:block">
                         <ul id="home-sections-list" class="space-y-3 text-sm lg:text-right">
-                            <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
-                            <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
-                            <li><a href="#experience" class="font-medium hover:underline">Expérience</a></li>
-                            <li><a href="#skills" class="font-medium hover:underline">Compétences</a></li>
+                            <li><a href="#about" class="font-medium hover:underline">{{ __('nav.about') }}</a></li>
+                            <li><a href="#projects" class="font-medium hover:underline">{{ __('nav.projects') }}</a></li>
+                            <li><a href="#experience" class="font-medium hover:underline">{{ __('nav.experience') }}</a></li>
+                            <li><a href="#skills" class="font-medium hover:underline">{{ __('nav.skills') }}</a></li>
                         </ul>
                     </nav>
 
@@ -72,7 +72,7 @@
 
                     <div id="home-contact-cv-icons" class="contact-cv-actions mt-0 flex items-center gap-3 justify-end">
                         <!-- Contact (inline from resources/svg/icon-contact.svg) -->
-                        <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="Ouvrir le contact" style="margin-top:2px;">
+                        <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="{{ __('contact.open') }}" style="margin-top:2px;">
                             @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
                             @if($svg) {!! $svg !!} @endif
                         </button>
@@ -85,7 +85,7 @@
                             @focus="hoverCV = true"
                             @blur="hoverCV = false"
                             class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
-                            aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                            aria-label="{{ __('cv.view') }} ({{ __('nav.about') }})" style="margin-top:2px;">
                             {{-- icône pour mode clair (noir sur fond clair) --}}
                             <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='light'" x-cloak>
                             {{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
@@ -118,7 +118,7 @@
                         </button>
 
                         <!-- Language toggle button: small globe with FR/EN badge -->
-                        <button id="langToggleButton" type="button" class="p-3 rounded theme-lang-button hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Changer la langue" title="Changer la langue">
+                        <button id="langToggleButton" type="button" data-locale="{{ app()->getLocale() }}" class="p-3 rounded theme-lang-button hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="{{ __('ui.lang.change') }}" title="{{ __('ui.lang.change') }}">
                             {{-- globe icon : standard globe with meridians/latitudes --}}
                             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
                                 <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
@@ -133,7 +133,7 @@
                                 <path d="M4.5 7.8 C8 9.2 16 9.2 19.5 7.8" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
                                 <path d="M4.5 16.2 C8 14.8 16 14.8 19.5 16.2" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
                             </svg>
-                            <span class="lang-badge text-xs px-1 rounded ml-1" aria-hidden="true">FR</span>
+                            <span class="lang-badge text-xs px-1 rounded ml-1" aria-hidden="true">{{ strtoupper(app()->getLocale() ?? 'FR') }}</span>
                         </button>
                     </div>
                 </div>
@@ -192,10 +192,10 @@
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">À propos</h2>
             </div>
             <div class="bg-[#fff2f2] rounded-md p-6">
-                <p class="text-sm text-[#706f6c]">Après plusieurs années passées dans la traduction et la gestion de projets IT, j’ai choisi de me tourner vers le développement pour concrétiser une passion que je nourrissais depuis longtemps. Cette transition s’est faite naturellement : j’y ai retrouvé la même rigueur, le même sens du détail et le même plaisir à transformer une idée en solution concrète et utile.</p>
-                <p class="text-sm text-[#706f6c] mt-3">Ce que j’aime dans le code, c’est l’équilibre entre logique et créativité. Je cherche toujours à optimiser, à rendre les choses plus fluides, plus claires, plus efficaces — sans jamais perdre de vue l’expérience de l’utilisateur final. La satisfaction vient pour moi d’un système qui fonctionne bien, proprement, et qui simplifie réellement la vie de ceux qui l’utilisent.</p>
-                <p class="text-sm text-[#706f6c] mt-2">J’accorde une grande importance à la bienveillance et au respect dans les relations de travail. J’aime collaborer, partager mes connaissances et apprendre des autres. Curieux, honnête et déterminé, je crois en une amélioration continue, individuelle comme collective — celle qui permet à une équipe de progresser ensemble et de construire des projets durables.</p>
-                <p class="text-sm text-[#706f6c] mt-2">En dehors du code, je trouve mon équilibre dans le sport et la musique : badminton, course à pied, salsa et bachata rythment mon temps libre et nourrissent mon énergie au quotidien.</p>
+                <p class="text-sm text-[#706f6c]">{{ __('about.p1') }}</p>
+                <p class="text-sm text-[#706f6c] mt-3">{{ __('about.p2') }}</p>
+                <p class="text-sm text-[#706f6c] mt-2">{{ __('about.p3') }}</p>
+                <p class="text-sm text-[#706f6c] mt-2">{{ __('about.p4') }}</p>
             </div>
         </section>
 
@@ -209,13 +209,13 @@
                     <div class="w-full p-4 bg-white rounded flex flex-col gap-4 project-card">
                         <div class="flex-1 text-sm text-[#706f6c]">
                             <div class="flex items-center">
-                                <span class="text-base font-semibold">Livret CDA</span>
+                                <span class="text-base font-semibold">{{ __('projects.livret.title') }}</span>
                                 @php $repoSvg = ''; try { $repoSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab-repo-link.svg')); } catch (Exception $e) { } @endphp
-                                <a href="https://gitlab.com/JeremyEscassut/livret-cda" target="_blank" rel="noopener noreferrer" aria-label="Voir le dépôt GitLab - Livret CDA" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                <a href="https://gitlab.com/JeremyEscassut/livret-cda" target="_blank" rel="noopener noreferrer" aria-label="{{ __('projects.repo.livret') }}" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
                                     @if($repoSvg) {!! $repoSvg !!} @endif
                                 </a>
                             </div>
-                            <p class="mt-2 text-sm text-[#706f6c]">Application web pour gérer sessions de formation, utilisateurs (profils), compétences et espaces admin. Elle inclut des fixtures pour peupler les données, des contrôleurs et templates Twig pour l’IU, ainsi qu’une suite de tests PHPUnit avec rapports de couverture. Le code est organisé avec Doctrine pour la persistance et des outils de génération/CI.</p>
+                            <p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.livret.description') }}</p>
 
                             <div class="project-tags mt-3">
                                 <span class="project-tag">PHP</span>
@@ -226,19 +226,19 @@
 
 
                         </div>
-                        <img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Livret_CDA.png'))) }}" alt="Aperçu du projet Livret CDA" class="rounded project-image">
+                        <img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Livret_CDA.png'))) }}" alt="{{ __('projects.preview.livret') }}" class="rounded project-image">
                     </div>
 
                     <div class="w-full p-4 bg-white rounded flex flex-col gap-4 project-card">
                         <div class="flex-1 text-sm text-[#706f6c]">
                             <div class="flex items-center">
-                                <span class="text-base font-semibold">Breaking Cat</span>
+                                <span class="text-base font-semibold">{{ __('projects.breakingcat.title') }}</span>
                                 @php $repoSvg = ''; try { $repoSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab-repo-link.svg')); } catch (Exception $e) { } @endphp
-                                <a href="https://gitlab.com/JeremyEscassut/breakingcat" target="_blank" rel="noopener noreferrer" aria-label="Voir le dépôt GitLab - Breaking Cat" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                <a href="https://gitlab.com/JeremyEscassut/breakingcat" target="_blank" rel="noopener noreferrer" aria-label="{{ __('projects.repo.breakingcat') }}" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
                                     @if($repoSvg) {!! $repoSvg !!} @endif
                                 </a>
                             </div>
-                            <p class="mt-2 text-sm text-[#706f6c]">Mini‑jeu web accessible après authentification, avec deux modes de jeu (Normal et Hardcore, ce dernier indiqué comme inactif). Le joueur lance une partie et enregistre son score, qui alimente un tableau des meilleurs scores affiché sur l’accueil. L’interface est responsive (Bootstrap) avec un mode thème clair/sombre, et les données (utilisateurs/scores) sont persistées en base MySQL via PDO.</p>
+                            <p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.breakingcat.description') }}</p>
 
                             <div class="project-tags mt-3">
                                 <span class="project-tag">PHP</span>
@@ -247,7 +247,7 @@
                                 <span class="project-tag">JavaScript</span>
                             </div>
                         </div>
-                        <img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Breaking_Cat.png'))) }}" alt="Breaking Cat - aperçu" class="rounded project-image">
+                        <img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Breaking_Cat.png'))) }}" alt="{{ __('projects.preview.breakingcat') }}" class="rounded project-image">
                     </div>
                 </div>
             </div>
@@ -260,19 +260,19 @@
             <div class="bg-[#fff7db] rounded-md p-6">
                 <div class="space-y-6">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div class="text-sm text-[#706f6c] font-medium">Juin 2025–PRÉSENT</div>
+                        <div class="text-sm text-[#706f6c] font-medium">{{ __('experience.current.dates') }}</div>
                         <div>
-                            <h2 class="text-lg font-semibold tracking-tight">Formation CDA - C2RT</h2>
-                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">Titre RNCP Concepteur Développeur d'Applications</h3>
+                            <h2 class="text-lg font-semibold tracking-tight">{{ __('experience.current.title') }}</h2>
+                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.current.subtitle') }}</h3>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div class="text-sm text-[#706f6c] font-medium">2012–2024</div>
+                        <div class="text-sm text-[#706f6c] font-medium">{{ __('experience.previous.dates') }}</div>
                         <div>
-                            <h2 class="text-lg font-semibold tracking-tight">Traducteur/Chef de projets - e2f</h2>
-                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">Gestion d'un parc informatique, dépannage</h3>
-                            <p class="text-sm text-[#706f6c] mt-2">Titulaire d’un Master en traduction (CETIM), j’ai assuré la traduction, la relecture et le contrôle qualité de contenus IT. J’ai géré des projets multilingues, coordonné des traducteurs et assuré le support technique local : maintenance du parc informatique, installation et dépannage logiciels, rédaction de procédures internes.</p>
+                            <h2 class="text-lg font-semibold tracking-tight">{{ __('experience.previous.title') }}</h2>
+                            <h3 class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.previous.subtitle') }}</h3>
+                            <p class="text-sm text-[#706f6c] mt-2">{{ __('experience.previous.description') }}</p>
                         </div>
                     </div>
                 </div>
@@ -343,7 +343,7 @@
 
                     <!-- Others group -->
                     <div id="other">
-                        <h3 class="text-sm font-semibold mb-2">Autres</h3>
+                        <h3 class="text-sm font-semibold mb-2">{{ __('skills.other') }}</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
                             <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile" aria-label="Jira" data-name="Jira">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-jira.svg')); } catch (Exception $e) { } @endphp
@@ -378,10 +378,10 @@
         <footer id="footer" class="right-footer mt-6 p-6 text-sm text-[#706f6c] bg-transparent">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                 <div class="text-center lg:text-left">
-                    &copy; {{ date('Y') }} Jérémy Escassut<br><a href="{{ url('/mentions') }}" class="underline" aria-label="Mentions légales">Mentions légales</a>
+                    &copy; {{ date('Y') }} Jérémy Escassut<br><a href="{{ route('mentions', ['locale' => app()->getLocale()]) }}" class="underline" aria-label="{{ __('legal.title') }}">{{ __('legal.title') }}</a>
                 </div>
                 <div class="text-center lg:text-right text-xs text-[#8b8a88]">
-                    Conçu avec Laravel, Tailwind et Alpine.
+                    {{ __('footer.built_with') }}
                 </div>
             </div>
         </footer>
@@ -451,4 +451,50 @@
 
 @push('scripts')
 <!-- Page scripts moved to resources/js/app.js -->
+<script>
+    // Language toggle: swap between 'fr' and 'en', preserve path/query/hash, set cookie
+    (function() {
+        function setLocaleCookie(locale) {
+            try {
+                document.cookie = 'locale=' + encodeURIComponent(locale) + ';path=/;max-age=' + (60 * 60 * 24 * 365);
+            } catch (e) {
+                /* noop */
+            }
+        }
+
+        function buildNewPath(newLocale) {
+            var loc = window.location;
+            var path = loc.pathname || '/';
+            // remove existing leading /fr or /en if present
+            var m = path.match(/^\/(fr|en)(?:\/|$)/);
+            if (m) {
+                path = path.replace(/^\/(fr|en)/, '');
+            }
+            // ensure leading slash
+            if (!path.startsWith('/')) path = '/' + path;
+            // if resulting path is just '/', keep it
+            var newPath = '/' + newLocale + (path === '/' ? '' : path);
+            return newPath + (loc.search || '') + (loc.hash || '');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('langToggleButton');
+            if (!btn) return;
+            var badge = btn.querySelector('.lang-badge');
+            var current = (btn.getAttribute('data-locale') || document.documentElement.lang || 'fr').toLowerCase();
+            if (badge) badge.textContent = current.toUpperCase();
+
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                var next = (current === 'fr') ? 'en' : 'fr';
+                // set cookie so middleware can fall back when route param missing
+                setLocaleCookie(next);
+                // redirect to same path prefixed with locale
+                var target = buildNewPath(next);
+                // use location.replace to avoid creating extra history entry
+                window.location.href = target;
+            });
+        });
+    })();
+</script>
 @endpush
