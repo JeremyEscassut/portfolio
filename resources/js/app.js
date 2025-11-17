@@ -9,6 +9,43 @@ import Alpine from 'alpinejs';
 // Ensure theme from localStorage is applied immediately (no 'auto' option):
 { const stored = localStorage.getItem('theme'); if (stored === 'dark') { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); } }
 
+// Inject small UI hover/focus styles for icon links (moved from Blade)
+(function injectIconHoverStyles() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById('ui-icon-hover-styles')) return;
+    const css = `
+/* Subtle lift + slight clockwise rotation on hover/focus for icon links and small buttons */
+.repo-link,
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .16s ease;
+    will-change: transform;
+}
+.repo-link:hover,
+.social-link:hover,
+.repo-link:focus-visible,
+.social-link:focus-visible {
+    transform: translateY(-4px) rotate(4deg);
+}
+.repo-link:active,
+.social-link:active {
+    transform: translateY(-1px) rotate(2deg);
+}
+.repo-link:focus-visible,
+.social-link:focus-visible {
+    outline: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+`;
+    const el = document.createElement('style');
+    el.id = 'ui-icon-hover-styles';
+    el.appendChild(document.createTextNode(css));
+    document.head.appendChild(el);
+})();
+
 // Register contact modal factory and other small page behaviors here so markup can remain clean.
 // We keep a window.contactModal factory for compatibility with existing x-data="contactModal()" usage.
 window.contactModal = function () {
@@ -113,6 +150,40 @@ document.addEventListener('alpine:init', () => {
         target.style.width = w + 'px';
         target.style.height = h + 'px';
         target.classList.add('fixed');
+
+        // compute a vertical top offset so the fixed actions sit centered
+        // inside the aside (if present) on small screens
+        try {
+            const aside = document.getElementById('home-aside') || document.querySelector('aside');
+            if (aside) {
+                const aRect = aside.getBoundingClientRect();
+                // aRect.top is relative to viewport; we want top (px) from viewport
+                const desiredTop = Math.round(Math.max(6, aRect.top + Math.round((aRect.height - h) / 2)));
+                target.style.top = desiredTop + 'px';
+            } else {
+                // fallback: small padding from top
+                target.style.top = '8px';
+            }
+
+            // compute a horizontal offset using the element's original left
+            // coordinate. Setting `left` when `position: fixed` keeps the
+            // element visually aligned with its previous inline position
+            // without manual tuning.
+            try {
+                if (origRect) {
+                    const leftDist = Math.round(Math.max(6, origRect.left));
+                    target.style.left = leftDist + 'px';
+                } else {
+                    // fallback: small padding from left
+                    target.style.left = '8px';
+                }
+            } catch (e) {
+                target.style.left = '8px';
+            }
+        } catch (e) {
+            // ignore measurement errors, leave default placement
+            target.style.top = '8px';
+        }
     }
 
     function removeFixed() {
@@ -120,6 +191,8 @@ document.addEventListener('alpine:init', () => {
         target.classList.remove('fixed');
         target.style.width = '';
         target.style.height = '';
+        target.style.top = '';
+        target.style.right = '';
     }
 
     function onScroll() {

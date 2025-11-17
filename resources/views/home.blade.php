@@ -4,7 +4,7 @@
 <div class="lg:flex lg:justify-between lg:gap-4">
     <!-- LEFT: navigation / identity (centré verticalement sur grand écran) -->
     <!-- LEFT: like Brittany, sticky on large screens within page scroll -->
-    <aside class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
+    <aside id="home-aside" class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
         <div id="home" x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
             <!-- Name -->
             <div id="home-title" class="mb-8">
@@ -31,10 +31,13 @@
                         } catch (Exception $e) { }
                         @endphp
 
-                        <div id="profilePhotoContainer" class="relative cursor-pointer group w-full lg:mx-auto lg:w-full max-w-full text-center" role="button" tabindex="0"
+                        <div id="profilePhotoContainer" class="relative cursor-pointer group w-full lg:mx-auto lg:w-full max-w-full text-center flex flex-col items-center" role="button" tabindex="0"
                             data-original="{{ $origData ? 'data:image/jpeg;base64,' . $origData : asset('images/je_profile.jpeg') }}"
                             data-ai="{{ $aiData ? 'data:image/jpeg;base64,' . $aiData : asset('images/je_ia_profile.jpg') }}">
-                            <canvas id="photoCanvas" class="block w-full rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]" style="aspect-ratio:1/1; width:100%; height:auto;"></canvas>
+                            <div id="photoCanvasWrapper" style="max-width:400px; display:flex; align-items:center; justify-content:center;">
+                                <canvas id="photoCanvas" width="400" height="400" class="rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]"
+                                    style="display:block; width:100%; height:auto; max-width:400px;"></canvas>
+                            </div>
                             <p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">Original<br>Cliquez si vous aimez Arcane</p>
                         </div>
                     </div>
@@ -166,7 +169,7 @@
 
 
         <section id="about" class="mb-8 scroll-mt-24" aria-label="À propos">
-            <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+            <div id="section-banner" class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
                 <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">À propos</h2>
             </div>
             <div class="bg-[#fff2f2] rounded-md p-6">
@@ -356,7 +359,7 @@
         <footer id="footer" class="right-footer mt-6 p-6 text-sm text-[#706f6c] bg-transparent">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
                 <div class="text-center lg:text-left">
-                    &copy; {{ date('Y') }} Jérémy Escassut — <a href="{{ url('/mentions') }}" class="underline" aria-label="Mentions légales">Mentions légales</a>
+                    &copy; {{ date('Y') }} Jérémy Escassut<br><a href="{{ url('/mentions') }}" class="underline" aria-label="Mentions légales">Mentions légales</a>
                 </div>
                 <div class="text-center lg:text-right text-xs text-[#8b8a88]">
                     Conçu avec Laravel, Tailwind et Alpine.
@@ -368,7 +371,7 @@
 </div>
 
 @push('styles')
-<!-- Styles page-scoped déplacés vers resources/css/app.css (fin du fichier) -->
+<!-- Hover lift styles moved to `resources/js/app.js` and injected at runtime -->
 @endpush
 
 

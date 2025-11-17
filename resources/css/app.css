@@ -1430,11 +1430,14 @@ html:not(.dark)
     }
 }
 
-/* Contact/CV actions when fixed on small screens */
+/* Contact/CV actions when fixed on small screens
+   Note: `top` is intentionally not hard-coded here so JS can compute
+   a vertical position that centers the actions within the aside sticky
+   region. We keep `position: fixed` and `right` control in CSS. */
 #home-contact-cv-icons.fixed {
     position: fixed !important;
-    top: 0 !important;
-    right: 55px !important;
+    /* top and right are set dynamically by JS to place the actions where
+       they visually matched their original inline position. */
     left: auto !important;
     z-index: 60 !important;
     background: transparent !important;
@@ -2156,12 +2159,8 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
         margin-left: 20px;
     }
 
-    /* when contact/CV actions become fixed on small screens, move them slightly upward
-       so they don't overlap or sit below the section title banner */
-    #home-contact-cv-icons.fixed {
-        /* keep existing fixed positioning but lift visually */
-        transform: translateY(-20px) !important;
-    }
+    /* when contact/CV actions become fixed on small screens, we let JS compute
+         a vertical offset so the actions are centered within the aside sticky area. */
 }
 
 /* ------------------------------------------------------------------
