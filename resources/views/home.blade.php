@@ -456,7 +456,8 @@
     (function() {
         function setLocaleCookie(locale) {
             try {
-                document.cookie = 'locale=' + encodeURIComponent(locale) + ';path=/;max-age=' + (60 * 60 * 24 * 365);
+                // Middleware reads `site_locale` so set that cookie name for consistency
+                document.cookie = 'site_locale=' + encodeURIComponent(locale) + ';path=/;max-age=' + (60 * 60 * 24 * 365);
             } catch (e) {
                 /* noop */
             }
@@ -465,15 +466,23 @@
         function buildNewPath(newLocale) {
             var loc = window.location;
             var path = loc.pathname || '/';
-            // remove existing leading /fr or /en if present
-            var m = path.match(/^\/(fr|en)(?:\/|$)/);
-            if (m) {
-                path = path.replace(/^\/(fr|en)/, '');
-            }
-            // ensure leading slash
-            if (!path.startsWith('/')) path = '/' + path;
-            // if resulting path is just '/', keep it
-            var newPath = '/' + newLocale + (path === '/' ? '' : path);
+
+            // detect a base prefix like '/portfolio'
+            var baseMatch = path.match(/^\/(portfolio)(?:\/|$)/i);
+            var basePrefix = baseMatch ? '/' + baseMatch[1] : null;
+
+            // derive the 'rest' after the basePrefix (or whole path if none)
+            var rest = basePrefix ? path.slice(basePrefix.length) : path;
+            if (!rest.startsWith('/')) rest = '/' + rest;
+
+            // remove any leading locale from the rest ('/fr' or '/en')
+            rest = rest.replace(/^\/(fr|en)(?:\/|$)/i, '/');
+
+            // normalise empty rest
+            if (rest === '/') rest = '';
+
+            var newPath = basePrefix ? (basePrefix + '/' + newLocale + rest) : ('/' + newLocale + (rest === '' ? '' : rest));
+
             return newPath + (loc.search || '') + (loc.hash || '');
         }
 

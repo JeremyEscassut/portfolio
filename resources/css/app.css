@@ -2273,14 +2273,20 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
    que `#themeToggleButton` et `#langToggleButton` (classe theme-lang-button). */
 .dark #themeToggleButton.theme-lang-button:hover svg,
 .dark #themeToggleButton.theme-lang-button:focus-visible svg,
+.dark #themeToggleButton.theme-lang-button:active svg,
 .dark #themeToggleButton.theme-lang-button:hover svg *,
 .dark #themeToggleButton.theme-lang-button:focus-visible svg *,
+.dark #themeToggleButton.theme-lang-button:active svg *,
 .dark #langToggleButton.theme-lang-button:hover svg,
 .dark #langToggleButton.theme-lang-button:focus-visible svg,
+.dark #langToggleButton.theme-lang-button:active svg,
 .dark #langToggleButton.theme-lang-button:hover svg *,
-.dark #langToggleButton.theme-lang-button:focus-visible svg * {
-    stroke: #000 !important;
-    color: #000 !important;
+.dark #langToggleButton.theme-lang-button:focus-visible svg *,
+.dark #langToggleButton.theme-lang-button:active svg * {
+    /* En mode sombre, forcer les icônes des boutons thème/langue en blanc
+       pour assurer un contraste élevé sur fonds sombres/verts (mobile inclus). */
+    stroke: #fff !important;
+    color: #fff !important;
 }
 
 /* ------------------------------------------------------------------

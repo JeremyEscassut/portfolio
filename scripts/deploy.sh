@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure we run from the project root (the `Portfolio` folder) even when this
+# script is invoked from a different working directory. This makes `npm ci`,
+# `npm run build` and `rsync` operate against the intended files.
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$PROJECT_ROOT"
+echo "Working directory: $PROJECT_ROOT"
+
 # deploy.sh - déploiement sécurisé par rsync vers Alwaysdata
 # Usage:
 #   ./scripts/deploy.sh [--dry-run] [--no-build]
@@ -90,8 +97,10 @@ else
   "${RSYNC_CMD[@]}"
 fi
 
-# Post-deploy commands run on remote
-read -r -d '' REMOTE_CMDS <<'REMOTE_EOF'
+## Post-deploy commands run directly on the remote server using an ssh heredoc
+if [ $DRY_RUN -eq 1 ]; then
+  echo "DRY RUN: remote commands to run:" 
+  cat <<'REMOTE_EOF'
 set -e
 cd "${REMOTE_PATH}"
 # remove any stale bootstrap caches that can cause provider/autoload mismatches
@@ -111,14 +120,28 @@ php artisan cache:clear || true
 php artisan config:cache || true
 php artisan route:cache || true
 REMOTE_EOF
-
-# Execute remote commands via ssh
-if [ $DRY_RUN -eq 1 ]; then
-  echo "DRY RUN: remote commands to run:\n$REMOTE_CMDS"
 else
   echo "==> Running post-deploy commands on remote"
+# Expand ${REMOTE_PATH} locally so the remote `cd` uses an explicit path
   ssh "${REMOTE_USER}@${REMOTE_HOST}" bash -s -- <<SSH_EOF
-${REMOTE_CMDS}
+set -e
+cd "${REMOTE_PATH}"
+# remove any stale bootstrap caches that can cause provider/autoload mismatches
+rm -f bootstrap/cache/*.php || true
+# Run composer if vendor is absent or to regenerate autoload (optional)
+if [ -f composer.json ] && [ ! -d vendor ]; then
+  composer install --no-dev --optimize-autoloader --prefer-dist
+elif [ -f composer.json ]; then
+  # regenerate autoload (safe)
+  composer dump-autoload -o || true
+fi
+# Clear and recache Laravel artefacts
+php artisan view:clear || true
+php artisan config:clear || true
+php artisan cache:clear || true
+# Recreate optimized caches
+php artisan config:cache || true
+php artisan route:cache || true
 SSH_EOF
 fi
 
