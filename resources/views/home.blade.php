@@ -97,7 +97,7 @@
 
                     <!-- Theme cycle button placed under contact/CV actions -->
                     <div id="theme-toggle-wrapper" class="mt-2 flex justify-end items-center gap-2">
-                        <button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-3 rounded theme-lang-button hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Sélecteur de thème">
+                        <button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-3 rounded theme-lang-button transform -translate-x-2 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Sélecteur de thème">
                             <template x-if="theme==='auto'">
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
