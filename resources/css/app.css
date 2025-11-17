@@ -2267,3 +2267,111 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     box-shadow: none !important;
     border: none !important;
 }
+
+/* Dark mode: forcer les traits (stroke) des icônes des boutons thème/langue en noir
+   lors du hover ou du focus-visible afin d'assurer un contraste élevé. Ceci n'affecte
+   que `#themeToggleButton` et `#langToggleButton` (classe theme-lang-button). */
+.dark #themeToggleButton.theme-lang-button:hover svg,
+.dark #themeToggleButton.theme-lang-button:focus-visible svg,
+.dark #themeToggleButton.theme-lang-button:hover svg *,
+.dark #themeToggleButton.theme-lang-button:focus-visible svg *,
+.dark #langToggleButton.theme-lang-button:hover svg,
+.dark #langToggleButton.theme-lang-button:focus-visible svg,
+.dark #langToggleButton.theme-lang-button:hover svg *,
+.dark #langToggleButton.theme-lang-button:focus-visible svg * {
+    stroke: #000 !important;
+    color: #000 !important;
+}
+
+/* ------------------------------------------------------------------
+   Targeted styles: uniquement pour les boutons Theme et Langue
+   - assure que seules ces deux commandes sont affectées
+   - double la taille des SVG et ajuste le focus/hover
+   ------------------------------------------------------------------ */
+
+#themeToggleButton.theme-lang-button,
+#langToggleButton.theme-lang-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem; /* proche de p-3 */
+    border-radius: 9999px;
+    transition: transform 160ms ease, box-shadow 160ms ease,
+        background-color 120ms ease;
+}
+
+#themeToggleButton.theme-lang-button svg,
+#langToggleButton.theme-lang-button svg {
+    width: 36px;
+    height: 36px;
+    display: block;
+}
+
+@media (hover: hover) {
+    #themeToggleButton.theme-lang-button,
+    #langToggleButton.theme-lang-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px; /* container slightly smaller than Contact/CV (40px) */
+        height: 36px;
+        padding: 0; /* use explicit width/height to control size */
+        border-radius: 9999px;
+        transition: transform 160ms ease, box-shadow 160ms ease,
+            background-color 120ms ease;
+    }
+
+    #themeToggleButton.theme-lang-button svg,
+    #langToggleButton.theme-lang-button svg {
+        width: 32px; /* slightly smaller than contact/cv icons (40px) */
+        height: 32px;
+        display: block;
+    }
+
+    @media (hover: hover) {
+        #themeToggleButton.theme-lang-button:hover,
+        #langToggleButton.theme-lang-button:hover {
+            transform: translateY(-4px) rotate(-3deg);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+        }
+    }
+
+    #themeToggleButton.theme-lang-button:focus-visible,
+    #langToggleButton.theme-lang-button:focus-visible {
+        outline: 2px solid rgba(59, 130, 246, 0.6);
+        outline-offset: 4px;
+    }
+
+    .lang-badge {
+        background: rgba(0, 0, 0, 0.06);
+        color: inherit;
+        font-weight: 600;
+    }
+}
+
+/* Badge language: position top-right outside the icon, not inside SVG */
+.theme-lang-button {
+    position: relative; /* ensure the badge can be absolutely positioned relative to button */
+}
+.theme-lang-button .lang-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    transform: translate(0, 0);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.06);
+    color: inherit;
+    padding: 0.125rem 0.35rem;
+    font-size: 0.65rem;
+    line-height: 1;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Slightly stronger badge background in dark mode for readability */
+.dark .theme-lang-button .lang-badge {
+    background: rgba(255, 255, 255, 0.08);
+}

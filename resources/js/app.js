@@ -16,7 +16,11 @@ import Alpine from 'alpinejs';
     const css = `
 /* Subtle lift + slight clockwise rotation on hover/focus for icon links and small buttons */
 .repo-link,
-.social-link {
+.social-link,
+#themeToggleButton,
+#langToggleButton,
+.repo-link .repo-icon,
+.social-link .repo-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -26,24 +30,84 @@ import Alpine from 'alpinejs';
 }
 .repo-link:hover,
 .social-link:hover,
+#themeToggleButton:hover,
+#langToggleButton:hover,
 .repo-link:focus-visible,
-.social-link:focus-visible {
+.social-link:focus-visible,
+#themeToggleButton:focus-visible,
+#langToggleButton:focus-visible {
     transform: translateY(-4px) rotate(4deg);
 }
 .repo-link:active,
-.social-link:active {
+.social-link:active,
+#themeToggleButton:active,
+#langToggleButton:active {
     transform: translateY(-1px) rotate(2deg);
 }
 .repo-link:focus-visible,
-.social-link:focus-visible {
+.social-link:focus-visible,
+#themeToggleButton:focus-visible,
+#langToggleButton:focus-visible {
     outline: none;
     box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* Cursor: show pointer (hand with index) on devices with fine pointer (desktop) */
+@media (hover: hover) and (pointer: fine) {
+    #themeToggleButton, #langToggleButton {
+        cursor: pointer;
+    }
 }
 `;
     const el = document.createElement('style');
     el.id = 'ui-icon-hover-styles';
     el.appendChild(document.createTextNode(css));
     document.head.appendChild(el);
+})();
+
+// Language toggle: small globe button with FR/EN badge — share behavior/colors with theme toggle
+(function initLangToggle() {
+    try {
+        const btn = document.getElementById('langToggleButton');
+        if (!btn) return;
+
+        const badge = btn.querySelector('.lang-badge');
+
+        function readLang() {
+            return (localStorage.getItem('siteLang') || 'FR');
+        }
+
+        function writeLang(l) {
+            localStorage.setItem('siteLang', l);
+        }
+
+        function render() {
+            const l = readLang();
+            if (badge) badge.textContent = l;
+            btn.setAttribute('aria-label', `Changer la langue — actuellement ${l}`);
+        }
+
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const current = readLang();
+            const next = current === 'FR' ? 'EN' : 'FR';
+            writeLang(next);
+            render();
+        });
+
+        // keyboard accessibility
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                btn.click();
+            }
+        });
+
+        // initial render
+        render();
+    } catch (err) {
+        // ignore
+    }
 })();
 
 // Register contact modal factory and other small page behaviors here so markup can remain clean.
