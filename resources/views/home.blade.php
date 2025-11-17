@@ -9,87 +9,112 @@
             <!-- Name -->
             <div id="home-title" class="mb-8">
                 <!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
-                <div id="home-icons" class="mt-3 flex justify-end">
-                    <button type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
-                        <template x-if="theme==='auto'">
-                            <!-- system icon -->
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
-                                <path d="M8 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                            </svg>
-                        </template>
-                        <template x-if="theme==='light'">
-                            <!-- sun icon -->
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
-                            </svg>
-                        </template>
-                        <template x-if="theme==='dark'">
-                            <!-- moon icon -->
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                        </template>
-                    </button>
-                </div>
+                <div id="home-icons" class="mt-3 flex justify-end"></div>
 
                 <h1 class="text-3xl ml-6 font-semibold">Jérémy Escassut</h1>
                 <h2 class="text-xl ml-6 font-semibold">Développeur Full Stack</h2>
                 <p class="text-[#706f6c] mt-3">Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.</p>
             </div>
 
-            <!-- Section links (hidden on small screens, visible on desktop) -->
-            <nav class="mt-8 mb-6 hidden lg:block">
-                <ul class="space-y-3 text-sm text-end">
-                    <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
-                    <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
-                    <li><a href="#experience" class="font-medium hover:underline">Expérience</a></li>
-                    <li><a href="#skills" class="font-medium hover:underline">Compétences</a></li>
-                </ul>
-            </nav>
+            <div class="lg:flex lg:gap-4 mt-4">
+                <!-- LEFT column: photo (grows to fill available space) -->
+                <div class="left-col flex-1 flex items-center justify-center">
+                    <div id="home-photo" class="w-full">
+                        @php
+                        $origData = '';
+                        $aiData = '';
+                        try {
+                        $origData = base64_encode(file_get_contents(resource_path('je_profile.jpeg')));
+                        } catch (Exception $e) { }
+                        try {
+                        $aiData = base64_encode(file_get_contents(resource_path('je_ia_profile.jpg')));
+                        } catch (Exception $e) { }
+                        @endphp
+
+                        <div id="profilePhotoContainer" class="relative cursor-pointer group mx-auto w-[200px] lg:w-[320px] max-w-full text-center" role="button" tabindex="0"
+                            data-original="{{ $origData ? 'data:image/jpeg;base64,' . $origData : asset('images/je_profile.jpeg') }}"
+                            data-ai="{{ $aiData ? 'data:image/jpeg;base64,' . $aiData : asset('images/je_ia_profile.jpg') }}">
+                            <canvas id="photoCanvas" width="320" height="320" class="block w-full h-auto rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]"></canvas>
+                            <p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">Original<br>Cliquez si vous aimez Arcane</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT column: stacked list, social icons, contact/CV -->
+                <div id="home-right-col" class="right-col w-full lg:w-[40%] flex flex-col gap-4">
+                    <nav class="mt-0 mb-0 hidden lg:block">
+                        <ul id="home-sections-list" class="space-y-3 text-sm text-end lg:text-left">
+                            <li><a href="#about" class="font-medium hover:underline">À propos</a></li>
+                            <li><a href="#projects" class="font-medium hover:underline">Projets</a></li>
+                            <li><a href="#experience" class="font-medium hover:underline">Expérience</a></li>
+                            <li><a href="#skills" class="font-medium hover:underline">Compétences</a></li>
+                        </ul>
+                    </nav>
+
+                    <div id="home-social-icons" class="w-full flex gap-3 items-center text-sm text-[#706f6c] justify-end">
+                        <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
+                        <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
+                            @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
+                            @if($svg) {!! $svg !!} @endif
+                        </a>
+
+                        <!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
+                        <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
+                            @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
+                            @if($svg) {!! $svg !!} @endif
+                        </a>
 
 
-            <!-- Social icon buttons (Tabler icons, larger, no border) -->
-            <div id="home-social-icons" class="mt-6 flex gap-3 items-center text-sm text-[#706f6c] justify-end">
-                <!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
-                <a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
-                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
-                    @if($svg) {!! $svg !!} @endif
-                </a>
+                    </div>
 
-                <!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
-                <a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
-                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
-                    @if($svg) {!! $svg !!} @endif
-                </a>
-            </div>
+                    <div id="home-contact-cv-icons" class="contact-cv-actions mt-0 flex items-center gap-3 justify-end w-full">
+                        <!-- Contact (inline from resources/svg/icon-contact.svg) -->
+                        <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="Ouvrir le contact" style="margin-top:2px;">
+                            @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
+                            @if($svg) {!! $svg !!} @endif
+                        </button>
 
+                        <!-- CV (PNG light/dark variants placed in resources/png) -->
+                        <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer"
+                            @mouseenter="hoverCV = true"
+                            @mouseleave="hoverCV = false"
+                            @click="hoverCV = false"
+                            @focus="hoverCV = true"
+                            @blur="hoverCV = false"
+                            class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
+                            aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
+                            {{-- icône pour mode clair (noir sur fond clair) --}}
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='light'" x-cloak>
+                            {{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && !hoverCV" x-cloak>
+                            {{-- icône pour mode sombre lors du hover (utilise la variante noire fournie) --}}
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && hoverCV" x-cloak>
+                        </a>
+                    </div>
 
-            <!-- Actions: icons -->
-            <div id="home-contact-cv-icons" class="contact-cv-actions mt-6 flex items-center gap-3 justify-end">
-                <!-- Contact (inline from resources/svg/icon-contact.svg) -->
-                <button onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--contact" aria-label="Ouvrir le contact" style="margin-top:2px;">
-                    @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-contact.svg')); } catch (Exception $e) { } @endphp
-                    @if($svg) {!! $svg !!} @endif
-                </button>
-
-                <!-- CV (PNG light/dark variants placed in resources/png) -->
-                <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer"
-                    @mouseenter="hoverCV = true"
-                    @mouseleave="hoverCV = false"
-                    @click="hoverCV = false"
-                    @focus="hoverCV = true"
-                    @blur="hoverCV = false"
-                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
-                    aria-label="Voir le CV (ouvre dans un nouvel onglet)" style="margin-top:2px;">
-                    {{-- icône pour mode clair (noir sur fond clair) --}}
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='light'" x-cloak>
-                    {{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && !hoverCV" x-cloak>
-                    {{-- icône pour mode sombre lors du hover (utilise la variante noire fournie) --}}
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && hoverCV" x-cloak>
-                </a>
+                    <!-- Theme cycle button placed under contact/CV actions -->
+                    <div id="theme-toggle-wrapper" class="mt-2 flex justify-end w-full">
+                        <button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-2 rounded" aria-label="Sélecteur de thème">
+                            <template x-if="theme==='auto'">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+                                    <path d="M8 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                </svg>
+                            </template>
+                            <template x-if="theme==='light'">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
+                                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+                                </svg>
+                            </template>
+                            <template x-if="theme==='dark'">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </template>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </aside>

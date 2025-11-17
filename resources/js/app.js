@@ -223,4 +223,5 @@ Alpine.start();
 })();
 
 // Ambient halo: small, non-intrusive background glow updated on scroll/mousemove
+import './photoToggle';
 import './halo';
