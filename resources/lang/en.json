@@ -5,7 +5,7 @@
   "nav.about": "About",
   "nav.projects": "Projects",
   "nav.experience": "Experience",
-  "nav.skills": "Stack",
+  "nav.stack": "Stack",
   "cv.preview": "CV preview",
   "cv.preview_pdf": "CV preview (PDF)",
   "cv.open_new_tab": "Open CV (new tab)",
@@ -39,7 +39,7 @@
   "ui.back": "Back",
   "cv.icon_alt": "CV icon",
 
-  "skills.other": "Others",
+  "stack.other": "Others",
   "footer.built_with": "Built with Laravel, Tailwind and Alpine.",
 
   "place.example.name": "John Doe",

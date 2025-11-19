@@ -203,7 +203,7 @@ aside > div.shadow {
 }
 
 /* Skill icon tiles: keep a slightly different, matched light-green background */
-.skills-grid .skill-tile,
+.stack-grid .skill-tile,
 .skill-tile {
     background-color: color-mix(
         in srgb,
@@ -216,7 +216,7 @@ aside > div.shadow {
 }
 
 /* If markup still uses explicit utility class bg-white on tiles, override it */
-.skills-grid .bg-white.skill-tile,
+.stack-grid .bg-white.skill-tile,
 .skill-tile.bg-white {
     background-color: color-mix(
         in srgb,
@@ -1384,7 +1384,7 @@ html:not(.dark)
 
 /* =============================================================== */
 /* Page-scoped: home.blade.php overrides (migrés depuis @push('styles')) */
-/* Canonicalisé : footer sticky, skills, social-link svgs, modal Contact, */
+/* Canonicalisé : footer sticky, stack, social-link svgs, modal Contact, */
 /* accessibility tokens, and targeted dark-mode fixes. Keep this block at */
 /* the end of the file so it can safely override Tailwind utilities.     */
 /* =============================================================== */
@@ -1446,14 +1446,14 @@ html:not(.dark)
     align-items: center !important;
 }
 
-/* Skills / tiles */
+/* Stack / tiles */
 .skill-php svg {
     width: 2rem;
     height: 2rem;
     display: inline-block;
     vertical-align: middle;
 }
-.skills-grid .skill-tile {
+.stack-grid .skill-tile {
     aspect-ratio: 1/1;
     min-width: 3.5rem;
     width: 100%;
@@ -1463,10 +1463,10 @@ html:not(.dark)
     padding: 0.5rem;
     box-sizing: border-box;
 }
-.skills-grid .grid > .skill-tile {
+.stack-grid .grid > .skill-tile {
     height: auto;
 }
-.skills-grid svg {
+.stack-grid svg {
     width: 1.9rem;
     height: 1.9rem;
     display: block;
@@ -1475,17 +1475,17 @@ html:not(.dark)
     object-fit: contain;
 }
 @media (min-width: 1024px) {
-    .skills-grid .skill-tile {
+    .stack-grid .skill-tile {
         min-width: 5rem;
     }
-    .skills-grid svg {
+    .stack-grid svg {
         width: 2.4rem;
         height: 2.4rem;
     }
 }
-/* Group headings inside the Skills section: add left offset for visual alignment */
-#skills h3.text-sm.font-semibold,
-#skills .text-sm.font-semibold.mb-2 {
+/* Group headings inside the Stack section: add left offset for visual alignment */
+#stack h3.text-sm.font-semibold,
+#stack .text-sm.font-semibold.mb-2 {
     margin-left: 30px;
 }
 
@@ -1893,7 +1893,7 @@ html:not(.dark) aside {
 /* Project cards, panels, and tiles should use the light surface token */
 html:not(.dark) .project-card,
 html:not(.dark) .rounded-md,
-html:not(.dark) .skills-grid .skill-tile,
+html:not(.dark) .stack-grid .skill-tile,
 html:not(.dark) .skill-tile,
 html:not(.dark) [role="dialog"] {
     background: var(--surface) !important;

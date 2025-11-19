@@ -5,7 +5,7 @@
     <!-- LEFT: navigation / identity (centré verticalement sur grand écran) -->
     <!-- LEFT: like Brittany, sticky on large screens within page scroll -->
     <aside id="home-aside" class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
-        <div id="home" x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" x-init="init()" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
+        <div id="home" data-x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" data-x-init="init()" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
             <!-- Name -->
             <div id="home-title" class="mb-8">
                 <!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
@@ -50,7 +50,7 @@
                             <li><a href="#about" class="font-medium hover:underline">{{ __('nav.about') }}</a></li>
                             <li><a href="#projects" class="font-medium hover:underline">{{ __('nav.projects') }}</a></li>
                             <li><a href="#experience" class="font-medium hover:underline">{{ __('nav.experience') }}</a></li>
-                            <li><a href="#skills" class="font-medium hover:underline">{{ __('nav.skills') }}</a></li>
+                            <li><a href="#stack" class="font-medium hover:underline">{{ __('nav.stack') }}</a></li>
                         </ul>
                     </nav>
 
@@ -79,11 +79,11 @@
 
                         <!-- CV (PNG light/dark variants placed in resources/png) -->
                         <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer"
-                            @mouseenter="hoverCV = true"
-                            @mouseleave="hoverCV = false"
-                            @click="hoverCV = false"
-                            @focus="hoverCV = true"
-                            @blur="hoverCV = false"
+                            data-x-on-mouseenter="hoverCV = true"
+                            data-x-on-mouseleave="hoverCV = false"
+                            data-x-on-click="hoverCV = false"
+                            data-x-on-focus="hoverCV = true"
+                            data-x-on-blur="hoverCV = false"
                             class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
                             aria-label="{{ __('cv.view') }} ({{ __('nav.about') }})" style="margin-top:2px;">
                             {{-- icône pour mode clair (noir sur fond clair) --}}
@@ -281,13 +281,13 @@
             </div>
         </section>
 
-        <section id="skills" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.skills') }}">
+        <section id="stack" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.stack') }}">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-                <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('nav.skills') }}</h2>
+                <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('nav.stack') }}</h2>
             </div>
 
-            <!-- Simplified skills container: no green background, tighter gaps, centered icon tiles -->
-            <div id="skills-icons" class="p-0 skills-grid">
+            <!-- Simplified stack container: no green background, tighter gaps, centered icon tiles -->
+            <div id="stack-icons" class="p-0 stack-grid">
                 <div class="space-y-4 text-sm">
                     <!-- Front group -->
                     <div>
@@ -345,7 +345,7 @@
 
                     <!-- Others group -->
                     <div id="other">
-                        <h3 class="text-sm font-semibold mb-2">{{ __('skills.other') }}</h3>
+                        <h3 class="text-sm font-semibold mb-2">{{ __('stack.other') }}</h3>
                         <div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
                             <div class="bg-white rounded flex items-center justify-center skill-jira skill-tile" aria-label="Jira" data-name="Jira">
                                 @php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-jira.svg')); } catch (Exception $e) { } @endphp

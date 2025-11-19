@@ -194,6 +194,37 @@ document.addEventListener('alpine:init', () => {
     // smooth-scroll behavior for nav links is left to CSS scroll-behavior; keep default handlers minimal
 });
 
+// Shim: copy all attributes named data-x-* to x-* so server-side HTML is W3C-valid
+// while Alpine receives its expected attributes at runtime. Executed before
+// Alpine.start() below so component initialization works as expected.
+function applyDataXShim() {
+    if (typeof document === 'undefined') return;
+    try {
+        document.querySelectorAll('*').forEach(el => {
+            // copy attributes that start with data-x- or data-x-on- (events)
+            Array.prototype.slice.call(el.attributes).forEach(attr => {
+                if (!attr || typeof attr.name !== 'string') return;
+
+                // special-case event handlers encoded as data-x-on-<event>
+                if (attr.name.indexOf('data-x-on-') === 0) {
+                    // convert to Alpine's x-on:<event> form (colon included)
+                    const newName = attr.name.replace('data-x-on-', 'x-on:');
+                    if (!el.hasAttribute(newName)) el.setAttribute(newName, attr.value);
+                    return;
+                }
+
+                // generic data-x-* → x-* mapping (for x-data, x-init, x-ref, etc.)
+                if (attr.name.indexOf('data-x-') === 0) {
+                    const newName = attr.name.replace('data-x-', 'x-');
+                    if (!el.hasAttribute(newName)) el.setAttribute(newName, attr.value);
+                }
+            });
+        });
+    } catch (e) {
+        // silently ignore shim failures
+    }
+}
+
 // Contact/CV actions: make them fixed on small screens when scrolled past their original top
 (function () {
     // support legacy id 'contact-cv-actions' or new id 'home-contact-cv-icons'
@@ -300,6 +331,9 @@ document.addEventListener('alpine:init', () => {
     window.addEventListener('orientationchange', applyFooterPadding);
     setTimeout(applyFooterPadding, 60);
 })();
+
+// Ensure any data-x-* attributes are copied to x-* before Alpine initializes
+try { applyDataXShim(); } catch (e) { /* ignore shim failures */ }
 
 // Initialize Alpine after we've registered data and listeners
 window.Alpine = Alpine;

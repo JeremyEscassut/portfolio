@@ -5,7 +5,7 @@
   "nav.about": "À propos",
   "nav.projects": "Projets",
   "nav.experience": "Expérience",
-  "nav.skills": "Stack",
+  "nav.stack": "Stack",
   "cv.preview": "Aperçu du CV",
   "cv.preview_pdf": "Aperçu du CV en PDF",
   "cv.open_new_tab": "Ouvrir le CV (nouvel onglet)",
@@ -39,7 +39,7 @@
   "ui.back": "Retour",
   "cv.icon_alt": "Icône CV",
 
-  "skills.other": "Autres",
+  "stack.other": "Autres",
   "footer.built_with": "Conçu avec Laravel, Tailwind et Alpine.",
 
   "place.example.name": "Jean Dupont",
