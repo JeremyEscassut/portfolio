@@ -14,10 +14,10 @@
 
   "home.job_title": "Développeur Full Stack",
 
-  "about.p1": "Après plusieurs années passées dans la traduction et la gestion de projets IT, j’ai choisi de me tourner vers le développement pour concrétiser une passion que je nourrissais depuis longtemps. Cette transition s’est faite naturellement : j’y ai retrouvé la même rigueur, le même sens du détail et le même plaisir à transformer une idée en solution concrète et utile.",
-  "about.p2": "Ce que j’aime dans le code, c’est l’équilibre entre logique et créativité. Je cherche toujours à optimiser, à rendre les choses plus fluides, plus claires, plus efficaces — sans jamais perdre de vue l’expérience de l’utilisateur final. La satisfaction vient pour moi d’un système qui fonctionne bien, proprement, et qui simplifie réellement la vie de ceux qui l’utilisent.",
-  "about.p3": "J’accorde une grande importance à la bienveillance et au respect dans les relations de travail. J’aime collaborer, partager mes connaissances et apprendre des autres. Curieux, honnête et déterminé, je crois en une amélioration continue, individuelle comme collective — celle qui permet à une équipe de progresser ensemble et de construire des projets durables.",
-  "about.p4": "En dehors du code, je trouve mon équilibre dans le sport et la musique : badminton, course à pied, salsa et bachata rythment mon temps libre et nourrissent mon énergie au quotidien.",
+  "about.p1": "Après plusieurs années dans la traduction et la gestion de projets IT, je me suis naturellement tourné vers le développement, un domaine qui m'a toujours passionné. J’y retrouve la même rigueur, le goût du détail et le plaisir de transformer une idée en une solution concrète et utile.",
+  "about.p2": "Ce que j'apprécie dans le code, c'est sa capacité à résoudre de façon élégante des problèmes complexes. Je m'efforce d'optimiser les solutions pour les rendre plus fluides, claires et efficaces — tout en gardant l'expérience utilisateur et la sécurité au cœur des choix techniques. Ma satisfaction vient d'un système solide, bien pensé et réellement utile au quotidien.",
+  "about.p3": "La bienveillance et le respect forment la base de mes collaborations : j'aime partager mes connaissances, apprendre des autres et contribuer à des équipes où l'amélioration continue est une réalité. Curieux, intègre et déterminé, je vise la progression collective et la pérennité des projets. Intéressé de longue date par la cybersécurité, j'ai à cœur de concevoir des applications et sites robustes et sûrs.",
+  "about.p4": "Hors du code, je trouve mon équilibre dans le sport et la musique — badminton, course à pied, salsa et bachata rythment mon temps libre. Sur le plan professionnel, je m'intéresse aussi aux réseaux, à la cybersécurité et à l'IA ; je prévois de me former de façon structurée dans ces domaines pour compléter ma spécialisation en développement afin d'offrir des compétences cohérentes et complémentaires.",
 
   "projects.repo.livret": "Voir le dépôt GitLab - Livret CDA",
   "projects.preview.livret": "Aperçu du projet Livret CDA",
@@ -49,6 +49,7 @@
   "experience.current.dates": "Juin 2025–PRÉSENT",
   "experience.current.title": "Formation CDA - C2RT",
   "experience.current.subtitle": "Titre RNCP Concepteur Développeur d'Applications",
+  "experience.current.description": "Formation intensive axée sur le développement d'interfaces responsives, la conception de composants métier et la définition d'architectures logicielles avec modélisation de bases relationnelles. Le cursus met l'accent sur la prise en charge du développement de bout en bout — capacité à piloter des projets techniques — et inclut l'accès aux données (SQL), les tests automatisés et l'intégration d'éléments de sécurité.",
 
   "experience.previous.dates": "2012–2024",
   "experience.previous.title": "Traducteur/Chef de projets - e2f",

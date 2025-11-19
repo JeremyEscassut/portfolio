@@ -264,6 +264,7 @@
                         <div>
                             <h2 class="text-lg font-semibold tracking-tight">{{ __('experience.current.title') }}</h2>
                             <h3 class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.current.subtitle') }}</h3>
+                            <p class="text-sm text-[#706f6c] mt-2">{{ __('experience.current.description') }}</p>
                         </div>
                     </div>
 

@@ -14,10 +14,10 @@
 
   "home.job_title": "Full Stack Developer",
 
-  "about.p1": "After several years working in translation and IT project management, I chose to move into development to realise a long-held passion. The transition happened naturally: I found the same rigor, attention to detail and the same pleasure in turning an idea into a practical, useful solution.",
-  "about.p2": "What I love about code is the balance between logic and creativity. I always strive to optimise, to make things smoother, clearer and more efficient—without ever losing sight of the end-user experience. Satisfaction for me comes from a system that works well, cleanly, and genuinely simplifies people's lives.",
-  "about.p3": "I place great value on kindness and respect in working relationships. I enjoy collaborating, sharing knowledge and learning from others. Curious, honest and determined, I believe in continuous improvement, both individual and collective—the kind that allows a team to progress together and build sustainable projects.",
-  "about.p4": "Outside of coding, I find balance in sport and music: badminton, running, salsa and bachata punctuate my free time and fuel my daily energy.",
+  "about.p1": "After several years in translation and IT project management, I naturally moved into development — a field I've always been passionate about. There I find the same rigor, attention to detail, and the satisfaction of turning an idea into a concrete, useful solution.",
+  "about.p2": "What I appreciate about code is its ability to elegantly solve complex problems. I strive to optimise solutions to make them smoother, clearer and more efficient — while keeping user experience and security at the heart of technical decisions. My satisfaction comes from a robust, well-designed system that is truly useful in everyday life.",
+  "about.p3": "Kindness and respect are the foundation of my collaborations: I enjoy sharing knowledge, learning from others and contributing to teams where continuous improvement is real. Curious, honest and determined, I aim for collective progress and the long-term durability of projects. Long interested in cybersecurity, I am committed to designing robust and secure applications and websites.",
+  "about.p4": "Outside of coding, I find balance in sport and music — badminton, running, salsa and bachata punctuate my free time. Professionally, I am also interested in networking, cybersecurity and AI; I plan to pursue structured training in these areas to complement my development specialisation and provide coherent, complementary skills.",
 
   "projects.repo.livret": "View GitLab repo - Livret CDA",
   "projects.preview.livret": "Project Livret CDA preview",
@@ -49,6 +49,7 @@
   "experience.current.dates": "June 2025–PRESENT",
   "experience.current.title": "CDA Training - C2RT",
   "experience.current.subtitle": "RNCP Qualification: Application Designer-Developer",
+  "experience.current.description": "Intensive training focused on building responsive user interfaces, designing business logic components and defining software architectures with relational database modelling. The program emphasizes end-to-end development ownership — the ability to lead technical projects — and covers data access (SQL), automated testing and the integration of security practices.",
 
   "experience.previous.dates": "2012–2024",
   "experience.previous.title": "Translator/Project Manager - e2f",
