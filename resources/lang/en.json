@@ -5,7 +5,7 @@
   "nav.about": "About",
   "nav.projects": "Projects",
   "nav.experience": "Experience",
-  "nav.skills": "Skills",
+  "nav.skills": "Stack",
   "cv.preview": "CV preview",
   "cv.preview_pdf": "CV preview (PDF)",
   "cv.open_new_tab": "Open CV (new tab)",
@@ -50,6 +50,7 @@
   "experience.current.title": "CDA Training - C2RT",
   "experience.current.subtitle": "RNCP Qualification: Application Designer-Developer",
   "experience.current.description": "Intensive training focused on building responsive user interfaces, designing business logic components and defining software architectures with relational database modelling. The program emphasizes end-to-end development ownership — the ability to lead technical projects — and covers data access (SQL), automated testing and the integration of security practices.",
+  "experience.current.internship": "Internship: 9 February – 30 April 2026 (sponsored by the Nouvelle-Aquitaine region)",
 
   "experience.previous.dates": "2012–2024",
   "experience.previous.title": "Translator/Project Manager - e2f",

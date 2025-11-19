@@ -265,6 +265,7 @@
                             <h2 class="text-lg font-semibold tracking-tight">{{ __('experience.current.title') }}</h2>
                             <h3 class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.current.subtitle') }}</h3>
                             <p class="text-sm text-[#706f6c] mt-2">{{ __('experience.current.description') }}</p>
+                            <p class="text-sm text-[#706f6c] mt-2">{{ __('experience.current.internship') }}</p>
                         </div>
                     </div>
 
@@ -280,9 +281,9 @@
             </div>
         </section>
 
-        <section id="skills" class="mb-8 scroll-mt-24" aria-label="Compétences">
+        <section id="skills" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.skills') }}">
             <div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-                <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Compétences</h2>
+                <h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('nav.skills') }}</h2>
             </div>
 
             <!-- Simplified skills container: no green background, tighter gaps, centered icon tiles -->

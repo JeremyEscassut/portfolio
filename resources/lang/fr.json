@@ -5,7 +5,7 @@
   "nav.about": "À propos",
   "nav.projects": "Projets",
   "nav.experience": "Expérience",
-  "nav.skills": "Compétences",
+  "nav.skills": "Stack",
   "cv.preview": "Aperçu du CV",
   "cv.preview_pdf": "Aperçu du CV en PDF",
   "cv.open_new_tab": "Ouvrir le CV (nouvel onglet)",
@@ -50,6 +50,7 @@
   "experience.current.title": "Formation CDA - C2RT",
   "experience.current.subtitle": "Titre RNCP Concepteur Développeur d'Applications",
   "experience.current.description": "Formation intensive axée sur le développement d'interfaces responsives, la conception de composants métier et la définition d'architectures logicielles avec modélisation de bases relationnelles. Le cursus met l'accent sur la prise en charge du développement de bout en bout — capacité à piloter des projets techniques — et inclut l'accès aux données (SQL), les tests automatisés et l'intégration d'éléments de sécurité.",
+  "experience.current.internship": "Stage : 9 février – 30 avril 2026 (pris en charge par la région Nouvelle‑Aquitaine)",
 
   "experience.previous.dates": "2012–2024",
   "experience.previous.title": "Traducteur/Chef de projets - e2f",
