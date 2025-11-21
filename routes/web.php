@@ -46,18 +46,20 @@ Route::get('{locale}/{any?}', function (Request $request, $locale, $any = null) 
     return redirect($target, 302);
 })->where(['locale' => 'en|fr', 'any' => '.*']);
 
-// Serve the site under /portfolio and accept an optional locale after that
+// Serve the site and accept an optional locale after that
 Route::group([
-    'prefix' => 'portfolio/{locale?}',
+    // Serve routes at the application root using an optional locale
+    // so URLs are `/fr/...` or `/en/...` when the app is mounted at `/`.
+    'prefix' => '{locale?}',
     'where' => ['locale' => 'en|fr'],
     'middleware' => [\App\Http\Middleware\SetLocale::class]
 ], function () {
 
     Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
-    // Homepage is available at /portfolio and /portfolio/{locale}
-    // If no locale was provided in the URL (i.e. visiting `/portfolio`),
-    // show the French homepage without adding another `/portfolio` segment.
+    // Homepage is available at / and /{locale}
+    // If no locale was provided in the URL (i.e. visiting `/`),
+    // show the French homepage by default.
     Route::get('/', function () {
         $locale = request()->route('locale');
         if (empty($locale)) {
@@ -72,12 +74,12 @@ Route::group([
         return view('cv');
     })->name('cv');
 
-    // Page mentions légales available at /portfolio/mentions and /portfolio/{locale}/mentions
+    // Page mentions légales available at /mentions and /{locale}/mentions
     Route::get('/mentions', function () {
         return view('mentions');
     })->name('mentions');
 
-    // Catch-all within the /portfolio prefix to serve the SPA-like pages or legacy paths
+    // Catch-all within the application root to serve the SPA-like pages or legacy paths
     // Keep this at the end so specific routes above take precedence.
     Route::get('/{any?}', function () {
         return view('home');

@@ -1403,6 +1403,11 @@ html:not(.dark)
     z-index: 40;
 }
 
+/* Alpine x-cloak helper: hide elements until Alpine removes the attribute */
+[x-cloak] {
+    display: none !important;
+}
+
 /* Desktop: constrain stuck footer to main column */
 @media (min-width: 1024px) {
     #footer.stuck {

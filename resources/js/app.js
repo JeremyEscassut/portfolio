@@ -303,6 +303,31 @@ function applyDataXShim() {
     setTimeout(() => { recalc(); onScroll(); }, 120);
 })();
 
+// Theme toggle fallback: if Alpine isn't active for some reason, provide
+// a small JS handler to ensure the button still toggles the theme class.
+(function initThemeToggleFallback() {
+    try {
+        const btn = document.getElementById('themeToggleButton');
+        if (!btn) return;
+
+        btn.addEventListener('click', function (e) {
+            // If Alpine is handling the event, prefer Alpine behaviour
+            if (window.Alpine && btn.hasAttribute('x-on:click')) return;
+
+            // Use the same cycle logic as the Alpine component
+            const stored = localStorage.getItem('theme') || 'light';
+            const order = ['light', 'dark'];
+            let i = order.indexOf(stored);
+            if (i === -1) i = 0;
+            const next = order[(i + 1) % order.length];
+            if (next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', next);
+        });
+    } catch (e) {
+        // noop
+    }
+})();
+
 // Ensure footer reserved space on mobile when it becomes stuck
 (function () {
     // support legacy id 'right-footer' or new id 'footer'
@@ -352,6 +377,18 @@ Alpine.start();
             // replace in DOM
             el.parentNode.replaceChild(clone, el);
             try { clone.blur && clone.blur(); } catch (e) { /* ignore */ }
+            // After cloning, ensure any data-x-* attributes are applied and
+            // Alpine re-initializes behaviour on the new node so interactions
+            // (x-on, x-show, etc.) continue to work on the replaced node.
+            try {
+                if (typeof applyDataXShim === 'function') applyDataXShim();
+                // Alpine exposes initTree in v3 — use it to init the newly cloned node.
+                if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+                    try { window.Alpine.initTree(clone); } catch (e) { /* ignore */ }
+                }
+            } catch (e) {
+                // ignore failures; best-effort re-init only
+            }
         } catch (e) {
             // ignore failures to clone
         }

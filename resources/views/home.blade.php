@@ -87,11 +87,11 @@
                             class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
                             aria-label="{{ __('cv.view') }} ({{ __('nav.about') }})" style="margin-top:2px;">
                             {{-- icône pour mode clair (noir sur fond clair) --}}
-                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='light'" x-cloak>
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='light'" data-x-cloak>
                             {{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
-                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && !hoverCV" x-cloak>
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && !hoverCV" data-x-cloak>
                             {{-- icône pour mode sombre lors du hover (utilise la variante noire fournie) --}}
-                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" x-show="theme==='dark' && hoverCV" x-cloak>
+                            <img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && hoverCV" data-x-cloak>
                         </a>
                     </div>
 
@@ -414,7 +414,7 @@
                             <button @click="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="Fermer">✕</button>
                         </div>
 
-                        <form method="POST" action="{{ route('contact.send') }}" class="space-y-4">
+                        <form method="POST" action="{{ route('contact.send', ['locale' => app()->getLocale()]) }}" class="space-y-4">
                             @csrf
                             {{-- flash messages moved to top-level so they are visible outside the modal after redirect --}}
                             <!-- honeypot -->
@@ -469,22 +469,16 @@
             var loc = window.location;
             var path = loc.pathname || '/';
 
-            // detect a base prefix like '/portfolio'
-            var baseMatch = path.match(/^\/(portfolio)(?:\/|$)/i);
-            var basePrefix = baseMatch ? '/' + baseMatch[1] : null;
-
-            // derive the 'rest' after the basePrefix (or whole path if none)
-            var rest = basePrefix ? path.slice(basePrefix.length) : path;
-            if (!rest.startsWith('/')) rest = '/' + rest;
+            // If the app was previously served under '/portfolio', strip it so
+            // canonical URLs use '/fr/...' and '/en/...'. Also remove any
+            // existing leading locale segment before rebuilding the path.
+            path = path.replace(/^\/portfolio/i, '');
 
             // remove any leading locale from the rest ('/fr' or '/en')
-            rest = rest.replace(/^\/(fr|en)(?:\/|$)/i, '/');
-
-            // normalise empty rest
+            var rest = path.replace(/^\/(fr|en)(?:\/|$)/i, '/');
             if (rest === '/') rest = '';
 
-            var newPath = basePrefix ? (basePrefix + '/' + newLocale + rest) : ('/' + newLocale + (rest === '' ? '' : rest));
-
+            var newPath = '/' + newLocale + (rest === '' ? '' : rest);
             return newPath + (loc.search || '') + (loc.hash || '');
         }
 
