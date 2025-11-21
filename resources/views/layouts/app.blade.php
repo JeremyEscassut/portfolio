@@ -29,6 +29,12 @@
 
 <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] min-h-screen">
     @yield('content')
+    <!-- Provide the application base path for client-side code. -->
+    <script>
+        // `getBasePath()` returns the path where the app is mounted ('' or '/portfolio').
+        // Store it on `window.APP_BASE` for JS to canonicalize URLs without hardcoding.
+        window.APP_BASE = "{{ rtrim(request()->getBasePath(), '/') }}";
+    </script>
     @stack('scripts')
 </body>
 

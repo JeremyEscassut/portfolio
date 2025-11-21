@@ -469,10 +469,19 @@
             var loc = window.location;
             var path = loc.pathname || '/';
 
-            // If the app was previously served under '/portfolio', strip it so
-            // canonical URLs use '/fr/...' and '/en/...'. Also remove any
-            // existing leading locale segment before rebuilding the path.
-            path = path.replace(/^\/portfolio/i, '');
+            // If the app is mounted under a base path (example: '/portfolio'),
+            // remove that base from the location pathname before rebuilding
+            // the canonical locale-prefixed path. We rely on `window.APP_BASE`
+            // (injected server-side) instead of hardcoding '/portfolio'.
+            if (window.APP_BASE && window.APP_BASE !== '') {
+                // escape for use in RegExp
+                var base = window.APP_BASE.replace(/\/$/, '');
+                if (base) {
+                    var esc = base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    var re = new RegExp('^' + esc, 'i');
+                    path = path.replace(re, '');
+                }
+            }
 
             // remove any leading locale from the rest ('/fr' or '/en')
             var rest = path.replace(/^\/(fr|en)(?:\/|$)/i, '/');
