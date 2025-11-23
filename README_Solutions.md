@@ -170,3 +170,214 @@ Ce document récapitule, de façon concise et exploitable, les problèmes rencon
 
 -   Référence : scripts de sauvegarde.
 -   Tags : infra | ops
+
+## 14 — Correction déploiement production : canonicalisation des routes, .env, SMTP et .htaccess
+
+**Titre** : Correction déploiement production & contact (locale, .env, SMTP, .htaccess)  
+**Date** : 2025-11-21
+
+### Contexte / reproduction
+
+En production, plusieurs symptômes simultanés empêchaient le site de fonctionner correctement :
+
+-   Pages renvoyant 500 (erreurs PHP / bootstrap cache incompatibles).
+-   Boucle interne d'Apache déclenchant l'erreur "Request exceeded the limit of 10 internal redirects".
+-   Formulaire de contact renvoyant une erreur 419 "Page Expired" lorsqu'un agent headless tentait un POST.
+-   Tentatives d'envoi d'email échouant (erreurs SMTP 535 ou connexion vers 127.0.0.1:1025).
+-   Logs Laravel mentionnant un parse error sur `.env` (ligne `MAIL_PASSWORD`) et une erreur SQL `no such table: cache` quand `CACHE_STORE=database`.
+
+Reproduction rapide (diagnostic) :
+
+-   `curl -I -L https://<votre-site>/fr` → vérifier redirections excessives.
+-   Consulter `storage/logs/laravel.log` pour entrées Dotenv / SQL / Mailer.
+-   GET `/fr/contact`, récupérer `_token` + cookies, POST headless → 419.
+
+### Logs / preuves (extraits représentatifs)
+
+-   Dotenv parse error :
+    `"Failed to parse dotenv file. Encountered an invalid name at ["MAIL_PASSWORD"]"`
+-   SQLite / cache :
+    `"SQLSTATE[HY000]: General error: 1 no such table: cache"`
+-   Apache :
+    `"Request exceeded the limit of 10 internal redirects due to probable configuration error."`
+-   Mailer :
+    `"Connection could not be established with host '127.0.0.1:1025': Connection refused"`  
+    `"535 Incorrect authentication data"`
+
+### Diagnostic (cause racine)
+
+1. Fichiers de cache (`bootstrap/cache/*.php`) générés localement synchronisés sur le serveur → incohérences d'autoload / providers.
+2. `.env` mal formé (guillemets non échappés autour de `MAIL_PASSWORD`) → échec du parsing dotenv → config cassée.
+3. `CACHE_STORE=database` sans table `cache` → erreurs SQL.
+4. Règles Apache (`RewriteBase /portfolio/` ou redirection racine → `/portfolio`) + `.htaccess` imbriqués → boucle interne.
+5. JS front fragile : `path.replace(/^\/portfolio/i, '')` (hardcode) → comportement incorrect selon base path d'hébergement.
+6. CSRF 419 en headless : mismatch session/cookie entre GET (token) et POST.
+
+### Actions appliquées (étapes & commandes)
+
+> Sauvegardes (avant toute opération)
+
+```bash
+git bundle create portfolio-backup-$(date +%Y%m%d-%H%M).bundle --all
+tar -czf Portfolio-backup-$(date +%Y%m%d-%H%M).tgz .
+cp .env .env.bak-$(date +%Y%m%d-%H%M)
+```
+
+1. Corriger `.env` côté serveur
+
+    - Vérifier et retirer guillemets non échappés, valider `MAIL_PASSWORD`.
+    - Exemple SMTP :
+        ```
+        MAIL_MAILER=smtp
+        MAIL_HOST=smtp-jeremyescassut.alwaysdata.net
+        MAIL_PORT=587
+        MAIL_USERNAME=contact@jeremyescassut.com
+        MAIL_PASSWORD=***REMOVED***
+        MAIL_ENCRYPTION=tls
+        ```
+    - Puis :
+        ```bash
+        php artisan config:clear
+        php artisan view:clear
+        ```
+
+2. Forcer `CACHE_STORE=file` (solution rapide) ou créer la table `cache`
+
+    - Rapidement :
+        ```bash
+        sed -i.bak 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env || echo 'CACHE_STORE=file' >> .env
+        php artisan config:clear
+        php artisan view:clear
+        ```
+    - Si on garde `database` :
+        ```bash
+        php artisan cache:table
+        php artisan migrate --force
+        ```
+
+3. Supprimer caches incompatibles et régénérer
+
+    ```bash
+    rm -f bootstrap/cache/*.php
+    composer dump-autoload -o
+    php artisan config:clear
+    php artisan cache:clear || true
+    php artisan view:clear
+    php artisan config:cache
+    php artisan route:cache
+    ```
+
+4. Corriger `.htaccess` Apache (backup avant)
+
+    ```bash
+    cp public/.htaccess public/.htaccess.bak-$(date +%Y%m%d-%H%M)
+    # s'assurer que RewriteBase / et pas de redirection racine -> /portfolio
+    # tester:
+    curl -I -L https://<votre-site>/fr
+    ```
+
+5. Frontend — canonicaliser le changement de langue
+
+    - Injecter base path côté serveur (layout Blade) :
+        ```blade
+        <script>window.APP_BASE = "{{ rtrim(request()->getBasePath(), '/') }}";</script>
+        ```
+    - Remplacer `path.replace(/^\/portfolio/i, '')` par une fonction `buildNewPath(newLocale)` qui retire `window.APP_BASE` en échappant correctement la chaîne pour RegExp.
+    - Centraliser le JS dans `resources/js/app.js`.
+
+6. Déployer assets correctement
+
+    - Build local :
+        ```bash
+        npm run build
+        ```
+    - Rsync (exemple) :
+        ```bash
+        rsync -av --delete public/build/ user@server:/home/username/www/Portfolio/public/build/
+        ```
+    - Côté serveur : régénérer autoload & caches (voir étape 3).
+
+7. Vérification mail et contact
+
+    - Depuis navigateur : tester `/fr/contact` → remplir → vérifier boîte.
+    - Test côté serveur (script) si nécessaire :
+        ```php
+        // scripts/send_test_mail.php
+        <?php
+        require __DIR__ . '/vendor/autoload.php';
+        use Illuminate\Support\Facades\Mail;
+        $app = require_once __DIR__ . '/bootstrap/app.php';
+        $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+        $kernel->bootstrap();
+        Mail::raw('Test SMTP', function($message){
+            $message->to('j.losaint@gmail.com')->subject('Test SMTP');
+        });
+        echo "Mail envoyé (vérifier logs)\n";
+        ```
+        ```bash
+        php scripts/send_test_mail.php
+        tail -n 200 storage/logs/laravel.log
+        ```
+
+8. CSRF 419 — headless (exemple curl correct)
+
+    ```bash
+    curl -c cookies.txt 'https://<votre-site>/fr/contact' -o contact.html
+    TOKEN=$(grep -oP 'name=\"_token\" value=\"\K[^\"]+' contact.html)
+    curl -b cookies.txt -c cookies.txt -X POST 'https://<votre-site>/fr/contact' \
+      -F "_token=${TOKEN}" -F "name=Test" -F "email=test@example.com" -F "message=hello"
+    ```
+
+9. Nettoyage post-opération
+    ```bash
+    php artisan optimize:clear
+    # documenter & commit changes on feature branch (non main)
+    ```
+
+### Résultats observés après corrections
+
+-   Suppression de la boucle Apache → `curl -I -L https://.../fr` → HTTP 200.
+-   Pages localisées `/fr/mentions` et `/en/mentions` accessibles.
+-   SMTP accepté par l'hôte après correction du mot de passe ; vérifier boîte de réception.
+-   Formulaire de contact : fonctionne depuis navigateur. Headless nécessite gestion cookies/session.
+
+### Pourquoi ces changements résolvent le problème
+
+-   `bootstrap/cache` contient du code dépendant de l'environnement → le supprimer et regénérer évite les incohérences.
+-   `.env` correctement parsé garantit APP*KEY, MAIL*_, DB\__ disponibles → sinon bootstrap casse.
+-   Corriger `RewriteBase` / règles `.htaccess` stoppe la boucle Apache.
+-   Centraliser `window.APP_BASE` évite hacks JS fragiles et rend le comportement indépendant du sous‑chemin d'hébergement.
+
+### Recommandations opérationnelles / préventives
+
+1. Ne jamais rsync / committer `bootstrap/cache/*.php` ou `vendor/` sans précautions. Préférer `composer install` côté serveur.
+2. Checklist de déploiement : backup `.env`, `public/build`, git bundle ; build local ; rsync `public/build` ; `composer dump-autoload` ; `php artisan config:cache`.
+3. Mettre `.env` dans `.gitignore`.
+4. Documenter tests post‑deploy (vérifier `/fr`, `/fr/mentions`, tester contact via navigateur).
+5. CI / script de déploiement : nettoyer `bootstrap/cache`, `composer install --no-dev --optimize-autoloader`, migrations, recréer caches.
+6. Garder un script d'envoi de mail de test et accès rapide aux logs (`tail -f storage/logs/laravel.log`).
+
+### Rollback rapide
+
+```bash
+git bundle unbundle portfolio-backup-YYYYMMDD-HHMM.bundle
+tar -xzf Portfolio-backup-YYYYMMDD-HHMM.tgz -C /path/to/restore
+cp .env.bak-YYYYMMDD-HHMM .env
+composer dump-autoload
+php artisan config:clear
+```
+
+### Références git & commits
+
+-   Branche : `feature/deploy-alwaysdata-20251121_123632` (correctifs front & cache).
+-   Exemple pour afficher commits :
+
+```bash
+git fetch origin
+git checkout feature/deploy-alwaysdata-20251121_123632
+git log --oneline -n 10
+```
+
+---
+
+Si tu veux que je remplace la section 14 directement dans `README_Solutions.md` et que je committe sur la branche `feature/deploy-alwaysdata-20251121_123632`, confirme et je l'appliquerai.
