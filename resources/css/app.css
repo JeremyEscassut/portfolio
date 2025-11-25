@@ -7,86 +7,6 @@
     --surface: #fbfdfe; /* slightly brighter surface (cards) */
     --edge: rgba(11, 23, 26, 0.06); /* subtle borders */
     --tag-bg-light: #ecf5ef; /* light tag background used in dark-mode tags */
-
-    .photo-frame {
-        position: relative;
-        display: inline-block;
-        /* keep the wrapper's content size unchanged; frame drawn outside */
-        box-sizing: content-box;
-    }
-
-    /* Outer frame drawn outside the element's box so it doesn't alter layout */
-    .photo-frame::before {
-        content: "";
-        position: absolute;
-        left: -5vmin;
-        right: -5vmin;
-        top: -5vmin;
-        bottom: -5vmin;
-        border-radius: 2px;
-        border: 5vmin solid #eee;
-        border-bottom-color: #fff;
-        border-left-color: #eee;
-        border-right-color: #ccb;
-        border-top-color: #ddd;
-        background-color: #ddc; /* subtle paper-like fill behind image */
-        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25) inset,
-            0 5px 10px rgba(0, 0, 0, 0.25);
-        pointer-events: none;
-        z-index: 5; /* above overlay */
-        box-sizing: border-box;
-    }
-
-    /* Decorative outer rim / shadow to give depth */
-    .photo-frame::before {
-        /* Outer border (slightly reduced width from original) */
-        content: "";
-        position: absolute;
-        left: -3vmin;
-        right: -3vmin;
-        top: -3vmin;
-        bottom: -3vmin;
-        border-radius: 2px;
-        border: 3vmin solid #eee;
-        border-bottom-color: #fff;
-        border-left-color: #eee;
-        border-right-color: #ccb;
-        border-top-color: #ddd;
-        background: transparent; /* do not cover the canvas area */
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-        pointer-events: none;
-        z-index: 6; /* sit above overlay so frame is always visible */
-        box-sizing: border-box;
-    }
-
-    /* Inner mat (paper insert) drawn slightly inset and behind the canvas so it
-       appears as the coloured mount often found in photo frames. It must be below
-       the canvas but above the page background. */
-    .photo-frame::after {
-        content: "";
-        position: absolute;
-        /* increase the inset so the coloured mat is more visible around the image */
-        left: 3.5vmin;
-        right: 3.5vmin;
-        top: 3.5vmin;
-        bottom: 3.5vmin;
-        border-radius: 2px;
-        background: #ddddcc; /* mat colour (expanded) */
-        box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.14);
-        pointer-events: none;
-        z-index: 3; /* below canvas but above page */
-    }
-
-    /* Ensure the main canvas stays above the inner mat */
-    #photoCanvas {
-        position: relative;
-        z-index: 4;
-    }
-    line-height: 1.45;
-    transition: background-color 240ms ease, color 240ms ease;
-    position: relative;
-    /* make stacking context so the halo can be placed behind content */
-    isolation: isolate;
 }
 
 /* Subtle selection color */
@@ -1441,47 +1361,47 @@ html:not(.dark)
     filter: blur(0);
 }
 
-/* Decorative frame around the photo canvas. Uses pseudo elements so it doesn't
-   change the element's layout or dimensions. The frame is visually above the
-   transition overlay so it remains visible during crossfades. */
+/* Cadre photo inspiré du snippet CodePen (frame Batman) */
 .photo-frame {
-    position: relative; /* establishes positioning context for pseudo-elements */
+    position: relative;
     display: inline-block;
+    background-color: #ddc; /* mat papier derrière l'image */
+    border: solid 5vmin #eee;
+    border-bottom-color: #fff;
+    border-left-color: #eee;
+    border-right-color: #ccb;
+    border-top-color: #ddd;
+    border-radius: 2px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25) inset,
+        0 5px 10px 5px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    padding: 8vmin; /* crée le mat autour du canvas */
 }
-.photo-frame::before,
+
+/* Petit inset intérieur (effet de gorge) */
+.photo-frame::before {
+    content: "";
+    position: absolute;
+    left: -2vmin;
+    right: -2vmin;
+    top: -2vmin;
+    bottom: -2vmin;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25) inset;
+    pointer-events: none;
+}
+
+/* Ombre externe plus large pour la profondeur */
 .photo-frame::after {
     content: "";
     position: absolute;
-    left: -1.5vmin;
-    right: -1.5vmin;
-    top: -1.5vmin;
-    bottom: -1.5vmin;
-    border-radius: 4px;
+    left: -2.5vmin;
+    right: -2.5vmin;
+    top: -2.5vmin;
+    bottom: -2.5vmin;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
     pointer-events: none;
-    box-sizing: border-box;
-}
-.photo-frame::before {
-    /* inner inset border */
-    border: 2px solid #e6e1d6;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.06) inset;
-    z-index: 3; /* above overlay */
-}
-.photo-frame::after {
-    /* outer decorative border / shadow */
-    border: 5vmin solid #efe8dd;
-    border-bottom-color: #fff;
-    border-left-color: #eee;
-    border-right-color: #ddd;
-    border-top-color: #dfd8cc;
-    border-radius: 6px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
-    z-index: 4; /* above overlay */
-}
-
-/* Ensure the main canvas stays on the natural content layer */
-#photoCanvas {
-    position: relative;
-    z-index: 1;
 }
 
 /* Ensure caption placed immediately after the framed photo is not
