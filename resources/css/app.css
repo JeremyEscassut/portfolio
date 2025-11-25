@@ -1411,9 +1411,15 @@ html:not(.dark)
      - Uses opacity + transform transitions (GPU-friendly)
 */
 .photo-transition-wrap {
+    /* Ensure container is a positioned context for the overlay canvas.
+       Do NOT override the container's display (e.g. `flex`) because that
+       caused layout shifts when we added this class dynamically. */
     position: relative;
 }
 
+/* Overlay canvas used for crossfades. We avoid any scaling/enlarging here.
+   The effect uses opacity + blur to produce a smooth, professional crossfade
+   that does not change the image size. */
 .photo-transition-canvas {
     position: absolute;
     left: 0;
@@ -1422,17 +1428,17 @@ html:not(.dark)
     height: 100%;
     pointer-events: none;
     opacity: 0;
-    /* Keep transform extremely subtle to avoid visible enlargement. */
-    transform: scale(1.005);
-    transition: opacity 420ms cubic-bezier(0.22, 0.9, 0.27, 1),
-        transform 420ms cubic-bezier(0.22, 0.9, 0.27, 1);
-    will-change: opacity, transform;
+    filter: blur(2px);
+    transition: opacity 420ms cubic-bezier(0.2, 0.95, 0.24, 1),
+        filter 420ms cubic-bezier(0.2, 0.95, 0.24, 1);
+    will-change: opacity, filter;
     z-index: 2; /* sit under the decorative frame */
+    background: transparent;
 }
 
 .photo-transition-canvas.show {
     opacity: 1;
-    transform: scale(1);
+    filter: blur(0);
 }
 
 /* Decorative frame around the photo canvas. Uses pseudo elements so it doesn't
@@ -1476,6 +1482,15 @@ html:not(.dark)
 #photoCanvas {
     position: relative;
     z-index: 1;
+}
+
+/* Ensure caption placed immediately after the framed photo is not
+   obscured by the decorative rim which extends outside the wrapper.
+   Use a responsive offset (vmin) plus a baseline margin to keep the
+   caption visible across viewports. */
+.photo-frame + #photoCaption {
+    /* Slightly larger offset so caption isn't visually close to the decorative rim */
+    margin-top: calc(2.5vmin + 0.75rem);
 }
 
 /* Footer / right-column sticky behaviour */

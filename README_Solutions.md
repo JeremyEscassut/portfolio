@@ -94,230 +94,131 @@ Ce document récapitule, de façon concise et exploitable, les problèmes rencon
     composer install --no-dev --optimize-autoloader --prefer-dist
     composer dump-autoload -o
 
-    (ou synchroniser `vendor/` si l'on choisit de déployer dépendances).
+    ## README_Solutions
 
--   Référence : logs et présence du dossier `vendor/`.
--   Tags : infra | composer
+    Ce fichier recense les changements et correctifs récents appliqués au projet Portfolio (front-end + environnement local). Le format suit : Titre / Contexte / Cause racine / Solution / Fichiers modifiés / Tests.
 
-9. `SQLSTATE[HY000]: General error: 1 no such table: cache` lors de php artisan cache:clear
+    ***
 
--   Titre : Table cache manquante pour le store `database`
--   Contexte / reproduction : `php artisan cache:clear` renvoie une erreur SQL liée à la table `cache`. Reproduction : exécuter la commande sur l'environnement affecté.
--   Cause racine : `CACHE_STORE` configuré sur `database` alors que la table `cache` n'existe pas ou config mise en cache.
--   Solution :
+    ## 1) Transition photo : crossfade GPU (opacité + blur)
 
-    -   Option 1 (rapide) : forcer `CACHE_STORE=file` dans `.env` :
+    -   Contexte : la transition entre photo originale et version IA utilisait soit un dissolve per-pixel coûteux, soit un scale visible qui agrandissait temporairement l'image.
+    -   Cause racine : animation par `transform: scale()` et/ou opérations pixel lourdes.
+    -   Solution :
+        -   Remplacement par un overlay canvas crossfade basé sur `opacity` + `filter: blur()` (420ms, courbe cubic-bezier).
+        -   L'overlay est dessiné au même buffer (attribut `width`/`height`) que le canvas principal et reçoit une taille CSS identique (px) pour garantir l'absence de débordement.
+        -   Écoute `transitionend` sur `opacity` et `filter` côté JS.
+    -   Fichiers modifiés :
+        -   `resources/js/photoToggle.js`
+        -   `resources/css/app.css`
+    -   Test rapide : démarrer Vite (`npm run dev`) et cliquer sur la photo — la transition est fluide sans agrandissement.
 
-        sed -i.bak 's/^CACHE_STORE=.\*/CACHE_STORE=file/' .env || echo 'CACHE_STORE=file' >> .env
-        php artisan config:clear
-        php artisan view:clear
+    ***
 
-    -   Option 2 : créer la table cache :
+    ## 2) Cadre décoratif non-intrusif + légende
 
-        php artisan cache:table
-        php artisan migrate --force
+    -   Contexte : ajout d'un cadre autour du canvas qui ne doit pas modifier la mise en page ni masquer la légende.
+    -   Cause racine : premiers essais modifiaient le flow ou la légende était trop proche du rim.
+    -   Solution :
+        -   Cadre réalisé via `::before` et `::after` sur `.photo-frame` (inner rim & outer rim) pour ne pas changer les dimensions du contenu.
+        -   `#photoCanvas` garde `z-index` inférieur ; overlay est placé entre canvas et rim.
+        -   Décalage de la légende : `.photo-frame + #photoCaption { margin-top: calc(2.5vmin + 0.75rem); }`.
+    -   Fichiers modifiés : `resources/css/app.css`, `resources/views/home.blade.php` (classe `photo-frame` appliquée au wrapper).
 
--   Référence : `.env` et commandes artisan associées.
--   Tags : infra | db
+    ***
 
-10. `.env` ou caches committés / écrasés par erreur
+    ## 3) Suppression du reflow à l'ajout de la classe de transition
 
--   Titre : `.env` ou caches inclus/écrasés par erreur
--   Contexte / reproduction : `.env` ou fichiers de cache transférés/committés provoquent des problèmes de configuration. Reproduction : vérifier l'historique git/rsync qui inclut `.env`.
--   Cause racine : inclusion accidentelle de `.env` dans le dépôt ou lors d'un rsync.
--   Solution :
+    -   Contexte : ajout dynamique de la classe `.photo-transition-wrap` provoquait précédemment un décalage parce que la règle forçait `display:inline-block`.
+    -   Solution : suppression de `display:inline-block` pour conserver le `display` d'origine du conteneur (flex), évitant ainsi tout reflow au clic.
+    -   Fichier modifié : `resources/css/app.css`.
 
-    -   Ajouter `.env` à `.gitignore` et retirer tout `.env` du dépôt (`git rm --cached .env`).
-    -   Avant opérations sensibles, sauvegarder : `cp .env .env.bak-$(date +%Y%m%d-%H%M)`.
+    ***
 
--   Référence : dépôt git et procédures de déploiement.
--   Tags : infra | security
+    ## 4) Robustesse de l'overlay : pixel-perfect sizing
 
-11. Composer / installation des dépendances côté serveur
+    -   Contexte : pendant la transition, les images pouvaient momentanément afficher au format d'origine (débordement) si le CSS du canvas différait du buffer.
+    -   Solution :
+        -   Append de l'overlay dans le même parent que le canvas.
+        -   Lecture de `canvas.offsetWidth/offsetHeight` pour fixer la taille CSS de l'overlay en px.
+        -   Alignement du buffer de l'overlay (`overlay.width/height = canvas.width/height`).
+    -   Fichier modifié : `resources/js/photoToggle.js`.
 
--   Titre : Dépendances `vendor/` absentes côté serveur
--   Contexte / reproduction : après rsync sans `vendor`, l'application manque de dépendances. Reproduction : vérifier l'absence du dossier `vendor/` sur le serveur et l'erreur retournée.
--   Cause racine : `vendor/` non synchronisé et `composer install` non exécuté sur le serveur.
--   Solution : exécuter `composer install --no-dev --optimize-autoloader` côté serveur après déploiement, ou inclure `vendor/` dans le déploiement si choisi.
--   Référence : dossier `vendor/` et logs d'erreur.
--   Tags : infra | composer
+    ***
 
-12. Permissions de `.env` et des fichiers de cache
+    ## 5) Corrections environnement local (PATH, VS Code terminal)
 
--   Titre : Permissions incorrectes sur `.env` / `storage`
--   Contexte / reproduction : erreurs d'accès ou risques de sécurité suite à permissions incorrectes. Reproduction : `ls -la` et tests d'écriture sur `storage`.
--   Cause racine : permissions trop ouvertes ou mauvais propriétaire sur les fichiers sensibles.
--   Solution :
+    -   Contexte : `node`/`npm` non détectés dans certaines sessions zsh du terminal intégré.
+    -   Solution :
 
-    chmod 600 .env
-    chmod -R 775 storage bootstrap/cache
-    vérifier le propriétaire (chown) selon l'utilisateur du serveur web.
+        -   Ajout d'un export PATH local dans `~/.zshenv` (et synchronisation dans `~/.zshrc`/`~/.zprofile`) :
 
--   Référence : vérification `ls -la`.
--   Tags : infra | security
+            export PATH="/usr/local/bin:$PATH"
 
-13. Processus de rollback
+        -   Ajout d'un fichier `.vscode/settings.json` au workspace pour lancer le terminal intégré en login shell (zsh -l) afin que ces variables soient prises en compte.
 
--   Titre : Absence de procédure de rollback
--   Contexte / reproduction : nécessité de restaurer rapidement l'état précédent après une opération destructive.
--   Cause racine : aucune sauvegarde systématique avant opérations lourdes.
--   Solution : toujours créer des sauvegardes avant opérations critiques, exemple :
+    Note : ces changements sont propres à la machine de dev (fichiers de profil) et non obligatoirement commités dans le repo.
 
-    cp .env .env.bak-$(date +%Y%m%d-%H%M)
-  cp -r public/build public/build.bak-$(date +%Y%m%d-%H%M)
+    ***
 
-    et documenter la procédure de rollback.
+    ## 6) Commandes utiles
 
--   Référence : scripts de sauvegarde.
--   Tags : infra | ops
-
-## 14 — Correction déploiement production : canonicalisation des routes, .env, SMTP et .htaccess
-
-**Titre** : Correction déploiement production & contact (locale, .env, SMTP, .htaccess)  
-**Date** : 2025-11-21
-
-### Contexte / reproduction
-
-En production, plusieurs symptômes simultanés empêchaient le site de fonctionner correctement :
-
--   Pages renvoyant 500 (erreurs PHP / bootstrap cache incompatibles).
--   Boucle interne d'Apache déclenchant l'erreur "Request exceeded the limit of 10 internal redirects".
--   Formulaire de contact renvoyant une erreur 419 "Page Expired" lorsqu'un agent headless tentait un POST.
--   Tentatives d'envoi d'email échouant (erreurs SMTP 535 ou connexion vers 127.0.0.1:1025).
--   Logs Laravel mentionnant un parse error sur `.env` (ligne `MAIL_PASSWORD`) et une erreur SQL `no such table: cache` quand `CACHE_STORE=database`.
-
-Reproduction rapide (diagnostic) :
-
--   `curl -I -L https://<votre-site>/fr` → vérifier redirections excessives.
--   Consulter `storage/logs/laravel.log` pour entrées Dotenv / SQL / Mailer.
--   GET `/fr/contact`, récupérer `_token` + cookies, POST headless → 419.
-
-### Logs / preuves (extraits représentatifs)
-
--   Dotenv parse error :
-    `"Failed to parse dotenv file. Encountered an invalid name at ["MAIL_PASSWORD"]"`
--   SQLite / cache :
-    `"SQLSTATE[HY000]: General error: 1 no such table: cache"`
--   Apache :
-    `"Request exceeded the limit of 10 internal redirects due to probable configuration error."`
--   Mailer :
-    `"Connection could not be established with host '127.0.0.1:1025': Connection refused"`  
-    `"535 Incorrect authentication data"`
-
-### Diagnostic (cause racine)
-
-1. Fichiers de cache (`bootstrap/cache/*.php`) générés localement synchronisés sur le serveur → incohérences d'autoload / providers.
-2. `.env` mal formé (guillemets non échappés autour de `MAIL_PASSWORD`) → échec du parsing dotenv → config cassée.
-3. `CACHE_STORE=database` sans table `cache` → erreurs SQL.
-4. Règles Apache (`RewriteBase /portfolio/` ou redirection racine → `/portfolio`) + `.htaccess` imbriqués → boucle interne.
-5. JS front fragile : `path.replace(/^\/portfolio/i, '')` (hardcode) → comportement incorrect selon base path d'hébergement.
-6. CSRF 419 en headless : mismatch session/cookie entre GET (token) et POST.
-
-### Actions appliquées (étapes & commandes)
-
-> Sauvegardes (avant toute opération)
-
-```bash
-git bundle create portfolio-backup-$(date +%Y%m%d-%H%M).bundle --all
-tar -czf Portfolio-backup-$(date +%Y%m%d-%H%M).tgz .
-cp .env .env.bak-$(date +%Y%m%d-%H%M)
-```
-
-1. Corriger `.env` côté serveur
-
-    - Vérifier et retirer guillemets non échappés, valider `MAIL_PASSWORD`.
-    - Exemple SMTP :
-        ```
-        MAIL_MAILER=smtp
-        MAIL_HOST=smtp-jeremyescassut.alwaysdata.net
-        MAIL_PORT=587
-        MAIL_USERNAME=contact@jeremyescassut.com
-        MAIL_PASSWORD=***REMOVED***
-        MAIL_ENCRYPTION=tls
-        ```
-    - Puis :
-        ```bash
-        php artisan config:clear
-        php artisan view:clear
-        ```
-
-2. Forcer `CACHE_STORE=file` (solution rapide) ou créer la table `cache`
-
-    - Rapidement :
-        ```bash
-        sed -i.bak 's/^CACHE_STORE=.*/CACHE_STORE=file/' .env || echo 'CACHE_STORE=file' >> .env
-        php artisan config:clear
-        php artisan view:clear
-        ```
-    - Si on garde `database` :
-        ```bash
-        php artisan cache:table
-        php artisan migrate --force
-        ```
-
-3. Supprimer caches incompatibles et régénérer
+    -   Lancer l'environnement de développement (HMR) :
 
     ```bash
-    rm -f bootstrap/cache/*.php
-    composer dump-autoload -o
-    php artisan config:clear
-    php artisan cache:clear || true
-    php artisan view:clear
-    php artisan config:cache
-    php artisan route:cache
+    npm run dev
+    # ou (si défini) : npm run dev:all
     ```
 
-4. Corriger `.htaccess` Apache (backup avant)
+    -   Si `php artisan serve` échoue (port 8000 occupé) :
 
     ```bash
-    cp public/.htaccess public/.htaccess.bak-$(date +%Y%m%d-%H%M)
-    # s'assurer que RewriteBase / et pas de redirection racine -> /portfolio
-    # tester:
-    curl -I -L https://<votre-site>/fr
+    php artisan serve --port=8001
+    # ou tuer le PID : lsof -i :8000 && kill <PID>
     ```
 
-5. Frontend — canonicaliser le changement de langue
+    ***
 
-    - Injecter base path côté serveur (layout Blade) :
-        ```blade
-        <script>window.APP_BASE = "{{ rtrim(request()->getBasePath(), '/') }}";</script>
-        ```
-    - Remplacer `path.replace(/^\/portfolio/i, '')` par une fonction `buildNewPath(newLocale)` qui retire `window.APP_BASE` en échappant correctement la chaîne pour RegExp.
-    - Centraliser le JS dans `resources/js/app.js`.
+    ## 7) Liste courte des fichiers touchés
 
-6. Déployer assets correctement
+    -   `resources/js/photoToggle.js` — overlay/dessin/transition handling
+    -   `resources/css/app.css` — transition (opacity+blur), `.photo-frame` pseudo-el, caption offset, suppression du display override
+    -   `resources/views/home.blade.php` — wrapper `photo-frame` (appliquer la classe au bon élément)
+    -   `.vscode/settings.json` — réglage terminal login shell (workspace)
 
-    - Build local :
-        ```bash
-        npm run build
-        ```
-    - Rsync (exemple) :
-        ```bash
-        rsync -av --delete public/build/ user@server:/home/username/www/Portfolio/public/build/
-        ```
-    - Côté serveur : régénérer autoload & caches (voir étape 3).
+    ***
 
-7. Vérification mail et contact
+    ## 8) Tests recommandés
 
-    - Depuis navigateur : tester `/fr/contact` → remplir → vérifier boîte.
-    - Test côté serveur (script) si nécessaire :
-        ```php
-        // scripts/send_test_mail.php
-        <?php
-        require __DIR__ . '/vendor/autoload.php';
-        use Illuminate\Support\Facades\Mail;
-        $app = require_once __DIR__ . '/bootstrap/app.php';
+    1. Démarrer `npm run dev` puis ouvrir la page locale.
+    2. Cliquer sur la photo : vérifier absence d'agrandissement, cadre visible, légende bien placée.
+    3. Vérifier HMR en modifiant `resources/css/app.css`.
+
+    ***
+
+    Si tu veux, je peux :
+
+    -   committer ces modifications sur une branche dédiée (par ex. `fix/photo-transition-frame`) et ouvrir une PR ;
+    -   augmenter/diminuer l'intensité du flou (`filter: blur(2px)`) ou la durée de transition (actuelle : 420ms) ;
+    -   générer un screenshot headless pour vérifier le rendu sur plusieurs largeurs.
+
+    ***
+
+    Dernière mise à jour : 2025-11-25
+    require **DIR** . '/vendor/autoload.php';
+    use Illuminate\Support\Facades\Mail;
+    $app = require_once __DIR__ . '/bootstrap/app.php';
         $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
         $kernel->bootstrap();
         Mail::raw('Test SMTP', function($message){
-            $message->to('j.losaint@gmail.com')->subject('Test SMTP');
-        });
-        echo "Mail envoyé (vérifier logs)\n";
-        ```
-        ```bash
-        php scripts/send_test_mail.php
-        tail -n 200 storage/logs/laravel.log
-        ```
+    $message->to('j.losaint@gmail.com')->subject('Test SMTP');
+    });
+    echo "Mail envoyé (vérifier logs)\n";
+    `
+    `bash
+    php scripts/send_test_mail.php
+    tail -n 200 storage/logs/laravel.log
+    ```
 
 8. CSRF 419 — headless (exemple curl correct)
 
@@ -344,7 +245,7 @@ cp .env .env.bak-$(date +%Y%m%d-%H%M)
 ### Pourquoi ces changements résolvent le problème
 
 -   `bootstrap/cache` contient du code dépendant de l'environnement → le supprimer et regénérer évite les incohérences.
--   `.env` correctement parsé garantit APP*KEY, MAIL*_, DB\__ disponibles → sinon bootstrap casse.
+-   `.env` correctement parsé garantit APP*KEY, MAIL*\_, DB\_\_ disponibles → sinon bootstrap casse.
 -   Corriger `RewriteBase` / règles `.htaccess` stoppe la boucle Apache.
 -   Centraliser `window.APP_BASE` évite hacks JS fragiles et rend le comportement indépendant du sous‑chemin d'hébergement.
 

@@ -71,14 +71,14 @@
             overlay.width = canvas.width;
             overlay.height = canvas.height;
 
-            // Position overlay to fully cover the canvas inside its container.
-            // Use relative container coordinates to avoid layout shifts.
+            // Position overlay to fully cover the actual canvas element.
+            // Append the overlay to the same parent as the canvas so inset:0
+            // matches the canvas layout, and set explicit CSS width/height
+            // in pixels to match any CSS-scaling applied to the canvas while
+            // keeping the canvas drawing resolution in its attributes.
             overlay.style.position = 'absolute';
             overlay.style.left = '0';
             overlay.style.top = '0';
-            overlay.style.width = '100%';
-            overlay.style.height = '100%';
-            overlay.style.objectFit = 'cover';
             overlay.style.pointerEvents = 'none';
 
             const octx = overlay.getContext('2d');
@@ -96,15 +96,38 @@
                 octx.drawImage(img, x, y, w, h);
             })(toImg);
 
-            // Append overlay to container (container is relative)
-            container.appendChild(overlay);
+            // Append overlay to the same parent as the main canvas (prefer
+            // the immediate wrapper) so it covers only the canvas area.
+            const overlayParent = canvas.parentNode || container;
+            overlayParent.appendChild(overlay);
+
+            // Match the overlay's CSS size to the rendered CSS size of the
+            // main canvas to avoid any temporary visual scaling. We keep the
+            // overlay's drawing buffer equal to the main canvas's buffer
+            // so drawn pixels align exactly.
+            try {
+                const cssWidth = canvas.offsetWidth;
+                const cssHeight = canvas.offsetHeight;
+                overlay.style.width = cssWidth + 'px';
+                overlay.style.height = cssHeight + 'px';
+                // Ensure the overlay buffer resolution matches the main canvas
+                overlay.width = canvas.width;
+                overlay.height = canvas.height;
+            } catch (err) {
+                // Fallback to 100% sizing if anything goes wrong
+                overlay.style.width = '100%';
+                overlay.style.height = '100%';
+            }
 
             // Force a frame then add class to trigger CSS transition
             requestAnimationFrame(() => overlay.classList.add('show'));
 
             // When transition finishes copy final image to main canvas and cleanup
             const onEnd = (e) => {
-                if (e.propertyName !== 'opacity' && e.propertyName !== 'transform') return;
+                // Wait for either the opacity or filter transition to finish.
+                // We purposely do not rely on 'transform' since we removed any
+                // scaling/transform effects to keep the image size stable.
+                if (e.propertyName !== 'opacity' && e.propertyName !== 'filter') return;
                 try { drawImage(toImg); } catch (err) { /* ignore */ }
                 overlay.removeEventListener('transitionend', onEnd);
                 if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
