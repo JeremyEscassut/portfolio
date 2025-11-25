@@ -35,7 +35,7 @@
 							data-original="{{ $origData ? 'data:image/jpeg;base64,' . $origData : asset('images/je_profile.jpeg') }}"
 							data-ai="{{ $aiData ? 'data:image/jpeg;base64,' . $aiData : asset('images/je_ia_profile.jpg') }}">
 							<div id="photoCanvasWrapper" class="photo-frame" style="max-width:400px; display:flex; align-items:center; justify-content:center;">
-								<canvas id="photoCanvas" width="400" height="400" class="rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]"
+								<canvas id="photoCanvas" width="400" height="400" class="rounded-lg overflow-hidden bg-white dark:bg-[#161615]"
 									style="display:block; width:100%; height:auto; max-width:400px;"></canvas>
 							</div>
 							<p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">Original<br>Cliquez si vous aimez Arcane</p>
