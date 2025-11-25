@@ -6,67 +6,82 @@
     --bg: #f3f7f6; /* very light aqua-gray (not pure white) */
     --surface: #fbfdfe; /* slightly brighter surface (cards) */
     --edge: rgba(11, 23, 26, 0.06); /* subtle borders */
+    --tag-bg-light: #ecf5ef; /* light tag background used in dark-mode tags */
 
-    /* Typography */
-    --text: #0b1b20; /* dark warm-blue/charcoal for high contrast */
-    --muted: #51636a; /* muted text for secondary information */
+    .photo-frame {
+        position: relative;
+        display: inline-block;
+        /* keep the wrapper's content size unchanged; frame drawn outside */
+        box-sizing: content-box;
+    }
 
-    /* Accents (muted badminton court colors) */
-    --accent-primary: #2a8fb7; /* muted court blue */
-    --accent-secondary: #7fb77e; /* soft court green */
+    /* Outer frame drawn outside the element's box so it doesn't alter layout */
+    .photo-frame::before {
+        content: "";
+        position: absolute;
+        left: -5vmin;
+        right: -5vmin;
+        top: -5vmin;
+        bottom: -5vmin;
+        border-radius: 2px;
+        border: 5vmin solid #eee;
+        border-bottom-color: #fff;
+        border-left-color: #eee;
+        border-right-color: #ccb;
+        border-top-color: #ddd;
+        background-color: #ddc; /* subtle paper-like fill behind image */
+        box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25) inset,
+            0 5px 10px rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+        z-index: 5; /* above overlay */
+        box-sizing: border-box;
+    }
 
-    /* Halo / ambient glow */
-    --halo-x: 50%;
-    --halo-y: 40%; /* start visible and centered lower */
-    --halo-opacity: 0.16; /* slightly stronger intensity without increasing size */
-    --halo-enabled: 1; /* can be set to 0 to disable */
+    /* Decorative outer rim / shadow to give depth */
+    .photo-frame::before {
+        /* Outer border (slightly reduced width from original) */
+        content: "";
+        position: absolute;
+        left: -3vmin;
+        right: -3vmin;
+        top: -3vmin;
+        bottom: -3vmin;
+        border-radius: 2px;
+        border: 3vmin solid #eee;
+        border-bottom-color: #fff;
+        border-left-color: #eee;
+        border-right-color: #ccb;
+        border-top-color: #ddd;
+        background: transparent; /* do not cover the canvas area */
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        pointer-events: none;
+        z-index: 6; /* sit above overlay so frame is always visible */
+        box-sizing: border-box;
+    }
 
-    /* Misc */
-    --radius: 0.5rem;
-    --shadow-subtle: 0 6px 18px rgba(11, 23, 26, 0.04);
-    /* Accessibility: body copy color/size tokens (used for improved contrast on body text) */
-    --body-font-size: 1rem; /* base paragraph size */
-    --body-line-height: 1.65; /* comfortable reading line-height */
-    /* body-copy is intentionally a tad darker than --text in light mode to improve contrast
-       without affecting headings (headings continue to use --text). */
-    --body-copy: color-mix(in srgb, var(--text) 92%, black 8%);
-    /* per-element surfaces reused in dark mode */
-    --tag-bg: color-mix(
-        in srgb,
-        var(--accent-secondary) 12%,
-        var(--surface) 88%
-    );
-    --tile-bg: color-mix(
-        in srgb,
-        var(--accent-secondary) 14%,
-        var(--surface) 86%
-    );
-    /* Fixed light-mode surface colors for tags/tiles so they don't shift in dark mode */
-    --tag-bg-light: #ecf5ef;
-    --tile-bg-light: #eaf3ec;
-}
+    /* Inner mat (paper insert) drawn slightly inset and behind the canvas so it
+       appears as the coloured mount often found in photo frames. It must be below
+       the canvas but above the page background. */
+    .photo-frame::after {
+        content: "";
+        position: absolute;
+        /* increase the inset so the coloured mat is more visible around the image */
+        left: 3.5vmin;
+        right: 3.5vmin;
+        top: 3.5vmin;
+        bottom: 3.5vmin;
+        border-radius: 2px;
+        background: #ddddcc; /* mat colour (expanded) */
+        box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.14);
+        pointer-events: none;
+        z-index: 3; /* below canvas but above page */
+    }
 
-/* (previously contained @source/@theme metadata; removed to avoid parser warnings) */
-
-/* Global base styles for the light, minimal theme */
-html,
-body {
-    height: 100%;
-}
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(
-        --font-sans,
-        system-ui,
-        -apple-system,
-        "Segoe UI",
-        Roboto,
-        "Helvetica Neue",
-        Arial
-    );
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* Ensure the main canvas stays above the inner mat */
+    #photoCanvas {
+        position: relative;
+        z-index: 4;
+    }
     line-height: 1.45;
     transition: background-color 240ms ease, color 240ms ease;
     position: relative;
@@ -305,8 +320,10 @@ aside > div.shadow {
     /* Project tags keep a fixed light-mode background color so their appearance
        doesn't shift when switching to dark mode. Text/icons remain black. */
     .project-tag {
+        /* Keep a light, pill-like tag in dark mode but use readable text color */
         border: 1px solid rgba(127, 183, 126, 0.18) !important;
-        background-color: var(--tag-bg-light) !important;
+        background-color: #ecf5ef !important;
+        /* original appearance: light background with black text */
         color: #000 !important;
         box-shadow: none !important;
     }
@@ -1389,6 +1406,78 @@ html:not(.dark)
 /* the end of the file so it can safely override Tailwind utilities.     */
 /* =============================================================== */
 
+/* Photo transition: overlay canvas crossfade (GPU-accelerated)
+     - Keeps layout stable (no <img> insertion that shifts elements)
+     - Uses opacity + transform transitions (GPU-friendly)
+*/
+.photo-transition-wrap {
+    position: relative;
+}
+
+.photo-transition-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    /* Keep transform extremely subtle to avoid visible enlargement. */
+    transform: scale(1.005);
+    transition: opacity 420ms cubic-bezier(0.22, 0.9, 0.27, 1),
+        transform 420ms cubic-bezier(0.22, 0.9, 0.27, 1);
+    will-change: opacity, transform;
+    z-index: 2; /* sit under the decorative frame */
+}
+
+.photo-transition-canvas.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Decorative frame around the photo canvas. Uses pseudo elements so it doesn't
+   change the element's layout or dimensions. The frame is visually above the
+   transition overlay so it remains visible during crossfades. */
+.photo-frame {
+    position: relative; /* establishes positioning context for pseudo-elements */
+    display: inline-block;
+}
+.photo-frame::before,
+.photo-frame::after {
+    content: "";
+    position: absolute;
+    left: -1.5vmin;
+    right: -1.5vmin;
+    top: -1.5vmin;
+    bottom: -1.5vmin;
+    border-radius: 4px;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+.photo-frame::before {
+    /* inner inset border */
+    border: 2px solid #e6e1d6;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.06) inset;
+    z-index: 3; /* above overlay */
+}
+.photo-frame::after {
+    /* outer decorative border / shadow */
+    border: 5vmin solid #efe8dd;
+    border-bottom-color: #fff;
+    border-left-color: #eee;
+    border-right-color: #ddd;
+    border-top-color: #dfd8cc;
+    border-radius: 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    z-index: 4; /* above overlay */
+}
+
+/* Ensure the main canvas stays on the natural content layer */
+#photoCanvas {
+    position: relative;
+    z-index: 1;
+}
+
 /* Footer / right-column sticky behaviour */
 #footer {
     position: relative;
@@ -2297,7 +2386,7 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
 .dark #langToggleButton.theme-lang-button:active svg * {
     /* En mode sombre, forcer les icônes des boutons thème/langue en blanc
        pour assurer un contraste élevé sur fonds sombres/verts (mobile inclus). */
-    stroke: #fff !important;
+    stroke: black !important;
     color: #fff !important;
 }
 

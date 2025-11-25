@@ -34,7 +34,7 @@
 						<div id="profilePhotoContainer" class="relative cursor-pointer group w-full lg:mx-auto lg:w-full max-w-full text-center flex flex-col items-center" role="button" tabindex="0"
 							data-original="{{ $origData ? 'data:image/jpeg;base64,' . $origData : asset('images/je_profile.jpeg') }}"
 							data-ai="{{ $aiData ? 'data:image/jpeg;base64,' . $aiData : asset('images/je_ia_profile.jpg') }}">
-							<div id="photoCanvasWrapper" style="max-width:400px; display:flex; align-items:center; justify-content:center;">
+							<div id="photoCanvasWrapper" class="photo-frame" style="max-width:400px; display:flex; align-items:center; justify-content:center;">
 								<canvas id="photoCanvas" width="400" height="400" class="rounded-lg overflow-hidden border-2 border-[#e3e3e0] shadow-[0_6px_0_rgba(0,0,0,0.08)] bg-white dark:bg-[#161615]"
 									style="display:block; width:100%; height:auto; max-width:400px;"></canvas>
 							</div>

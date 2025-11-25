@@ -55,73 +55,81 @@
             ctx.drawImage(img, x, y, w, h);
         }
 
-        function pixelDissolveTransition(fromImg, toImg, duration = 800) {
+        // Lightweight, GPU-friendly crossfade implemented with an overlay canvas.
+        // This avoids per-pixel operations (getImageData/putImageData) and keeps
+        // layout stable because we do not insert <img> elements that can shift.
+        function cssCanvasCrossfadeTransition(fromImg, toImg, duration = 420) {
             if (isTransitioning) return;
             isTransitioning = true;
 
-            const cw = canvas.width;
-            const ch = canvas.height;
-            const pixelSize = Math.max(2, Math.floor((cw / 100)));
-            const cols = Math.ceil(cw / pixelSize);
-            const rows = Math.ceil(ch / pixelSize);
-            const totalPixels = cols * rows;
+            // Ensure container has relative positioning
+            container.classList.add('photo-transition-wrap');
 
-            const pixels = new Array(totalPixels);
-            for (let i = 0; i < totalPixels; i++) pixels[i] = i;
-            for (let i = pixels.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [pixels[i], pixels[j]] = [pixels[j], pixels[i]];
-            }
+            // Create overlay canvas that matches main canvas logical size
+            const overlay = document.createElement('canvas');
+            overlay.className = 'photo-transition-canvas';
+            overlay.width = canvas.width;
+            overlay.height = canvas.height;
 
-            drawImage(fromImg);
-            const fromImageData = ctx.getImageData(0, 0, cw, ch);
+            // Position overlay to fully cover the canvas inside its container.
+            // Use relative container coordinates to avoid layout shifts.
+            overlay.style.position = 'absolute';
+            overlay.style.left = '0';
+            overlay.style.top = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.objectFit = 'cover';
+            overlay.style.pointerEvents = 'none';
 
-            drawImage(toImg);
-            const toImageData = ctx.getImageData(0, 0, cw, ch);
+            const octx = overlay.getContext('2d');
 
-            ctx.putImageData(fromImageData, 0, 0);
+            // Draw target image into overlay canvas (cover behaviour)
+            (function drawToOverlay(img) {
+                const cw = overlay.width;
+                const ch = overlay.height;
+                const scale = Math.max(cw / img.width, ch / img.height);
+                const w = Math.round(img.width * scale);
+                const h = Math.round(img.height * scale);
+                const x = Math.round((cw - w) / 2);
+                const y = Math.round((ch - h) / 2);
+                octx.clearRect(0, 0, cw, ch);
+                octx.drawImage(img, x, y, w, h);
+            })(toImg);
 
-            const startTime = Date.now();
+            // Append overlay to container (container is relative)
+            container.appendChild(overlay);
 
-            function animateFrame() {
-                const elapsed = Date.now() - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const targetPixelIndex = Math.floor(progress * totalPixels);
+            // Force a frame then add class to trigger CSS transition
+            requestAnimationFrame(() => overlay.classList.add('show'));
 
-                for (let i = 0; i < targetPixelIndex; i++) {
-                    const pixelIndex = pixels[i];
-                    const col = pixelIndex % cols;
-                    const row = Math.floor(pixelIndex / cols);
-                    const x = col * pixelSize;
-                    const y = row * pixelSize;
+            // When transition finishes copy final image to main canvas and cleanup
+            const onEnd = (e) => {
+                if (e.propertyName !== 'opacity' && e.propertyName !== 'transform') return;
+                try { drawImage(toImg); } catch (err) { /* ignore */ }
+                overlay.removeEventListener('transitionend', onEnd);
+                if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                isTransitioning = false;
+            };
 
-                    ctx.putImageData(
-                        toImageData,
-                        0, 0,
-                        x, y,
-                        Math.min(pixelSize, cw - x),
-                        Math.min(pixelSize, ch - y)
-                    );
-                }
-
-                if (progress < 1) requestAnimationFrame(animateFrame);
-                else {
-                    drawImage(toImg);
+            overlay.addEventListener('transitionend', onEnd);
+            // safety fallback
+            setTimeout(() => {
+                if (isTransitioning) {
+                    try { drawImage(toImg); } catch (e) { }
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
                     isTransitioning = false;
                 }
-            }
-
-            requestAnimationFrame(animateFrame);
+            }, duration + 300);
         }
 
         function togglePhoto() {
             if (isTransitioning || imagesLoaded < 2) return;
             if (currentPhoto === 'original') {
-                pixelDissolveTransition(imgOriginal, imgAI);
+                cssCanvasCrossfadeTransition(imgOriginal, imgAI);
                 if (caption) caption.innerHTML = "Version Arcane, générée par l'IA Bing GPT-4o<br>Cliquez pour voir l'original";
                 currentPhoto = 'ai';
             } else {
-                pixelDissolveTransition(imgAI, imgOriginal);
+                cssCanvasCrossfadeTransition(imgAI, imgOriginal);
                 if (caption) caption.innerHTML = '';
                 currentPhoto = 'original';
             }
