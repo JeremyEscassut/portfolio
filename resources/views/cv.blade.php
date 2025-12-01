@@ -9,12 +9,12 @@
         <p class="text-sm text-[#706f6c] mb-4">Vous pouvez consulter ou télécharger mon CV au format PDF.</p>
 
         <div class="flex gap-3 mb-6">
-            <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-[#1b1b18] text-white rounded">{{ __('cv.open_new_tab') }}</a>
-            <a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" download class="inline-flex items-center gap-2 px-4 py-2 bg-white border rounded">{{ __('cv.download') }}</a>
+            <a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Developpeur_Full_Stack_Nov_2025_v6.pdf') }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 bg-[#1b1b18] text-white rounded">{{ __('cv.open_new_tab') }}</a>
+            <a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Developpeur_Full_Stack_Nov_2025_v6.pdf') }}" download class="inline-flex items-center gap-2 px-4 py-2 bg-white border rounded">{{ __('cv.download') }}</a>
         </div>
 
         <div class="border rounded overflow-hidden" style="height:70vh;">
-            <iframe src="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" title="{{ __('cv.preview') }}" class="w-full h-full" aria-label="{{ __('cv.preview_pdf') }}"></iframe>
+            <iframe src="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Developpeur_Full_Stack_Nov_2025_v6.pdf') }}" title="{{ __('cv.preview') }}" class="w-full h-full" aria-label="{{ __('cv.preview_pdf') }}"></iframe>
         </div>
 
         <p class="text-xs text-[#706f6c] mt-3">{{ __('cv.intro') }}</p>

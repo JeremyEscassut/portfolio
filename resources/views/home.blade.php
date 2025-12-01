@@ -78,7 +78,7 @@
 						</button>
 
 						<!-- CV (PNG light/dark variants placed in resources/png) -->
-						<a href="{{ asset('cv/CV_Dev-FS_2025-10-24_Jeremy_Escassut.pdf') }}" target="_blank" rel="noopener noreferrer"
+						<a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Developpeur_Full_Stack_Nov_2025_v6.pdf') }}" target="_blank" rel="noopener noreferrer"
 							data-x-on-mouseenter="hoverCV = true"
 							data-x-on-mouseleave="hoverCV = false"
 							data-x-on-click="hoverCV = false"

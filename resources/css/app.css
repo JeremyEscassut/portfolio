@@ -2450,3 +2450,75 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
 }
 
 /* Note: do not reset .mobile-offset on large screens here so Tailwind `lg:` utilities can apply. */
+
+/* ------------------------------------------------------------------
+   Cherry-wood rim (free SVG) — integrated fallback + CSS-only fallback
+   - Places a tileable SVG within the border-box so the rim shows wood
+   - Keeps the inner mat as a top background layer (padding-box)
+   - If the SVG is unavailable, `.photo-frame.no-tex` provides a CSS-only wood-like fallback
+   ------------------------------------------------------------------ */
+.photo-frame {
+    /* use transparent border to reveal the rim texture painted in the border-box */
+    border: 5vmin solid transparent !important;
+    /*
+      Layers (first = topmost):
+        1) mat interior (padding-box)
+        2) solid base color for the rim (border-box) — prevents page bg showing through transparent SVG
+        3) wood texture SVG overlay (border-box)
+    */
+    background-image: linear-gradient(
+            180deg,
+            #eef6ea 0%,
+            #e6edd4 40%,
+            #dbe6bf 100%
+        ),
+        linear-gradient(180deg, #6f3526 0%, #5a2a1e 100%),
+        url("/images/cherry-wood-strong.svg");
+    background-origin: padding-box, border-box, border-box;
+    background-clip: padding-box, border-box, border-box;
+    background-repeat: no-repeat, repeat, repeat;
+    /* let the mat cover the inner area; middle layer gives solid backing for the texture */
+    background-size: cover, cover, auto;
+    /* preserve the mat thickness (≈ 1/3 du rim) */
+    padding: calc(5vmin / 3);
+}
+
+/* keep the previously-intended subtle overlay/shine but do not obscure the wood */
+.photo-frame::before {
+    /* overlay varnish to give subtle gloss to the wood without changing geometry */
+    background: linear-gradient(rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
+    mix-blend-mode: overlay;
+    pointer-events: none;
+}
+
+/* Fallback when texture can't be loaded: layered gradient + repeating lines for grain */
+.photo-frame.no-tex {
+    background-image: linear-gradient(
+            180deg,
+            #eef6ea 0%,
+            #e6edd4 40%,
+            #dbe6bf 100%
+        ),
+        linear-gradient(180deg, #6b3a2a 0%, #5b2e24 50%, #6b3a2a 100%),
+        repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.03) 0 1px,
+            transparent 1px 6px
+        );
+    background-origin: padding-box, border-box, border-box;
+    background-clip: padding-box, border-box, border-box;
+    background-size: cover, cover, auto;
+    background-repeat: no-repeat, repeat, repeat;
+}
+
+/* Dark-mode tweak: use a deeper base color for rim to avoid inheriting page tint */
+.dark .photo-frame {
+    background-image: linear-gradient(
+            180deg,
+            #eef6ea 0%,
+            #e6edd4 40%,
+            #dbe6bf 100%
+        ),
+        linear-gradient(180deg, #4d261a 0%, #34140d 100%),
+        url("/images/cherry-wood2.svg");
+}
