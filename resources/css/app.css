@@ -4,9 +4,20 @@
 :root {
     /* Background & surfaces */
     --bg: #f3f7f6; /* very light aqua-gray (not pure white) */
+    --bg-gradient: linear-gradient(
+        160deg,
+        #f6fbff 0%,
+        #eef8f3 48%,
+        #f9f6ee 100%
+    );
     --surface: #fbfdfe; /* slightly brighter surface (cards) */
     --edge: rgba(11, 23, 26, 0.06); /* subtle borders */
     --tag-bg-light: #ecf5ef; /* light tag background used in dark-mode tags */
+}
+
+body {
+    background: var(--bg-gradient) !important;
+    background-attachment: fixed;
 }
 
 /* Subtle selection color */
@@ -24,7 +35,8 @@ body::before {
     /* keep the halo behind normal content by default */
     z-index: -1 !important;
     /* keep gradients compact but increase visibility: intensity up, sizes moderate */
-    background: radial-gradient(
+    background:
+        radial-gradient(
             600px 600px at var(--halo-x) var(--halo-y),
             rgba(42, 143, 183, var(--halo-opacity)) 0%,
             rgba(127, 183, 126, calc(var(--halo-opacity) * 0.45)) 28%,
@@ -931,7 +943,9 @@ body
     background: color-mix(in srgb, white 10%, var(--bg) 90%);
     opacity: 0.95;
     z-index: -1;
-    transition: background-color 220ms ease, transform 180ms ease,
+    transition:
+        background-color 220ms ease,
+        transform 180ms ease,
         opacity 180ms ease;
 }
 
@@ -997,7 +1011,9 @@ aside nav a.font-semibold::before {
     background: color-mix(in srgb, var(--accent-secondary) 50%, white 90%);
     opacity: 0.95;
     z-index: -1;
-    transition: background-color 220ms ease, transform 180ms ease,
+    transition:
+        background-color 220ms ease,
+        transform 180ms ease,
         opacity 180ms ease;
 }
 
@@ -1349,7 +1365,8 @@ html:not(.dark)
     pointer-events: none;
     opacity: 0;
     filter: blur(2px);
-    transition: opacity 420ms cubic-bezier(0.2, 0.95, 0.24, 1),
+    transition:
+        opacity 420ms cubic-bezier(0.2, 0.95, 0.24, 1),
         filter 420ms cubic-bezier(0.2, 0.95, 0.24, 1);
     will-change: opacity, filter;
     z-index: 2; /* sit under the decorative frame */
@@ -1498,7 +1515,7 @@ html:not(.dark)
     position: fixed !important;
     /* top and right are set dynamically by JS to place the actions where
        they visually matched their original inline position. */
-    left: auto !important;
+    right: auto !important;
     z-index: 60 !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -2076,7 +2093,9 @@ html:not(.dark) main#content * {
 html:not(.dark) .social-link,
 html:not(.dark) .repo-link,
 html:not(.dark) .social-link button {
-    transition: background-color 120ms ease, color 120ms ease;
+    transition:
+        background-color 120ms ease,
+        color 120ms ease;
 }
 /* subtle neutral highlight for general social links (slightly stronger for better contrast) */
 html:not(.dark) .social-link:hover,
@@ -2199,6 +2218,14 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     flex: 0 0 auto;
     position: relative;
 }
+
+/* MySQL logo is more detailed (wordmark + symbol), so give it a small boost
+   to keep perceived size consistent with simpler icons. */
+.skill-mysql svg {
+    width: 46px;
+    height: 46px;
+}
+
 .skill-tile[data-name]::after {
     content: attr(data-name);
     position: absolute;
@@ -2369,7 +2396,9 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     justify-content: center;
     padding: 0.5rem; /* proche de p-3 */
     border-radius: 9999px;
-    transition: transform 160ms ease, box-shadow 160ms ease,
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
         background-color 120ms ease;
 }
 
@@ -2390,7 +2419,9 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
         height: 36px;
         padding: 0; /* use explicit width/height to control size */
         border-radius: 9999px;
-        transition: transform 160ms ease, box-shadow 160ms ease,
+        transition:
+            transform 160ms ease,
+            box-shadow 160ms ease,
             background-color 120ms ease;
     }
 
@@ -2449,18 +2480,165 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     background: rgba(255, 255, 255, 0.08);
 }
 
-/* Custom: mobile offset for theme toggle
-     - small screens: apply a subtle translateX to visually offset the button
-     - large screens (>=1024px): remove this transform so Tailwind's `lg:-translate-x-2` applies
-*/
-@media (max-width: 1023px) {
-    /* apply mobile offset to any element carrying the helper class */
-    .mobile-offset {
-        transform: translateX(6px) !important;
+/* Desktop-only compartmented layout for the left aside:
+   - top row: name/title/intro
+   - second row: 2 sub-columns (photo area + sections/actions area)
+   This prevents overlap when the viewport width shrinks. */
+@media (min-width: 1024px) {
+    #home-interactions {
+        display: contents;
     }
-    /* Ensure the theme button also moves on mobile (higher specificity) */
-    #themeToggleButton.mobile-offset {
-        transform: translateX(15px) !important;
+
+    #home {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(140px, 22%, 180px);
+        grid-template-rows: auto 1fr;
+        column-gap: 1rem;
+        row-gap: 1rem;
+    }
+
+    #home-title {
+        grid-column: 1;
+        grid-row: 1;
+        margin-bottom: 0;
+    }
+
+    #home-left-col {
+        grid-column: 1;
+        grid-row: 2;
+        min-width: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #home-photo {
+        width: 100%;
+        max-width: 430px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #home-right-col {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        width: clamp(140px, 22%, 180px);
+        max-width: 180px;
+        min-height: 30rem;
+        justify-content: flex-start;
+        gap: 0.625rem;
+        padding-top: 0.75rem;
+    }
+
+    #home-right-col nav {
+        margin-bottom: 0 !important;
+    }
+
+    /* Keep nav/title area high while grouping action icons near the bottom. */
+    #home-social-icons {
+        margin-top: auto;
+    }
+
+    #theme-toggle-wrapper {
+        margin-top: 0 !important;
+    }
+
+    #home-contact-cv-icons {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Keep the profile centered inside its own photo column. */
+    #profilePhotoContainer {
+        transform: none;
+    }
+}
+
+/* Mobile icon layout (<=1023px): enforce a coherent 2x3 grid for
+   LinkedIn, GitLab, Theme, Language, Contact, CV without affecting desktop. */
+@media (max-width: 1023px) {
+    #home-right-col {
+        width: fit-content;
+        max-width: none;
+        margin-left: auto;
+        margin-right: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 40px);
+        justify-content: end;
+        justify-items: center;
+        align-items: center;
+        gap: 10px 12px;
+    }
+
+    /* Flatten only social and theme wrappers so they populate rows 1 and 2. */
+    #home-social-icons,
+    #theme-toggle-wrapper {
+        display: contents;
+    }
+
+    /* Keep Contact/CV wrapper as a real box: JS needs it for sticky behavior. */
+    #home-contact-cv-icons {
+        grid-column: 1 / span 2;
+        display: grid !important;
+        grid-template-columns: repeat(2, 40px);
+        justify-content: center;
+        justify-self: center;
+        align-items: center;
+        gap: 10px 12px;
+        margin: 0 !important;
+    }
+
+    /* Remove legacy mobile offsets that caused right-shift on some devices. */
+    .mobile-offset,
+    #themeToggleButton.mobile-offset,
+    #langToggleButton.mobile-offset {
+        transform: none !important;
+    }
+
+    /* Keep the no-offset baseline, but restore hover/focus motion for pointer devices. */
+    @media (hover: hover) {
+        #themeToggleButton.theme-lang-button:hover,
+        #langToggleButton.theme-lang-button:hover {
+            transform: translateY(-4px) rotate(-3deg) !important;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        #themeToggleButton.theme-lang-button:focus-visible,
+        #langToggleButton.theme-lang-button:focus-visible {
+            transform: translateY(-2px) !important;
+        }
+    }
+
+    /* Keep all icon containers on the same footprint for visual alignment. */
+    #home-social-icons .social-link,
+    #home-contact-cv-icons .social-link,
+    #themeToggleButton.theme-lang-button,
+    #langToggleButton.theme-lang-button {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px;
+        min-height: 40px;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #themeToggleButton.theme-lang-button svg,
+    #langToggleButton.theme-lang-button svg {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    /* When sticky is activated by JS, keep Contact/CV on the same two columns. */
+    #home-contact-cv-icons.fixed {
+        grid-template-columns: repeat(2, 40px) !important;
+        display: grid !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px 12px !important;
+        width: 92px !important;
+        height: auto !important;
+        right: auto !important;
     }
 }
 
@@ -2486,10 +2664,13 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     /* mat thickness ≈ 1/3 of rim */
     padding: calc(2.5vmin / 3);
     /* Relief: inner highlight + inner shadow (bevel) + plus forte ombre extérieure en mode clair */
-    box-shadow: inset 0 8px 14px rgba(255, 255, 255, 0.75),
+    box-shadow:
+        inset 0 8px 14px rgba(255, 255, 255, 0.75),
         inset 0 -8px 16px rgba(0, 0, 0, 0.14),
         0 30px 84px rgba(11, 38, 51, 0.26);
-    transition: box-shadow 180ms ease, transform 180ms ease;
+    transition:
+        box-shadow 180ms ease,
+        transform 180ms ease;
 }
 
 /* subtle inner varnish/highlight to enhance relief without textures */
@@ -2556,6 +2737,8 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     );
     border-color: var(--photo-frame-accent);
     /* deeper, softer shadow + stronger inner shadow for relief in dark */
-    box-shadow: inset 0 6px 12px rgba(255, 255, 255, 0.02),
-        inset 0 -10px 18px rgba(0, 0, 0, 0.72), 0 28px 80px rgba(0, 0, 0, 0.7);
+    box-shadow:
+        inset 0 6px 12px rgba(255, 255, 255, 0.02),
+        inset 0 -10px 18px rgba(0, 0, 0, 0.72),
+        0 28px 80px rgba(0, 0, 0, 0.7);
 }

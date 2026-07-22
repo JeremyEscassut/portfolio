@@ -72,6 +72,27 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 - Documenter surtout les zones critiques (securite, routage, mail, deploy).
 - Une information, une source principale.
 
+## Guidelines UI - Section Stack
+
+### Categorisation obligatoire
+
+- Chaque technologie doit etre classee dans une categorie existante : `Front`, `Back` ou `Autres`.
+- Ne pas introduire de sous-bloc ad hoc (exemple : "Recently used") si les technologies peuvent etre classees dans les categories standards.
+
+### Presentation visuelle
+
+- Chaque technologie est affichee dans une card `skill-tile` avec :
+    - une icone,
+    - un label via `data-name`.
+- Interdiction d'utiliser des tags texte seuls pour une technologie dans cette section.
+
+### Style des icones
+
+- Les icones de la section Stack doivent etre monochromes (noir/blanc selon le theme) en mode clair et en mode sombre.
+- Les SVG doivent utiliser `currentColor` (pas de couleur de marque hardcodee) sauf exception explicitement validee.
+- Gabarit recommande pour les nouveaux SVG : `40x40` avec contenu centre.
+- La lisibilite doit rester coherente entre toutes les cards (pas d'icone visuellement plus grande que les autres).
+
 ## Langue et nomenclature
 
 - Code et commentaires techniques : anglais par defaut.

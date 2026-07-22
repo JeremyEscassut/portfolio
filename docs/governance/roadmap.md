@@ -10,8 +10,10 @@
 1. Corriger les incoherences fonctionnelles et tests critiques.
 2. Stabiliser le flux contact e-mail (dev + prod).
 3. Fiabiliser le parcours CV (ouverture, telechargement, preview).
-4. Garantir un affichage fiable sur navigateurs/appareils principaux.
-5. Consolider la documentation de gouvernance et d'exploitation.
+4. Livrer les ajustements UX/UI a forte valeur immediate (hero, boutons, lisibilite desktop).
+5. Structurer le storytelling projets (CRM Admiral + PWA Budget) avec medias.
+6. Garantir un affichage fiable sur navigateurs/appareils principaux.
+7. Consolider la documentation de gouvernance et d'exploitation.
 
 ## Plan par phases
 
@@ -66,6 +68,50 @@ Criteres de sortie :
 - [ ] Ajouter pipeline CI GitLab minimale : tests Laravel + build Vite.
 - [ ] Mettre en place une cadence de revue des incidents/solutions.
 - [ ] Formaliser checklist pre-deploiement dans docs (sans runbook DRP).
+
+## Phase 5 - Evolutions produit et UX (Semaine 2+)
+
+- [ ] Inverser le texte FR/EN du bouton de changement de langue.
+- [ ] Deplacer les boutons langue + theme au-dessus des boutons Contact et CV.
+- [ ] Augmenter l'espace entre les titres des sections et les boutons en mode desktop.
+- [ ] Changer le titre en : `Chef de projet IT | Developpeur Full Stack oriente Produit & UX`.
+- [ ] Ajouter React, PostgreSQL et MySQL dans les technologies recentes.
+- [ ] Mettre a jour la description profil pour inclure la recherche de roles chef de projet / product owner et enrichir le volet formation (ANSSI, LinkedIn Learning, etc.).
+- [ ] Changer l'arriere-plan clair avec un degrade plus agreable.
+- [ ] Ajouter une section Projets pour l'experience CRM Admiral (ADM Assurances) sans lien Git, avec carousel de screenshots.
+- [ ] Evaluer l'ajout d'un enregistrement ecran CRM Admiral en fonction du poids final deploye (Alwaysdata).
+- [ ] Ajouter une section Projets pour la PWA Budget (Lovable) avec lien public.
+- [ ] Ajouter un selecteur de CV au clic sur le bouton CV :
+    - [ ] version Chef de projet IT,
+    - [ ] version Developpeur Full Stack oriente Produit & UX.
+
+## Plan de priorisation - Reste de journee (execution rapide)
+
+### Bloc A - Must have aujourd'hui (faible risque, fort impact)
+
+- [ ] Inverser texte FR/EN du bouton langue.
+- [ ] Deplacer boutons langue + theme au-dessus de Contact/CV.
+- [ ] Augmenter espacement titres/zone boutons (desktop).
+- [ ] Changer le titre principal (hero) vers la formulation cible.
+- [ ] Ajouter React, PostgreSQL, MySQL dans la stack/technologies.
+
+### Bloc B - Si temps restant aujourd'hui (impact produit)
+
+- [ ] Mettre a jour description profil (roles vises + experience chef de projet + formations).
+- [ ] Appliquer un nouveau degrade de fond clair.
+
+### Bloc C - A planifier sur prochain lot (plus volumineux)
+
+- [ ] Section CRM Admiral avec carousel screenshots.
+- [ ] Option enregistrement ecran (decision apres estimation poids/perf).
+- [ ] Section PWA Budget avec lien.
+- [ ] Selecteur de CV (2 versions).
+
+## Definition de pret pour demain
+
+- Bloc A termine + verifie en desktop/mobile.
+- Aucune regression navigation/contact/CV.
+- Screenshots de validation conserves pour comparer avant/apres.
 
 ## Definition of done globale
 

@@ -44,8 +44,8 @@
 				</div>
 
 				<!-- RIGHT column: stacked list, social icons, contact/CV (fills remaining space on mobile) -->
-				<div id="home-right-col" class="right-col flex-none w-auto max-w-[140px] sm:max-w-[180px] flex flex-col gap-4">
-					<nav class="mt-0 mb-0 hidden lg:block">
+				<div id="home-right-col" class="right-col flex-none w-auto max-w-[140px] sm:max-w-[180px] flex flex-col gap-4 lg:gap-7">
+					<nav class="mt-0 mb-0 hidden lg:block lg:mb-4">
 						<ul id="home-sections-list" class="space-y-3 text-sm lg:text-right">
 							<li><a href="#about" class="font-medium hover:underline">{{ __('nav.about') }}</a></li>
 							<li><a href="#projects" class="font-medium hover:underline">{{ __('nav.projects') }}</a></li>
@@ -68,6 +68,43 @@
 						</a>
 
 
+					</div>
+
+					<!-- Theme/language controls moved above contact/CV actions -->
+					<div id="theme-toggle-wrapper" class="mt-1 flex justify-end items-center gap-2">
+						<button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-3 rounded theme-lang-button mobile-offset lg:transform lg:-translate-x-2 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Sélecteur de thème">
+							<template x-if="theme==='auto'">
+								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+									<rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+									<path d="M8 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+								</svg>
+							</template>
+							<template x-if="theme==='light'">
+								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+									<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
+									<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+								</svg>
+							</template>
+							<template x-if="theme==='dark'">
+								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+									<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+								</svg>
+							</template>
+						</button>
+
+						<!-- Language toggle button: show target locale (inverse of current) -->
+						<button id="langToggleButton" type="button" data-locale="{{ app()->getLocale() }}" class="p-3 rounded theme-lang-button mobile-offset hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="{{ __('ui.lang.change') }}" title="{{ __('ui.lang.change') }}">
+							<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+								<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
+								<path d="M12 3v18" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+								<path d="M9 3 C7.5 8 7.5 16 9 21" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
+								<path d="M15 3 C16.5 8 16.5 16 15 21" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
+								<path d="M3 12h18" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
+								<path d="M4.5 7.8 C8 9.2 16 9.2 19.5 7.8" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
+								<path d="M4.5 16.2 C8 14.8 16 14.8 19.5 16.2" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
+							</svg>
+							<span class="lang-badge text-xs px-1 rounded ml-1" aria-hidden="true">{{ strtoupper((app()->getLocale() ?? 'fr') === 'fr' ? 'EN' : 'FR') }}</span>
+						</button>
 					</div>
 
 					<div id="home-contact-cv-icons" class="contact-cv-actions mt-0 flex items-center gap-3 justify-end">
@@ -95,47 +132,6 @@
 						</a>
 					</div>
 
-					<!-- Theme cycle button placed under contact/CV actions -->
-					<div id="theme-toggle-wrapper" class="mt-2 flex justify-end items-center gap-2">
-						<button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-3 rounded theme-lang-button mobile-offset lg:transform lg:-translate-x-2 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Sélecteur de thème">
-							<template x-if="theme==='auto'">
-								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
-									<path d="M8 20h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-								</svg>
-							</template>
-							<template x-if="theme==='light'">
-								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
-									<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
-								</svg>
-							</template>
-							<template x-if="theme==='dark'">
-								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-								</svg>
-							</template>
-						</button>
-
-						<!-- Language toggle button: small globe with FR/EN badge -->
-						<button id="langToggleButton" type="button" data-locale="{{ app()->getLocale() }}" class="p-3 rounded theme-lang-button mobile-offset hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="{{ __('ui.lang.change') }}" title="{{ __('ui.lang.change') }}">
-							{{-- globe icon : standard globe with meridians/latitudes --}}
-							<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
-								<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.2" fill="none" />
-
-								<!-- Verticals: center straight + two curved meridians -->
-								<path d="M12 3v18" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
-								<path d="M9 3 C7.5 8 7.5 16 9 21" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
-								<path d="M15 3 C16.5 8 16.5 16 15 21" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
-
-								<!-- Horizontals: center straight + two curved parallels -->
-								<path d="M3 12h18" stroke="currentColor" stroke-width="1" stroke-linecap="round" />
-								<path d="M4.5 7.8 C8 9.2 16 9.2 19.5 7.8" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
-								<path d="M4.5 16.2 C8 14.8 16 14.8 19.5 16.2" stroke="currentColor" stroke-width="1" stroke-linecap="round" fill="none" />
-							</svg>
-							<span class="lang-badge text-xs px-1 rounded ml-1" aria-hidden="true">{{ strtoupper(app()->getLocale() ?? 'FR') }}</span>
-						</button>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -297,6 +293,10 @@
 								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-angular.svg')); } catch (Exception $e) { } @endphp
 								@if($svg) {!! $svg !!} @endif
 							</div>
+							<div class="bg-white rounded flex items-center justify-center skill-react skill-tile" aria-label="React" data-name="React">
+								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-react.svg')); } catch (Exception $e) { } @endphp
+								@if($svg) {!! $svg !!} @endif
+							</div>
 							<div class="bg-white rounded flex items-center justify-center skill-html5 skill-tile" aria-label="HTML5" data-name="HTML5">
 								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-html5.svg')); } catch (Exception $e) { } @endphp
 								@if($svg) {!! $svg !!} @endif
@@ -338,6 +338,14 @@
 							</div>
 							<div class="bg-white rounded flex items-center justify-center skill-symfony skill-tile" aria-label="Symfony" data-name="Symfony">
 								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-symfony.svg')); } catch (Exception $e) { } @endphp
+								@if($svg) {!! $svg !!} @endif
+							</div>
+							<div class="bg-white rounded flex items-center justify-center skill-postgresql skill-tile" aria-label="PostgreSQL" data-name="PostgreSQL">
+								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-postgresql.svg')); } catch (Exception $e) { } @endphp
+								@if($svg) {!! $svg !!} @endif
+							</div>
+							<div class="bg-white rounded flex items-center justify-center skill-mysql skill-tile" aria-label="MySQL" data-name="MySQL">
+								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-mysql.svg')); } catch (Exception $e) { } @endphp
 								@if($svg) {!! $svg !!} @endif
 							</div>
 						</div>
@@ -496,7 +504,7 @@
 			if (!btn) return;
 			var badge = btn.querySelector('.lang-badge');
 			var current = (btn.getAttribute('data-locale') || document.documentElement.lang || 'fr').toLowerCase();
-			if (badge) badge.textContent = current.toUpperCase();
+			if (badge) badge.textContent = (current === 'fr' ? 'EN' : 'FR');
 
 			btn.addEventListener('click', function(e) {
 				e.preventDefault();

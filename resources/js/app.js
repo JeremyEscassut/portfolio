@@ -246,39 +246,15 @@ function applyDataXShim() {
         target.style.height = h + 'px';
         target.classList.add('fixed');
 
-        // compute a vertical top offset so the fixed actions sit centered
-        // inside the aside (if present) on small screens
-        try {
-            const aside = document.getElementById('home-aside') || document.querySelector('aside');
-            if (aside) {
-                const aRect = aside.getBoundingClientRect();
-                // aRect.top is relative to viewport; we want top (px) from viewport
-                const desiredTop = Math.round(Math.max(6, aRect.top + Math.round((aRect.height - h) / 2)));
-                target.style.top = desiredTop + 'px';
-            } else {
-                // fallback: small padding from top
-                target.style.top = '8px';
-            }
-
-            // compute a horizontal offset using the element's original left
-            // coordinate. Setting `left` when `position: fixed` keeps the
-            // element visually aligned with its previous inline position
-            // without manual tuning.
-            try {
-                if (origRect) {
-                    const leftDist = Math.round(Math.max(6, origRect.left));
-                    target.style.left = leftDist + 'px';
-                } else {
-                    // fallback: small padding from left
-                    target.style.left = '8px';
-                }
-            } catch (e) {
-                target.style.left = '8px';
-            }
-        } catch (e) {
-            // ignore measurement errors, leave default placement
-            target.style.top = '8px';
+        // Pin to the top as soon as the original top reaches viewport top,
+        // while preserving each icon column's horizontal alignment.
+        target.style.top = '8px';
+        if (origRect) {
+            target.style.left = Math.round(Math.max(6, origRect.left)) + 'px';
+        } else {
+            target.style.left = '8px';
         }
+        target.style.right = 'auto';
     }
 
     function removeFixed() {
@@ -287,6 +263,7 @@ function applyDataXShim() {
         target.style.width = '';
         target.style.height = '';
         target.style.top = '';
+        target.style.left = '';
         target.style.right = '';
     }
 
