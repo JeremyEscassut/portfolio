@@ -2379,7 +2379,7 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
 .dark #langToggleButton.theme-lang-button:active svg * {
     /* En mode sombre, forcer les icônes des boutons thème/langue en blanc
        pour assurer un contraste élevé sur fonds sombres/verts (mobile inclus). */
-    stroke: black !important;
+    stroke: #fff !important;
     color: #fff !important;
 }
 

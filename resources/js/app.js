@@ -234,6 +234,12 @@ function applyDataXShim() {
     let origRect = null;
 
     function recalc() {
+        // Mobile browsers can emit resize events while scrolling.
+        // If we recompute while fixed, we capture the fixed top (8px)
+        // instead of the natural document position and the sticky can flicker/disappear.
+        if (target.classList.contains('fixed') && target.__origTop !== undefined) {
+            return;
+        }
         origRect = target.getBoundingClientRect();
         target.__origTop = origRect.top + window.scrollY;
     }
