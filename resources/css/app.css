@@ -2383,6 +2383,29 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     color: #fff !important;
 }
 
+/* Desktop dark mode: on hover/focus, keep a light hover background and
+   switch icon strokes to dark for stronger visual feedback. */
+@media (min-width: 1024px) {
+    .dark #themeToggleButton.theme-lang-button:hover,
+    .dark #themeToggleButton.theme-lang-button:focus-visible,
+    .dark #langToggleButton.theme-lang-button:hover,
+    .dark #langToggleButton.theme-lang-button:focus-visible {
+        background-color: #f3f4f6 !important;
+    }
+
+    .dark #themeToggleButton.theme-lang-button:hover svg,
+    .dark #themeToggleButton.theme-lang-button:focus-visible svg,
+    .dark #themeToggleButton.theme-lang-button:hover svg *,
+    .dark #themeToggleButton.theme-lang-button:focus-visible svg *,
+    .dark #langToggleButton.theme-lang-button:hover svg,
+    .dark #langToggleButton.theme-lang-button:focus-visible svg,
+    .dark #langToggleButton.theme-lang-button:hover svg *,
+    .dark #langToggleButton.theme-lang-button:focus-visible svg * {
+        stroke: #111827 !important;
+        color: #111827 !important;
+    }
+}
+
 /* ------------------------------------------------------------------
    Targeted styles: uniquement pour les boutons Theme et Langue
    - assure que seules ces deux commandes sont affectées
