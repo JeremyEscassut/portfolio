@@ -44,8 +44,8 @@ class ContactController extends Controller
 
             return redirect()->back()->withInput()->with('error', 'Une erreur est survenue lors de l\'envoi du message.')->with(['openContact' => true]);
         }
-        $displayName = $nameForMessage ? ' ' . trim($nameForMessage) : '';
-        $personal = $displayName ? " {$displayName}" : '';
+        $displayName = $nameForMessage ? trim($nameForMessage) : '';
+        $personal = $displayName !== '' ? " {$displayName}" : '';
         // Friendly, clear success message for the user
         return redirect()->back()->with('status', "Votre message a bien été envoyé. Merci{$personal} — je vous répondrai dès que possible.");
     }

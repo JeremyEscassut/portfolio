@@ -1361,52 +1361,48 @@ html:not(.dark)
     filter: blur(0);
 }
 
-/* Cadre photo inspiré du snippet CodePen (frame Batman) */
+/* Cadre photo ajusté : bord carré, épaisseur réduite, couleur plein #2b8fb7
+   + demi-épaisseur du rim précédent (5vmin -> 2.5vmin)
+   + ombre discrète visible en clair et foncé
+*/
 .photo-frame {
     position: relative;
     display: inline-block;
-    /* mat papier derrière l'image : subtil dégradé pour relief */
-    background: linear-gradient(180deg, #eef6ea 0%, #e6edd4 40%, #dbe6bf 100%);
-    border: solid 5vmin #eee;
-    border-bottom-color: #fff;
-    border-left-color: #eee;
-    border-right-color: #ccb;
-    border-top-color: #ddd;
-    border-radius: 2px; /* légère arrondie sur le pourtour du cadre */
-    /* Bevel intérieur (haut plus clair, bas plus foncé) + ombre externe */
-    box-shadow: inset 0 6px 10px rgba(255, 255, 255, 0.6),
-        inset 0 -6px 10px rgba(230, 245, 230, 0.6),
-        0 6px 18px rgba(0, 0, 0, 0.18);
+    background: none;
+    /* Rim coloré plein, moitié de l'épaisseur précédente */
+    border: solid 2.5vmin #2b8fb7;
+    border-radius: 0; /* coins carrés demandés */
+    /* Ombre renforcée en mode clair pour meilleure visibilité */
+    box-shadow: 0 26px 70px rgba(11, 38, 51, 0.22);
     box-sizing: border-box;
-    /* Mat épaisseur ≈ 1/3 du rim (rim = 5vmin) */
-    padding: calc(5vmin / 3);
+    /* Mat intérieur proportionnel à la bordure */
+    padding: calc(2.5vmin / 3);
 }
 
-/* Petit inset intérieur (effet de gorge) */
+/* Petit inset intérieur (effet de gorge) — adapté à la nouvelle épaisseur */
 .photo-frame::before {
-    /* fine gorge intérieure pour donner du relief près du rim */
     content: "";
     position: absolute;
-    left: -2vmin;
-    right: -2vmin;
-    top: -2vmin;
-    bottom: -2vmin;
-    border-radius: 2px;
-    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.08);
+    /* proportion conservée par rapport au rim d'origine */
+    left: -1vmin;
+    right: -1vmin;
+    top: -1vmin;
+    bottom: -1vmin;
+    border-radius: 0;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.06);
     pointer-events: none;
 }
 
-/* Ombre externe plus large pour la profondeur */
+/* Ombre externe ajustée pour le nouveau rim */
 .photo-frame::after {
-    /* ombre externe subtile pour la profondeur du cadre */
     content: "";
     position: absolute;
-    left: -2.5vmin;
-    right: -2.5vmin;
-    top: -2.5vmin;
-    bottom: -2.5vmin;
-    border-radius: 2px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    left: -1.25vmin;
+    right: -1.25vmin;
+    top: -1.25vmin;
+    bottom: -1.25vmin;
+    border-radius: 0;
+    box-shadow: 0 6px 18px rgba(11, 38, 51, 0.12);
     pointer-events: none;
 }
 
@@ -1424,9 +1420,28 @@ html:not(.dark)
    obscured by the decorative rim which extends outside the wrapper.
    Use a responsive offset (vmin) plus a baseline margin to keep the
    caption visible across viewports. */
+.photo-frame > #photoCanvas,
+.photo-frame canvas {
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* Ensure caption placed immediately after the framed photo is not
+   obscured by the decorative rim which extends outside the wrapper.
+   We also rehausse légèrement la légende demandée par l'utilisateur. */
 .photo-frame + #photoCaption {
-    /* Slightly larger offset so caption isn't visually close to the decorative rim */
-    margin-top: calc(2.5vmin + 0.75rem);
+    margin-top: calc(1.25vmin + 0.5rem);
+    font-weight: 600; /* rehausse du texte */
+    font-size: 0.95rem;
+    line-height: 1.15;
+}
+
+/* Dark mode : garder la couleur du rim (bleu) mais adoucir l'ombre */
+.dark .photo-frame {
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.5);
 }
 
 /* Footer / right-column sticky behaviour */
@@ -2451,74 +2466,96 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
 
 /* Note: do not reset .mobile-offset on large screens here so Tailwind `lg:` utilities can apply. */
 
-/* ------------------------------------------------------------------
-   Cherry-wood rim (free SVG) — integrated fallback + CSS-only fallback
-   - Places a tileable SVG within the border-box so the rim shows wood
-   - Keeps the inner mat as a top background layer (padding-box)
-   - If the SVG is unavailable, `.photo-frame.no-tex` provides a CSS-only wood-like fallback
-   ------------------------------------------------------------------ */
+/* Photo frame simplified for homepage
+   - No SVG textures: single colored rim + inner mat
+   - Rim width: 2.5vmin (half of previous 5vmin)
+   - Rim color: #2b8fb7 (requested)
+   - Inner mat: flat color close to previous tone (#eef5ea)
+   - Square corners as requested
+*/
 .photo-frame {
-    /* use transparent border to reveal the rim texture painted in the border-box */
-    border: 5vmin solid transparent !important;
-    /*
-      Layers (first = topmost):
-        1) mat interior (padding-box)
-        2) solid base color for the rim (border-box) — prevents page bg showing through transparent SVG
-        3) wood texture SVG overlay (border-box)
-    */
-    background-image: linear-gradient(
-            180deg,
-            #eef6ea 0%,
-            #e6edd4 40%,
-            #dbe6bf 100%
-        ),
-        linear-gradient(180deg, #6f3526 0%, #5a2a1e 100%),
-        url("/images/cherry-wood-strong.svg");
-    background-origin: padding-box, border-box, border-box;
-    background-clip: padding-box, border-box, border-box;
-    background-repeat: no-repeat, repeat, repeat;
-    /* let the mat cover the inner area; middle layer gives solid backing for the texture */
-    background-size: cover, cover, auto;
-    /* preserve the mat thickness (≈ 1/3 du rim) */
-    padding: calc(5vmin / 3);
+    position: relative;
+    display: inline-block;
+    /* Use theme-aware accent if present, fallback to requested blue */
+    --photo-frame-accent: var(--accent-primary, #2b8fb7);
+    border: 2.5vmin solid var(--photo-frame-accent);
+    border-radius: 0; /* square corners */
+    /* Mat interior: flat neutral hue requested by user */
+    background-color: #eef5ea;
+    box-sizing: border-box;
+    /* mat thickness ≈ 1/3 of rim */
+    padding: calc(2.5vmin / 3);
+    /* Relief: inner highlight + inner shadow (bevel) + plus forte ombre extérieure en mode clair */
+    box-shadow: inset 0 8px 14px rgba(255, 255, 255, 0.75),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.14),
+        0 30px 84px rgba(11, 38, 51, 0.26);
+    transition: box-shadow 180ms ease, transform 180ms ease;
 }
 
-/* keep the previously-intended subtle overlay/shine but do not obscure the wood */
+/* subtle inner varnish/highlight to enhance relief without textures */
 .photo-frame::before {
-    /* overlay varnish to give subtle gloss to the wood without changing geometry */
-    background: linear-gradient(rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.02));
-    mix-blend-mode: overlay;
+    content: "";
+    position: absolute;
+    left: -1vmin;
+    right: -1vmin;
+    top: -1vmin;
+    bottom: -1vmin;
+    border-radius: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0)
+    );
+    mix-blend-mode: screen;
     pointer-events: none;
+    z-index: 0;
 }
 
-/* Fallback when texture can't be loaded: layered gradient + repeating lines for grain */
-.photo-frame.no-tex {
-    background-image: linear-gradient(
-            180deg,
-            #eef6ea 0%,
-            #e6edd4 40%,
-            #dbe6bf 100%
-        ),
-        linear-gradient(180deg, #6b3a2a 0%, #5b2e24 50%, #6b3a2a 100%),
-        repeating-linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.03) 0 1px,
-            transparent 1px 6px
-        );
-    background-origin: padding-box, border-box, border-box;
-    background-clip: padding-box, border-box, border-box;
-    background-size: cover, cover, auto;
-    background-repeat: no-repeat, repeat, repeat;
+/* outer shadow layer — softened for light mode; deepened in .dark below */
+.photo-frame::after {
+    content: "";
+    position: absolute;
+    left: -1.25vmin;
+    right: -1.25vmin;
+    top: -1.25vmin;
+    bottom: -1.25vmin;
+    border-radius: 0;
+    /* Ombre externe plus visible en clair */
+    box-shadow: 0 36px 100px rgba(11, 38, 51, 0.24);
+    pointer-events: none;
+    z-index: -1;
 }
 
-/* Dark-mode tweak: use a deeper base color for rim to avoid inheriting page tint */
+/* Keep the canvas squared and above the mat */
+.photo-frame > #photoCanvas,
+.photo-frame canvas {
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* Caption immediately after the frame — rehaussée légèrement */
+.photo-frame + #photoCaption {
+    margin-top: calc(1.25vmin + 0.5rem);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    color: inherit;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.12); /* subtle lift for readability */
+}
+
+/* Dark mode: keep rim color but deepen shadow for contrast */
 .dark .photo-frame {
-    background-image: linear-gradient(
-            180deg,
-            #eef6ea 0%,
-            #e6edd4 40%,
-            #dbe6bf 100%
-        ),
-        linear-gradient(180deg, #4d261a 0%, #34140d 100%),
-        url("/images/cherry-wood2.svg");
+    /* slightly darken the rim for contrast in dark mode */
+    --photo-frame-accent: color-mix(
+        in srgb,
+        var(--accent-primary, #2b8fb7) 84%,
+        black 16%
+    );
+    border-color: var(--photo-frame-accent);
+    /* deeper, softer shadow + stronger inner shadow for relief in dark */
+    box-shadow: inset 0 6px 12px rgba(255, 255, 255, 0.02),
+        inset 0 -10px 18px rgba(0, 0, 0, 0.72), 0 28px 80px rgba(0, 0, 0, 0.7);
 }

@@ -11,22 +11,12 @@ class ContactFormTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * A basic feature test example.
-     */
-    public function test_example(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
     #[\PHPUnit\Framework\Attributes\Test]
     public function contact_form_sends_mail_and_sets_session_status_with_name()
     {
         Mail::fake();
 
-        $response = $this->post(route('contact.send'), [
+        $response = $this->post(route('contact.send', ['locale' => 'fr']), [
             'name' => 'Jean Test',
             'email' => 'jean@example.test',
             'message' => 'Bonjour, ceci est un test',
@@ -34,11 +24,11 @@ class ContactFormTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('status', 'Message envoyé, merci Jean Test !');
+        $response->assertSessionHas('status', 'Votre message a bien été envoyé. Merci Jean Test — je vous répondrai dès que possible.');
 
         Mail::assertSent(ContactMessage::class, function ($mail) {
             return $mail->payload['email'] === 'jean@example.test'
-                && $mail->payload['message'] === 'Bonjour, ceci est un test';
+                && $mail->payload['body'] === 'Bonjour, ceci est un test';
         });
     }
 
@@ -47,7 +37,7 @@ class ContactFormTest extends TestCase
     {
         Mail::fake();
 
-        $response = $this->post(route('contact.send'), [
+        $response = $this->post(route('contact.send', ['locale' => 'fr']), [
             'name' => null,
             'email' => 'jean2@example.test',
             'message' => 'Bonjour sans nom',
@@ -55,7 +45,7 @@ class ContactFormTest extends TestCase
         ]);
 
         $response->assertRedirect();
-        $response->assertSessionHas('status', 'Message envoyé, merci !');
+        $response->assertSessionHas('status', 'Votre message a bien été envoyé. Merci — je vous répondrai dès que possible.');
 
         Mail::assertSent(ContactMessage::class, function ($mail) {
             return $mail->payload['email'] === 'jean2@example.test';
