@@ -1,6 +1,9 @@
 {
   "portfolio.welcome": "Bienvenue sur mon portfolio. Voici un aperçu de mon travail et de mon expérience.",
   "home.hero.name": "Jérémy Escassut",
+  "home.section.about": "À propos",
+  "home.section.projects": "Projets",
+  "home.section.experience": "Expérience",
   "contact.open": "Ouvrir le contact",
   "cv.view": "Voir le CV",
   "nav.about": "À propos",
@@ -15,10 +18,10 @@
 
   "home.job_title": "Chef de projet IT | Développeur Full Stack orienté Produit & UX",
 
-  "about.p1": "Après plusieurs années dans la traduction et la gestion de projets IT, je me suis naturellement tourné vers le développement, un domaine qui m'a toujours passionné. J’y retrouve la même rigueur, le goût du détail et le plaisir de transformer une idée en une solution concrète et utile.",
-  "about.p2": "Ce que j'apprécie dans le code, c'est sa capacité à résoudre de façon élégante des problèmes complexes. Je m'efforce d'optimiser les solutions pour les rendre plus fluides, claires et efficaces — tout en gardant l'expérience utilisateur et la sécurité au cœur des choix techniques. Ma satisfaction vient d'un système solide, bien pensé et réellement utile au quotidien.",
-  "about.p3": "La bienveillance et le respect forment la base de mes collaborations : j'aime partager mes connaissances, apprendre des autres et contribuer à des équipes où l'amélioration continue est une réalité. Curieux, intègre et déterminé, je vise la progression collective et la pérennité des projets. Intéressé de longue date par la cybersécurité, j'ai à cœur de concevoir des applications et sites robustes et sûrs.",
-  "about.p4": "Hors du code, je trouve mon équilibre dans le sport et la musique — badminton, course à pied, salsa et bachata rythment mon temps libre. Sur le plan professionnel, je m'intéresse aussi aux réseaux, à la cybersécurité et à l'IA ; je prévois de me former de façon structurée dans ces domaines pour compléter ma spécialisation en développement afin d'offrir des compétences cohérentes et complémentaires.",
+  "about.p1": "Après plusieurs années dans la traduction et la gestion de projets IT, je me suis naturellement tourné vers le développement, un domaine qui m'a toujours passionné. J’y retrouve la même rigueur, le goût du détail et la satisfaction de transformer une idée en une solution concrète et utile.",
+  "about.p2": "Au fil de ma trajectoire, je me suis construit une posture à la fois technique et métier : je conçois des solutions avec une vraie sensibilité produit, je facilite la collaboration entre équipes techniques et métiers, et j’aide à faire avancer des projets de bout en bout avec méthode et clarté.",
+  "about.p3": "Je m'intéresse particulièrement aux postes de chef de projet IT, product owner ou lead de produit, car ils me permettent de combiner pilotage, compréhension des besoins utilisateurs et mise en œuvre concrète. Mes formations en cybersécurité (ANSSI, LinkedIn Learning) viennent renforcer cette approche orientée qualité, sécurité et continuité.",
+  "about.p4": "Hors du code, je trouve mon équilibre dans le sport et la musique — badminton, course à pied, salsa et bachata rythment mon temps libre. Sur le plan professionnel, je continue à me former sur les réseaux, la cybersécurité et l'IA pour compléter ma spécialisation en développement avec des compétences cohérentes et complémentaires.",
 
   "projects.repo.livret": "Voir le dépôt GitLab - Livret CDA",
   "projects.preview.livret": "Aperçu du projet Livret CDA",

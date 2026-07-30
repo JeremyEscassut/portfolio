@@ -1,6 +1,9 @@
 {
   "portfolio.welcome": "Welcome to my portfolio. Here is an overview of my work and experience.",
   "home.hero.name": "Jérémy Escassut",
+  "home.section.about": "About",
+  "home.section.projects": "Projects",
+  "home.section.experience": "Experience",
   "contact.open": "Open contact",
   "cv.view": "View CV",
   "nav.about": "About",
@@ -16,9 +19,9 @@
   "home.job_title": "IT Project Manager | Full Stack Developer focused on Product & UX",
 
   "about.p1": "After several years in translation and IT project management, I naturally moved into development — a field I've always been passionate about. There I find the same rigor, attention to detail, and the satisfaction of turning an idea into a concrete, useful solution.",
-  "about.p2": "What I appreciate about code is its ability to elegantly solve complex problems. I strive to optimise solutions to make them smoother, clearer and more efficient — while keeping user experience and security at the heart of technical decisions. My satisfaction comes from a robust, well-designed system that is truly useful in everyday life.",
-  "about.p3": "Kindness and respect are the foundation of my collaborations: I enjoy sharing knowledge, learning from others and contributing to teams where continuous improvement is real. Curious, honest and determined, I aim for collective progress and the long-term durability of projects. Long interested in cybersecurity, I am committed to designing robust and secure applications and websites.",
-  "about.p4": "Outside of coding, I find balance in sport and music — badminton, running, salsa and bachata punctuate my free time. Professionally, I am also interested in networking, cybersecurity and AI; I plan to pursue structured training in these areas to complement my development specialisation and provide coherent, complementary skills.",
+  "about.p2": "Over the course of my career, I have built a profile that blends technical depth and business awareness: I design solutions with a strong product mindset, I help technical and business teams collaborate effectively, and I support projects from idea to delivery with method and clarity.",
+  "about.p3": "I am particularly interested in IT project manager, product owner or product lead roles, because they allow me to combine delivery, user understanding and hands-on execution. My training in cybersecurity (ANSSI, LinkedIn Learning) reinforces this approach centred on quality, security and continuity.",
+  "about.p4": "Outside of coding, I find balance in sport and music — badminton, running, salsa and bachata punctuate my free time. Professionally, I continue to train in networking, cybersecurity and AI to complement my development specialisation with coherent, complementary skills.",
 
   "projects.repo.livret": "View GitLab repo - Livret CDA",
   "projects.preview.livret": "Project Livret CDA preview",

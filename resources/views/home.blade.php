@@ -185,9 +185,9 @@
 
 		<section id="about" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.about') }}">
 			<div id="section-banner" class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">À propos</h2>
+				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.about') }}</h2>
 			</div>
-			<div class="bg-[#fff2f2] rounded-md p-6">
+			<div class="rounded-md border border-[#f2e2dc] bg-gradient-to-br from-[#fff2f2] via-[#fff8f4] to-[#fef3df] p-6 shadow-sm">
 				<p class="text-sm text-[#706f6c]">{{ __('about.p1') }}</p>
 				<p class="text-sm text-[#706f6c] mt-3">{{ __('about.p2') }}</p>
 				<p class="text-sm text-[#706f6c] mt-2">{{ __('about.p3') }}</p>
@@ -197,7 +197,7 @@
 
 		<section id="projects" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.projects') }}">
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Projets</h2>
+				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.projects') }}</h2>
 			</div>
 			<!-- Remove gray side panel so projects use full width; images are placed below text and sized to 3:2 aspect ratio -->
 			<div class="p-0">
@@ -251,9 +251,9 @@
 
 		<section id="experience" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.experience') }}">
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
-				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Expérience</h2>
+				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.experience') }}</h2>
 			</div>
-			<div class="bg-[#fff7db] rounded-md p-6">
+			<div class="rounded-md border border-[#efe6c9] bg-gradient-to-br from-[#fff7db] via-[#fffde9] to-[#fdf2d8] p-6 shadow-sm">
 				<div class="space-y-6">
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						<div class="text-sm text-[#706f6c] font-medium">{{ __('experience.current.dates') }}</div>
