@@ -7,16 +7,16 @@
 	<aside id="home-aside" class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
 		<div id="home" data-x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" data-x-init="init()" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
 			<!-- Name -->
-			<div id="home-title" class="mb-8">
+			<div id="home-title" class="mb-8 lg:mb-10">
 				<!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
 				<div id="home-icons" class="mt-3 flex justify-end"></div>
 
-				<h1 class="text-3xl ml-6 font-semibold">Jérémy Escassut</h1>
+				<h1 class="text-3xl ml-6 font-semibold">{{ __('home.hero.name') }}</h1>
 				<h2 class="text-xl ml-6 font-semibold">{{ __('home.job_title') }}</h2>
 				<p class="text-[#706f6c] mt-3">{{ __('portfolio.welcome') }}</p>
 			</div>
 
-			<div id="home-interactions" class="flex gap-4 mt-4 items-start">
+			<div id="home-interactions" class="flex gap-4 mt-4 items-start lg:gap-6 lg:mt-6">
 				<!-- LEFT column: photo (fixed width on mobile, centered on lg) -->
 				<div id="home-left-col" class="left-col flex-1 min-w-0 flex items-center justify-center">
 					<div id="home-photo" class="w-full min-w-0">
@@ -38,7 +38,7 @@
 								<canvas id="photoCanvas" width="400" height="400" class="rounded-lg overflow-hidden bg-white dark:bg-[#161615]"
 									style="display:block; width:100%; height:auto; max-width:400px;"></canvas>
 							</div>
-							<p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">Original<br>Cliquez si vous aimez Arcane</p>
+							<p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">{!! __('photo.caption') !!}</p>
 						</div>
 					</div>
 				</div>
@@ -56,13 +56,13 @@
 
 					<div id="home-social-icons" class="flex gap-3 items-center text-sm text-[#706f6c] justify-end">
 						<!-- LinkedIn (inline from resources/svg/icon-linkedin.svg) -->
-						<a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
+						<a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="{{ __('social.linkedin') }}" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
 							@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-linkedin.svg')); } catch (Exception $e) { } @endphp
 							@if($svg) {!! $svg !!} @endif
 						</a>
 
 						<!-- GitLab (inline from resources/svg/icon-gitlab.svg) -->
-						<a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="GitLab (ouvre dans un nouvel onglet)" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
+						<a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="{{ __('social.gitlab') }}" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
 							@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab.svg')); } catch (Exception $e) { } @endphp
 							@if($svg) {!! $svg !!} @endif
 						</a>
@@ -72,7 +72,7 @@
 
 					<!-- Theme/language controls moved above contact/CV actions -->
 					<div id="theme-toggle-wrapper" class="mt-1 flex justify-end items-center gap-2">
-						<button id="themeToggleButton" type="button" @click="cycle()" :title="(theme==='light' ? 'Mode clair' : 'Mode sombre') + ' — cliquez pour changer'" class="p-3 rounded theme-lang-button mobile-offset lg:transform lg:-translate-x-2 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Sélecteur de thème">
+						<button id="themeToggleButton" type="button" @click="cycle()" title="{{ __('ui.theme.selector') }}" class="p-3 rounded theme-lang-button mobile-offset lg:transform lg:-translate-x-2 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="{{ __('ui.theme.selector') }}">
 							<template x-if="theme==='auto'">
 								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
@@ -124,11 +124,11 @@
 							class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
 							aria-label="{{ __('cv.view') }} ({{ __('nav.about') }})" style="margin-top:2px;">
 							{{-- icône pour mode clair (noir sur fond clair) --}}
-							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='light'" data-x-cloak>
+							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='light'" data-x-cloak>
 							{{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
-							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && !hoverCV" data-x-cloak>
+							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && !hoverCV" data-x-cloak>
 							{{-- icône pour mode sombre lors du hover (utilise la variante noire fournie) --}}
-							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="Icône CV" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && hoverCV" data-x-cloak>
+							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && hoverCV" data-x-cloak>
 						</a>
 					</div>
 
@@ -150,7 +150,7 @@
 					</svg>
 					<div class="text-sm">{!! session('status') !!}</div>
 				</div>
-				<button @click="show=false" class="text-sm text-green-700 dark:text-green-200 opacity-80 hover:opacity-100" aria-label="Fermer le message">✕</button>
+				<button @click="show=false" class="text-sm text-green-700 dark:text-green-200 opacity-80 hover:opacity-100" aria-label="{{ __('ui.message.close') }}">✕</button>
 			</div>
 			@endif
 
@@ -162,15 +162,15 @@
 					</svg>
 					<div class="text-sm">{!! session('error') !!}</div>
 				</div>
-				<button @click="show=false" class="text-sm text-red-700 dark:text-red-200 opacity-80 hover:opacity-100" aria-label="Fermer le message">✕</button>
+				<button @click="show=false" class="text-sm text-red-700 dark:text-red-200 opacity-80 hover:opacity-100" aria-label="{{ __('ui.message.close') }}">✕</button>
 			</div>
 			@endif
 
 			@if($errors->any())
 			<div x-show="show" role="alert" class="p-4 rounded-lg border border-red-200 bg-red-50 text-red-800 dark:bg-red-900 dark:border-red-800 dark:text-red-100 shadow-sm">
 				<div class="flex items-start justify-between">
-					<div class="text-sm">Veuillez corriger les erreurs suivantes :</div>
-					<button @click="show=false" class="text-sm text-red-700 dark:text-red-200 opacity-80 hover:opacity-100" aria-label="Fermer le message">✕</button>
+					<div class="text-sm">{{ __('contact.form.errors') }}</div>
+					<button @click="show=false" class="text-sm text-red-700 dark:text-red-200 opacity-80 hover:opacity-100" aria-label="{{ __('ui.message.close') }}">✕</button>
 				</div>
 				<ul class="mt-2 list-disc pl-5 text-sm">
 					@foreach($errors->all() as $err)
@@ -183,7 +183,7 @@
 
 
 
-		<section id="about" class="mb-8 scroll-mt-24" aria-label="À propos">
+		<section id="about" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.about') }}">
 			<div id="section-banner" class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">À propos</h2>
 			</div>
@@ -195,7 +195,7 @@
 			</div>
 		</section>
 
-		<section id="projects" class="mb-8 scroll-mt-24" aria-label="Projets">
+		<section id="projects" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.projects') }}">
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Projets</h2>
 			</div>
@@ -249,7 +249,7 @@
 			</div>
 		</section>
 
-		<section id="experience" class="mb-8 scroll-mt-24" aria-label="Expérience">
+		<section id="experience" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.experience') }}">
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">Expérience</h2>
 			</div>
@@ -287,7 +287,7 @@
 				<div class="space-y-4 text-sm">
 					<!-- Front group -->
 					<div>
-						<h3 class="text-sm font-semibold mb-2">Front</h3>
+						<h3 class="text-sm font-semibold mb-2">{{ __('stack.front') }}</h3>
 						<div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
 							<div class="bg-white rounded flex items-center justify-center skill-angular skill-tile" aria-label="Angular" data-name="Angular">
 								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-angular.svg')); } catch (Exception $e) { } @endphp
@@ -310,7 +310,7 @@
 
 					<!-- Back group -->
 					<div>
-						<h3 class="text-sm font-semibold mb-2">Back</h3>
+						<h3 class="text-sm font-semibold mb-2">{{ __('stack.back') }}</h3>
 						<div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
 							<div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile" aria-label="Laravel" data-name="Laravel">
 								@php $svg = ''; try { $svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-laravel.svg')); } catch (Exception $e) { } @endphp
@@ -415,11 +415,11 @@
 			<div x-show="isOpen" x-cloak class="fixed inset-0 bg-black/50" aria-hidden="true" style="z-index: 9998;"></div>
 
 			<div x-show="isOpen" x-cloak class="fixed inset-0 flex items-center justify-center p-4" style="z-index: 9999;">
-				<div @click.away="closeModal()" class="w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="Contact form" style="z-index: 10000; position: relative;">
+				<div @click.away="closeModal()" class="w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden" role="dialog" aria-modal="true" aria-label="{{ __('contact.form.title') }}" style="z-index: 10000; position: relative;">
 					<div class="p-6">
 						<div class="flex justify-between items-center mb-4">
-							<h3 class="text-lg font-medium">Contact</h3>
-							<button @click="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="Fermer">✕</button>
+							<h3 class="text-lg font-medium">{{ __('contact.form.title') }}</h3>
+							<button @click="closeModal()" class="text-gray-500 hover:text-gray-700" aria-label="{{ __('ui.close') }}">✕</button>
 						</div>
 
 						<form method="POST" action="{{ route('contact.send', ['locale' => app()->getLocale()]) }}" class="space-y-4">
@@ -430,17 +430,17 @@
 
 							<div>
 								<label class="block text-sm">Nom (optionnel)</label>
-								<input type="text" name="name" value="{{ old('name') }}" class="mt-1 block w-full rounded border px-3 py-2" placeholder="Jean Dupont">
+								<input type="text" name="name" value="{{ old('name') }}" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.name_placeholder') }}">
 							</div>
 
 							<div>
 								<label class="block text-sm">Votre email</label>
-								<input x-ref="email" type="email" name="email" value="{{ old('email') }}" class="mt-1 block w-full rounded border px-3 py-2" placeholder="prenom@exemple.com" required>
+								<input x-ref="email" type="email" name="email" value="{{ old('email') }}" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.email_placeholder') }}" required>
 							</div>
 
 							<div>
 								<label class="block text-sm">Message</label>
-								<textarea x-ref="message" name="message" rows="4" class="mt-1 block w-full rounded border px-3 py-2" placeholder="Bonjour…" required>{{ old('message') }}</textarea>
+								<textarea x-ref="message" name="message" rows="4" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.message_placeholder') }}" required>{{ old('message') }}</textarea>
 							</div>
 
 							<div class="flex justify-end items-center gap-3">

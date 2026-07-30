@@ -67,3 +67,13 @@ Ce fichier centralise les solutions appliquees au projet, au format court et reu
 - Solution: realigner les assertions sur message courant et payload `body`, utiliser route localisee `fr`.
 - References: `tests/Feature/ContactFormTest.php`, `app/Http/Controllers/ContactController.php`.
 - Tags: tests | bug | quality
+
+## 7) Lancement de l'environnement de dev Laravel bloque par OPcache
+
+- Date: 2026-07-30
+- Contexte: tentative de lancer `php artisan serve` depuis l'environnement de travail ; PHP a retourne `Fatal Error Unable to create opcache lock file in /tmp: Operation not permitted`.
+- Cause: OPcache CLI bloque la creation de lockfile dans l'environnement de conteneur/sandbox utilise pour l'execution.
+- Solution: relancer le serveur avec `php -d opcache.enable=0 -d opcache.enable_cli=0 -d opcache.jit=0 artisan serve --host=127.0.0.1 --port=8000` ; si besoin, utiliser une execution non sandboxee pour rendre localhost accessible.
+- Procedure a retenir pour la prochaine fois: 1) verifier la branche et le scope demande, 2) tenter `php artisan serve`, 3) si erreur OPcache, relancer avec OPcache desactive, 4) documenter le cas ici.
+- References: terminal local, `php artisan serve`, `php -i`.
+- Tags: infra | dev | php | ops

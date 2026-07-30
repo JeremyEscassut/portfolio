@@ -1,6 +1,6 @@
 # Portfolio - AI Development Instructions
 
-> Derniere mise a jour : 2026-07-22
+> Derniere mise a jour : 2026-07-30
 > Ce fichier est la source de verite de gouvernance IA du projet.
 > Chemin : `.github/copilot-instructions.md`
 
@@ -9,6 +9,7 @@
 ## Regle de conformite des reponses IA
 
 Chaque reponse commence immediatement par un marqueur de conformite (aucun texte avant).
+Cette regle est obligatoire, pas facultative. Elle s'applique a toutes les reponses, y compris les messages courts, confirmations, corrections et mises a jour rapides.
 
 Marqueurs autorises :
 
@@ -19,6 +20,13 @@ Marqueurs autorises :
 
 Format : `<marqueur> contenu`
 Exemple : `🤖📘 🌿 Reponse...`
+
+Regles d'application :
+
+- Avant d'envoyer une reponse, verifier qu'elle commence bien par un marqueur autorise et qu'aucun texte ne precede ce marqueur.
+- Si un marqueur manque, corriger la reponse avant de la transmettre.
+- En cas de reponse relative a un bug, a des tests ou a une verification de travail local, utiliser le marqueur correspondant selon le contexte.
+- En cas de reponse sur l'etat d'un lot de travail, confirmer d'abord le scope reel, la branche active et la roadmap avant de decrire la tache en cours.
 
 ---
 
@@ -45,6 +53,15 @@ L'assistant doit :
 - Consulter `docs/governance/ARCHITECTURE.md`.
 - Avant correction de bug : consulter `docs/reports/INCIDENT_LOG.md`.
 - Avant sujet tests/non-regression : consulter `docs/governance/Guidelines.md` (section tests).
+
+---
+
+## Regle de conformite bilingue du portfolio
+
+- Tout texte affiche a l'ecran doit respecter le modele bilingue du site : version anglaise et francaise obligatoire.
+- Les ALT text, labels, titres, boutons, messages d'erreur, tooltips, placeholders et textes de navigation doivent etre fournis dans les deux langues.
+- Aucune nouvelle interface ou modification de texte UI ne doit etre introduite sans version FR + EN conforme au modele du site.
+- En cas d'ecart avec le modele existant, l'assistant doit prioriser la version bilingue et ne pas laisser de contenu monolingue.
 
 ---
 
@@ -78,9 +95,14 @@ Ordre de priorite en cas de conflit :
 ## Discipline de travail
 
 - Chaque modification est bornee a un perimetre annonce.
+- Chaque lot doit rester atomique : un sujet, un objectif, un commit et une branche cohérents ; il ne faut pas melanger photo, UX/UI, docs et corrections de bug dans un meme lot sans justification expresse.
 - Validation locale minimale avant cloture : tests cibles + verification manuelle utile.
+- Avant toute implementation, verifier explicitement la branche active (`git branch --show-current`) et confirmer qu'elle correspond au scope demande.
+- Si la branche ne correspond pas au sujet, creer une branche dediee avant de coder et le signaler clairement.
 - Tout incident significatif est trace dans `docs/reports/INCIDENT_LOG.md`.
+- Lorsqu'il faut lancer un environnement de dev local, essayer d'abord `php artisan serve` ; si l'execution echoue sur un blocage OPcache (`Unable to create opcache lock file`), relancer avec `php -d opcache.enable=0 -d opcache.enable_cli=0 -d opcache.jit=0 artisan serve ...` et documenter le cas dans `docs/reports/SOLUTIONS_LOG.md`.
 - Convention de commits : `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `security:`.
+- Ces regles de travail sont des obligations de fonctionnement. Elles ne doivent pas etre contournees par des reponses rapides, des hypotheses non verifiees ou une interpretation laxiste du scope.
 
 ---
 

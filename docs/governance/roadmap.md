@@ -68,6 +68,7 @@ Criteres de sortie :
 - [ ] Ajouter pipeline CI GitLab minimale : tests Laravel + build Vite.
 - [ ] Mettre en place une cadence de revue des incidents/solutions.
 - [ ] Formaliser checklist pre-deploiement dans docs (sans runbook DRP).
+- [ ] Formaliser et appliquer le modele bilingue FR/EN pour tous les textes a l'ecran et les ALT text.
 
 ## Phase 5 - Evolutions produit et UX (Semaine 2+)
 

@@ -96,7 +96,12 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 ## Langue et nomenclature
 
 - Code et commentaires techniques : anglais par defaut.
-- Interface utilisateur : francais (avec support EN quand active).
+- Interface utilisateur : respecter le modele bilingue FR/EN du site ; tout texte a l'ecran doit etre fourni en anglais et en francais.
+- ALT text, labels accessibles, titres, boutons, messages d'erreur, placeholders et textes de navigation : obligatoirement bilingues.
+- Toute nouvelle chaine de texte visible ou accessible doit etre ajoutee dans les fichiers de traduction existants : `resources/lang/fr.json` et `resources/lang/en.json`.
+- Les traductions doivent toujours etre utilisees via le mecanisme de traduction du projet (`__()` / `trans()`), et non pas en dur dans les vues ou composants.
+- En cas de modification d'un texte existant, la version FR et EN doit etre mise a jour de maniere coherente et preserve la meme semantique dans les deux langues.
+- Une modification UI ne doit jamais produire un rendu monolingue ou un texte hors traduction ; la coherence avec la base de code et le comportement actuel du site est obligatoire.
 - Documentation gouvernance : francais.
 
 ## Workflow Git et livraison
@@ -105,15 +110,25 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 - Convention de branches : `feature/*`, `fix/*`, `chore/*`, `docs/*`.
 - Convention de commits : `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `security`.
 
+### Conformite IA et enforcement des regles
+
+- Les instructions de `copilot-instructions.md` et de ce document sont des obligations de travail, pas des recommandations facultatives.
+- Toute reponse doit commencer par un marqueur de conformite autorise ; aucune reponse courte, confirmation ou correction ne doit enfreindre cette regle.
+- Avant d'envoyer une reponse, l'assistant doit verifier qu'elle respecte ce format. Si le marqueur manque, la reponse doit etre corrigee avant transmission.
+- Les changements doivent rester atomiques et alignes sur un seul sujet fonctionnel ; on ne melange pas feature photo, UX/UI, docs et corrections dans un meme lot sans justification explicite.
+- En cas d'ecart avec ces regles, l'assistant doit corriger le comportement avant de poursuivre la tache.
+
 ### Objectif
 
 Maintenir un historique clair, des branches lisibles et des integrations sures.
 
 ### Regles de base
 
-- Verifier systematiquement la branche active avant toute implementation.
-- Si la branche ne correspond pas au sujet en cours, creer une branche dediee avant de coder.
+- Verifier systematiquement la branche active avant toute implementation (`git branch --show-current`) et confirmer qu'elle correspond au scope demande.
+- Si la branche ne correspond pas au sujet en cours, creer une branche dediee avant de coder et l'annoncer explicitement.
+- Si l'objectif est un lancement local de l'environnement de dev, valider d'abord les pre-requis runtime ; si PHP bloque sur OPcache (`Unable to create opcache lock file`), relancer avec OPcache desactive et documenter la procedure de secours dans `docs/reports/SOLUTIONS_LOG.md`.
 - Preferer des commits atomiques et thematiques.
+- Ne jamais mixer plusieurs sujets fonctionnels dans un meme lot de travail sans justification explicite ; la branche et le commit doivent rester lisibles et coherents.
 - Pousser les changements quand la fonctionnalite est integree et validee (build/tests adaptes).
 - Ne pas lancer de merge sans revue minimale et sans accord explicite.
 - Les documents de reference doivent rester a jour sur `main` en continu ; ils ne doivent jamais vivre uniquement dans une branche de fonctionnalite.
