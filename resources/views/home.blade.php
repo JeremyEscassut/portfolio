@@ -5,7 +5,9 @@
 	<!-- LEFT: navigation / identity (centré verticalement sur grand écran) -->
 	<!-- LEFT: like Brittany, sticky on large screens within page scroll -->
 	<aside id="home-aside" class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-24">
-		<div id="home" data-x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }" data-x-init="init()" class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
+		<div id="home" data-x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, cvModalOpen: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); }, openCvModal(){ this.cvModalOpen = true }, closeCvModal(){ this.cvModalOpen = false } }"
+			data-x-init="init()"
+			class="w-full bg-transparent dark:bg-transparent rounded-lg p-8 lg:p-12 shadow flex flex-col justify-between">
 			<!-- Name -->
 			<div id="home-title" class="mb-8 lg:mb-10">
 				<!-- Single-cycle theme icon (click to cycle Auto → Clair → Sombre) -->
@@ -34,8 +36,13 @@
 						<div id="profilePhotoContainer" class="relative cursor-pointer group w-full lg:mx-auto lg:w-full max-w-full text-center flex flex-col items-center" role="button" tabindex="0"
 							data-original="{{ $origData ? 'data:image/jpeg;base64,' . $origData : asset('images/je_profile.jpeg') }}"
 							data-ai="{{ $aiData ? 'data:image/jpeg;base64,' . $aiData : asset('images/je_ia_profile.jpg') }}">
-							<div id="photoCanvasWrapper" class="photo-frame" style="max-width:400px; display:flex; align-items:center; justify-content:center;">
-								<canvas id="photoCanvas" width="400" height="400" class="rounded-lg overflow-hidden bg-white dark:bg-[#161615]"
+							<div id="photoCanvasWrapper" class="photo-frame" style="max-width:430px; display:flex; align-items:center; justify-content:center;">
+								<svg class="photo-frame__wireframe" viewBox="0 0 430 430" aria-hidden="true" focusable="false">
+									<path d="M 51 322 V 108 L 215 13 L 379 108 V 285" />
+									<path class="photo-frame__notch" d="M 379 316 V 322 L 350 339" />
+									<path d="M 323 355 L 215 417 L 51 322" />
+								</svg>
+								<canvas id="photoCanvas" width="400" height="400"
 									style="display:block; width:100%; height:auto; max-width:400px;"></canvas>
 							</div>
 							<p id="photoCaption" class="mt-3 text-sm text-center text-[#706f6c] dark:text-[#A1A09A]">{!! __('photo.caption') !!}</p>
@@ -50,6 +57,8 @@
 							<li><a href="#about" class="font-medium hover:underline">{{ __('nav.about') }}</a></li>
 							<li><a href="#projects" class="font-medium hover:underline">{{ __('nav.projects') }}</a></li>
 							<li><a href="#experience" class="font-medium hover:underline">{{ __('nav.experience') }}</a></li>
+							<li><a href="#studies" class="font-medium hover:underline">{{ __('nav.studies') }}</a></li>
+							<li><a href="#recommendations" class="font-medium hover:underline">{{ __('nav.recommendations') }}</a></li>
 							<li><a href="#stack" class="font-medium hover:underline">{{ __('nav.stack') }}</a></li>
 						</ul>
 					</nav>
@@ -81,13 +90,13 @@
 							</template>
 							<template x-if="theme==='light'">
 								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
-									<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
+									<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
 								</svg>
 							</template>
 							<template x-if="theme==='dark'">
 								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+									<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"></circle>
+									<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"></path>
 								</svg>
 							</template>
 						</button>
@@ -115,20 +124,24 @@
 						</button>
 
 						<!-- CV (PNG light/dark variants placed in resources/png) -->
-						<a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Developpeur_Full_Stack_Nov_2025_v6.pdf') }}" target="_blank" rel="noopener noreferrer"
+						<a href="#cv-selector-modal"
+							data-cv-open="true"
 							data-x-on-mouseenter="hoverCV = true"
 							data-x-on-mouseleave="hoverCV = false"
-							data-x-on-click="hoverCV = false"
 							data-x-on-focus="hoverCV = true"
 							data-x-on-blur="hoverCV = false"
+							onclick="window.openCvSelectorModal(); return false;"
 							class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--cv"
 							aria-label="{{ __('cv.view') }} ({{ __('nav.about') }})" style="margin-top:2px;">
 							{{-- icône pour mode clair (noir sur fond clair) --}}
-							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='light'" data-x-cloak>
+							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}"
+								alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='light'" data-x-cloak>
 							{{-- icône pour mode sombre par défaut (blanc sur fond sombre) --}}
-							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}" alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && !hoverCV" data-x-cloak>
+							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-white-100.png'))) }}"
+								alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && !hoverCV" data-x-cloak>
 							{{-- icône pour mode sombre lors du hover (utilise la variante noire fournie) --}}
-							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}" alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && hoverCV" data-x-cloak>
+							<img src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'cv-black-100.png'))) }}"
+								alt="{{ __('cv.icon_alt') }}" class="w-8 h-8" aria-hidden="true" data-x-show="theme==='dark' && hoverCV" data-x-cloak>
 						</a>
 					</div>
 
@@ -187,7 +200,7 @@
 			<div id="section-banner" class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.about') }}</h2>
 			</div>
-			<div class="rounded-md border border-[#f2e2dc] bg-gradient-to-br from-[#fff2f2] via-[#fff8f4] to-[#fef3df] p-6 shadow-sm">
+			<div class="p-6">
 				<p class="text-sm text-[#706f6c]">{{ __('about.p1') }}</p>
 				<p class="text-sm text-[#706f6c] mt-3">{{ __('about.p2') }}</p>
 				<p class="text-sm text-[#706f6c] mt-2">{{ __('about.p3') }}</p>
@@ -199,10 +212,94 @@
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.projects') }}</h2>
 			</div>
-			<!-- Remove gray side panel so projects use full width; images are placed below text and sized to 3:2 aspect ratio -->
 			<div class="p-0">
 				<div class="flex flex-col gap-4">
-					<div class="w-full p-4 bg-white rounded flex flex-col gap-4 project-card">
+					@php
+					$crmSlide1 = '';
+					$crmSlide2 = '';
+					$crmSlide3 = '';
+					$a2Svg = '';
+					try { $crmSlide1 = base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Admiral - Détails d’un attendu.png'))); } catch (Exception $e) {}
+					try { $crmSlide2 = base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Admiral - TdB Admin.png'))); } catch (Exception $e) {}
+					try { $crmSlide3 = base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Admiral - TdB Client.png'))); } catch (Exception $e) {}
+					try { $a2Svg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-a2balles.svg')); } catch (Exception $e) {}
+					$crmSlides = [
+					['image' => $crmSlide1, 'alt' => __('projects.crm.carousel.slide1.alt')],
+					['image' => $crmSlide2, 'alt' => __('projects.crm.carousel.slide2.alt')],
+					['image' => $crmSlide3, 'alt' => __('projects.crm.carousel.slide3.alt')],
+					];
+					@endphp
+					<p class="px-1 text-sm text-[#706f6c]">{{ __('projects.intro') }}</p>
+
+					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
+						<div class="flex-1 text-sm text-[#706f6c]">
+							<div class="flex items-center">
+								<span class="text-base font-semibold">{{ __('projects.crm.title') }}</span>
+							</div>
+							<p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.crm.description') }}</p>
+							<div class="project-tags mt-3">
+								<span class="project-tag">React</span>
+								<span class="project-tag">Spring Boot</span>
+								<span class="project-tag">TypeScript</span>
+								<span class="project-tag">PostgreSQL</span>
+								<span class="project-tag">API REST</span>
+							</div>
+						</div>
+						<div class="mt-2" x-data="{ videoOpen: false, slides: {{ json_encode($crmSlides) }}, currentIndex: 0, startX: null, dragDelta: 0, goToNext() { this.currentIndex = (this.currentIndex + 1) % this.slides.length; }, goToPrev() { this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length; }, handleTouchStart(event) { this.startX = event.touches[0].clientX; this.dragDelta = 0; }, handleTouchMove(event) { if (this.startX === null) return; this.dragDelta = this.startX - event.touches[0].clientX; }, handleTouchEnd() { if (this.dragDelta > 50) { this.goToNext(); } else if (this.dragDelta < -50) { this.goToPrev(); } this.startX = null; this.dragDelta = 0; }, handlePointerDown(event) { this.startX = event.clientX; this.dragDelta = 0; }, handlePointerMove(event) { if (this.startX === null) return; this.dragDelta = this.startX - event.clientX; }, handlePointerUp() { if (this.dragDelta > 50) { this.goToNext(); } else if (this.dragDelta < -50) { this.goToPrev(); } this.startX = null; this.dragDelta = 0; } }">
+							<div class="relative w-full overflow-hidden rounded border border-[#e6ece5] bg-white/70 p-2" @touchstart="handleTouchStart($event)" @touchmove="handleTouchMove($event)" @touchend="handleTouchEnd()" @pointerdown="handlePointerDown($event)" @pointermove="handlePointerMove($event)" @pointerup="handlePointerUp()" @pointerleave="handlePointerUp()">
+								<template x-for="(slide, index) in slides" :key="index">
+									<div x-show="index === currentIndex" class="w-full">
+										<img loading="lazy" :src="'data:image/png;base64,' + slide.image" :alt="slide.alt" class="h-auto w-full rounded object-contain">
+									</div>
+								</template>
+								<div class="absolute inset-x-0 bottom-3 flex items-center justify-center gap-2">
+									<template x-for="(slide, index) in slides" :key="index">
+										<button type="button" class="h-2.5 w-2.5 rounded-full transition" :class="index === currentIndex ? 'bg-[#1b1b18]' : 'bg-[#c7d5c7] hover:bg-[#8b9a87]'" @click="currentIndex = index" :aria-label="'{{ __('projects.crm.carousel.previous') }}' + ' ' + (index + 1)"></button>
+									</template>
+								</div>
+								<button type="button" class="absolute inset-y-0 left-0 z-10 flex w-1/2 items-center justify-start px-3 text-xl text-[#1b1b18] opacity-80 transition hover:opacity-100" @click="goToPrev()" :aria-label="'{{ __('projects.crm.carousel.previous') }}'">←</button>
+								<button type="button" class="absolute inset-y-0 right-0 z-10 flex w-1/2 items-center justify-end px-3 text-xl text-[#1b1b18] opacity-80 transition hover:opacity-100" @click="goToNext()" :aria-label="'{{ __('projects.crm.carousel.next') }}'">→</button>
+							</div>
+							<button type="button" @click="videoOpen = true" class="recommendation-pdf-button mt-3 inline-flex items-center gap-2 rounded-full border border-[#c9d7cb] bg-[#f3f7f1] px-4 py-2 text-sm font-medium text-[#314132] shadow-sm transition hover:bg-[#e8f1e8] dark:text-[#edf4eb]">
+								{{ __('projects.crm.video.launch') }}
+							</button>
+							<div x-show="videoOpen" x-cloak class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4">
+								<div class="w-full max-w-4xl rounded-lg bg-white p-3 shadow-xl" role="dialog" aria-modal="true" aria-label="{{ __('projects.crm.video.title') }}">
+									<div class="mb-2 flex items-center justify-between">
+										<p class="text-sm font-semibold text-[#1b1b18]">{{ __('projects.crm.video.title') }}</p>
+										<button type="button" @click="videoOpen = false" class="text-sm text-[#706f6c] hover:text-[#1b1b18]" aria-label="{{ __('projects.crm.video.close') }}">✕</button>
+									</div>
+									<video controls playsinline preload="metadata" class="w-full rounded-lg">
+										<source src="{{ asset('mov/Demo Admiral.mov') }}" type="video/quicktime">
+										{{ __('projects.crm.video.unsupported') }}
+									</video>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
+						<div class="flex-1 text-sm text-[#706f6c]">
+							<div class="flex items-center">
+								<span class="text-base font-semibold">{{ __('projects.pwa.title') }}</span>
+								@if($a2Svg)
+								<a href="https://a2balles.com" target="_blank" rel="noopener noreferrer" aria-label="{{ __('projects.repo.pwa') }}" class="repo-link project-link--a2balles ml-5 inline-flex items-center justify-center rounded p-1 hover:bg-gray-100 dark:hover:bg-neutral-800">
+									{!! $a2Svg !!}
+								</a>
+								@endif
+							</div>
+							<p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.pwa.description') }}</p>
+							<div class="project-tags mt-3">
+								<span class="project-tag">Lovable</span>
+								<span class="project-tag">React</span>
+								<span class="project-tag">TypeScript</span>
+								<span class="project-tag">Postgres</span>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
 						<div class="flex-1 text-sm text-[#706f6c]">
 							<div class="flex items-center">
 								<span class="text-base font-semibold">{{ __('projects.livret.title') }}</span>
@@ -212,20 +309,17 @@
 								</a>
 							</div>
 							<p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.livret.description') }}</p>
-
 							<div class="project-tags mt-3">
 								<span class="project-tag">PHP</span>
 								<span class="project-tag">Symfony</span>
 								<span class="project-tag">EasyAdmin</span>
 								<span class="project-tag">PHPUnit</span>
 							</div>
-
-
 						</div>
 						<img loading="lazy" width="600" height="400" src="data:image/png;base64,{{ base64_encode(file_get_contents(resource_path('png'.DIRECTORY_SEPARATOR.'Livret_CDA.png'))) }}" alt="{{ __('projects.preview.livret') }}" class="rounded project-image">
 					</div>
 
-					<div class="w-full p-4 bg-white rounded flex flex-col gap-4 project-card">
+					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
 						<div class="flex-1 text-sm text-[#706f6c]">
 							<div class="flex items-center">
 								<span class="text-base font-semibold">{{ __('projects.breakingcat.title') }}</span>
@@ -235,7 +329,6 @@
 								</a>
 							</div>
 							<p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.breakingcat.description') }}</p>
-
 							<div class="project-tags mt-3">
 								<span class="project-tag">PHP</span>
 								<span class="project-tag">MySQL</span>
@@ -253,7 +346,7 @@
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.experience') }}</h2>
 			</div>
-			<div class="rounded-md border border-[#efe6c9] bg-gradient-to-br from-[#fff7db] via-[#fffde9] to-[#fdf2d8] p-6 shadow-sm">
+			<div class="p-6">
 				<div class="space-y-6">
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						<div class="text-sm text-[#706f6c] font-medium">{{ __('experience.current.dates') }}</div>
@@ -277,6 +370,58 @@
 			</div>
 		</section>
 
+		<section id="studies" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.studies') }}">
+			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.studies') }}</h2>
+			</div>
+			<div class="p-6">
+				<div class="space-y-6">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+						<div class="text-sm text-[#706f6c] font-medium">{{ __('studies.master.dates') }}</div>
+						<div>
+							<h3 class="text-lg font-semibold tracking-tight">{{ __('studies.master.title') }}</h3>
+							<p class="mt-2 text-sm text-[#706f6c]">{{ __('studies.master.description') }}</p>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+						<div class="text-sm text-[#706f6c] font-medium">{{ __('studies.cda.dates') }}</div>
+						<div>
+							<h3 class="text-lg font-semibold tracking-tight">{{ __('studies.cda.title') }}</h3>
+							<p class="mt-2 text-sm text-[#706f6c]">{{ __('studies.cda.description') }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="recommendations" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.recommendations') }}">
+			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
+				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('home.section.recommendations') }}</h2>
+			</div>
+			<div class="p-6">
+				<p class="text-sm text-[#706f6c]">{{ __('recommendations.intro') }}</p>
+				<div class="mt-4 space-y-4">
+					<div class="rounded border-l-2 border-[#c7d8ca] bg-transparent py-4 pl-4 pr-2 text-sm text-[#706f6c]">
+						<p class="text-sm font-semibold text-[#1b1b18] dark:text-[#f5f5f0]">{{ __('recommendations.linkedin.title') }}</p>
+						<p class="mt-1 text-sm font-medium">{{ __('recommendations.linkedin.author') }}</p>
+						<p class="text-xs uppercase tracking-wide text-[#8b8a88]">{{ __('recommendations.linkedin.role') }}</p>
+						<p class="mt-2 text-sm italic">{{ __('recommendations.linkedin.date') }}</p>
+						<blockquote class="mt-3 border-l border-[#c9d7cb] pl-4 text-sm leading-6 text-[#4b504b] dark:border-[#3b4a3d] dark:text-[#d8e2d8]">
+							{{ __('recommendations.linkedin.quote') }}
+						</blockquote>
+						<a href="https://www.linkedin.com/in/leabuadasfleuriot/fr/" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex text-sm font-medium underline decoration-[#899f8a] underline-offset-4">{{ __('recommendations.linkedin.link') }}</a>
+					</div>
+					<div class="rounded border-l-2 border-[#c7d8ca] bg-transparent py-4 pl-4 pr-2 text-sm text-[#706f6c]">
+						<p class="text-sm font-semibold text-[#1b1b18] dark:text-[#f5f5f0]">{{ __('recommendations.pdf.title') }}</p>
+						<p class="mt-2">{{ __('recommendations.pdf.body') }}</p>
+						<a href="{{ asset('recommandations/Jérémy Escassut - Lettre de recommandation par Pierre Souillé.pdf') }}" target="_blank" rel="noopener noreferrer" class="recommendation-pdf-button mt-4 inline-flex rounded-full border border-[#c9d7cb] bg-[#f3f7f1] px-4 py-2 text-sm font-medium text-[#314132] shadow-sm transition hover:bg-[#e8f1e8] dark:text-[#edf4eb]">
+							{{ __('recommendations.pdf.download') }}
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
+
 		<section id="stack" class="mb-8 scroll-mt-24" aria-label="{{ __('nav.stack') }}">
 			<div class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-transparent px-6 py-3 backdrop-blur lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0">
 				<h2 class="text-sm font-bold uppercase tracking-widest lg:sr-only">{{ __('nav.stack') }}</h2>
@@ -286,7 +431,7 @@
 			<div id="stack-icons" class="p-0 stack-grid">
 				<div class="space-y-4 text-sm">
 					<!-- Front group -->
-					<div>
+					<div class="stack-group stack-group--front pl-4 sm:pl-5 lg:pl-6">
 						<h3 class="text-sm font-semibold mb-2">{{ __('stack.front') }}</h3>
 						<div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
 							<div class="bg-white rounded flex items-center justify-center skill-angular skill-tile" aria-label="Angular" data-name="Angular">
@@ -309,7 +454,7 @@
 					</div>
 
 					<!-- Back group -->
-					<div>
+					<div class="stack-group stack-group--back pl-4 sm:pl-5 lg:pl-6">
 						<h3 class="text-sm font-semibold mb-2">{{ __('stack.back') }}</h3>
 						<div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
 							<div class="bg-white rounded flex items-center justify-center skill-laravel skill-tile" aria-label="Laravel" data-name="Laravel">
@@ -352,7 +497,7 @@
 					</div>
 
 					<!-- Others group -->
-					<div id="other">
+					<div id="other" class="stack-group stack-group--other pl-4 sm:pl-5 lg:pl-6">
 						<h3 class="text-sm font-semibold mb-2">{{ __('stack.other') }}</h3>
 						<div class="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-6 gap-2">
 							<div class="bg-white rounded flex items-center justify-center skill-jira skill-tile" aria-label="Jira" data-name="Jira">
@@ -453,6 +598,42 @@
 			</div>
 		</div>
 	</template>
+</div>
+
+<div id="cv-selector-modal" class="fixed inset-0 z-[10000] flex items-center justify-center p-4" aria-hidden="true" x-cloak style="display: none;">
+	<a href="#" class="absolute inset-0 bg-black/50" onclick="window.closeCvSelectorModal(); return false;" aria-label="{{ __('ui.close') }}"></a>
+	<div class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-[#111]" role="dialog" aria-modal="true" aria-label="{{ __('cv.view') }}">
+		<div class="flex items-start justify-between gap-4">
+			<div>
+				<h3 class="text-lg font-semibold">{{ __('cv.view') }}</h3>
+				<p class="mt-1 text-sm text-[#706f6c]">Choisissez une version du CV à ouvrir.</p>
+			</div>
+			<a href="#" onclick="window.closeCvSelectorModal(); return false;" class="text-gray-500 hover:text-gray-700" aria-label="{{ __('ui.close') }}">✕</a>
+		</div>
+		<div class="mt-6 flex flex-col gap-3">
+			<a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Développeur_Full_Stack_orienté_Produit_&_UX_Juillet_2026.pdf') }}"
+				target="_blank" rel="noopener noreferrer"
+				onclick="window.closeCvSelectorModal();"
+				class="rounded border border-gray-200 px-4 py-3 text-left hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800">
+				<span class="block font-medium">CV Développeur Full Stack</span>
+				<span class="mt-1 block text-sm text-[#706f6c]">Ouvre le PDF actuel dans un nouvel onglet</span>
+			</a>
+			<a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Chef_de_projet_Coordination_internationale_Juillet_2026.pdf') }}"
+				target="_blank" rel="noopener noreferrer"
+				onclick="window.closeCvSelectorModal();"
+				class="rounded border border-gray-200 px-4 py-3 text-left hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800">
+				<span class="block font-medium">CV Chef de projet</span>
+				<span class="mt-1 block text-sm text-[#706f6c]">Ouvre une version coordination internationale</span>
+			</a>
+			<a href="{{ asset('cv/ESCASSUT_JEREMY_-_CV_Product_Owner_|_Transformation_digitale_Juillet_2026.pdf') }}"
+				target="_blank" rel="noopener noreferrer"
+				onclick="window.closeCvSelectorModal();"
+				class="rounded border border-gray-200 px-4 py-3 text-left hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800">
+				<span class="block font-medium">CV Product Owner</span>
+				<span class="mt-1 block text-sm text-[#706f6c]">Ouvre une version orientée transformation digitale et product</span>
+			</a>
+		</div>
+	</div>
 </div>
 
 <!-- Mobile sticky buttons removed; mobile behavior relies on desktop action buttons and the global open-contact event -->

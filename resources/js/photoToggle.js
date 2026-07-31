@@ -42,17 +42,32 @@
         imgOriginal.onload = onImageLoad;
         imgAI.onload = onImageLoad;
 
+        function getImageLayout(img, width, height) {
+            const isAiPhoto = img === imgAI;
+            const scale = Math.max(width / img.width, height / img.height) * (isAiPhoto ? 1.03 : 1);
+            const renderedWidth = Math.round(img.width * scale);
+            const renderedHeight = Math.round(img.height * scale);
+            const verticalOffset = 12;
+
+            return {
+                width: renderedWidth,
+                height: renderedHeight,
+                x: Math.round((width - renderedWidth) / 2),
+                y: Math.round((height - renderedHeight) / 2) + verticalOffset,
+            };
+        }
+
+        function drawShiftedImage(context, img, width, height) {
+            const layout = getImageLayout(img, width, height);
+
+            context.drawImage(img, layout.x, layout.y, layout.width, layout.height);
+        }
+
         function drawImage(img) {
-            // maintain aspect ratio and cover within the fixed canvas dimensions
             const cw = canvas.width;
             const ch = canvas.height;
-            const scale = Math.max(cw / img.width, ch / img.height);
-            const w = Math.round(img.width * scale);
-            const h = Math.round(img.height * scale);
-            const x = Math.round((cw - w) / 2);
-            const y = Math.round((ch - h) / 2);
             ctx.clearRect(0, 0, cw, ch);
-            ctx.drawImage(img, x, y, w, h);
+            drawShiftedImage(ctx, img, cw, ch);
         }
 
         // Lightweight, GPU-friendly crossfade implemented with an overlay canvas.
@@ -87,13 +102,8 @@
             (function drawToOverlay(img) {
                 const cw = overlay.width;
                 const ch = overlay.height;
-                const scale = Math.max(cw / img.width, ch / img.height);
-                const w = Math.round(img.width * scale);
-                const h = Math.round(img.height * scale);
-                const x = Math.round((cw - w) / 2);
-                const y = Math.round((ch - h) / 2);
                 octx.clearRect(0, 0, cw, ch);
-                octx.drawImage(img, x, y, w, h);
+                drawShiftedImage(octx, img, cw, ch);
             })(toImg);
 
             // Append overlay to the same parent as the main canvas (prefer

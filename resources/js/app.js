@@ -136,6 +136,69 @@ window.contactModal = function () {
     }
 }
 
+function syncCvSelectorModalState() {
+    const modal = document.getElementById('cv-selector-modal');
+    if (!modal) return false;
+
+    const shouldOpen = window.location.hash === '#cv-selector-modal';
+    modal.style.display = shouldOpen ? 'flex' : 'none';
+    modal.classList.toggle('hidden', !shouldOpen);
+    modal.classList.toggle('flex', shouldOpen);
+    modal.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+
+    return shouldOpen;
+}
+
+window.openCvSelectorModal = function () {
+    window.location.hash = '#cv-selector-modal';
+    return true;
+};
+
+window.closeCvSelectorModal = function () {
+    if (window.location.hash === '#cv-selector-modal') {
+        window.location.hash = '';
+        return;
+    }
+    syncCvSelectorModalState();
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+    syncCvSelectorModalState();
+    document.querySelectorAll('[data-cv-open]').forEach((button) => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            window.openCvSelectorModal();
+        });
+    });
+});
+
+window.addEventListener('hashchange', syncCvSelectorModalState);
+window.addEventListener('load', syncCvSelectorModalState);
+
+window.downloadSelectedCv = function (url) {
+    if (!url) return;
+    window.closeCvSelectorModal();
+    try {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (e) {
+        window.location.assign(url);
+    }
+};
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        window.closeCvSelectorModal();
+    }
+});
+
 // Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
 window.addEventListener('open-contact', function _openContactFallback() {
     function tryOpen() {

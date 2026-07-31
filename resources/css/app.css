@@ -149,6 +149,19 @@ aside > div.shadow {
     transition: transform 160ms ease;
 }
 
+.dark .recommendation-pdf-button {
+    background-color: var(--bg) !important;
+    border-color: #5d735f !important;
+    box-shadow: 0 2px 6px rgba(237, 244, 235, 0.36) !important;
+}
+
+.dark .recommendation-pdf-button:hover,
+.dark .recommendation-pdf-button:focus-visible {
+    background-color: var(--bg) !important;
+    border-color: #718574 !important;
+    box-shadow: 0 2px 8px rgba(237, 244, 235, 0.46) !important;
+}
+
 /* Skill icon tiles: keep a slightly different, matched light-green background */
 .stack-grid .skill-tile,
 .skill-tile {
@@ -198,6 +211,12 @@ aside > div.shadow {
     color: initial !important;
     fill: initial !important;
     stroke: initial !important;
+}
+
+.project-link--a2balles svg {
+    width: 2.5em;
+    height: 2.5em;
+    display: block;
 }
 
 /* ------------------------------------------------------------------
@@ -425,6 +444,14 @@ aside > div.shadow {
 }
 
 /* Modal/dialog should stay solid and readable regardless of global card translucency */
+#cv-selector-modal {
+    display: none;
+}
+
+#cv-selector-modal:target,
+#cv-selector-modal[aria-hidden="false"] {
+    display: flex !important;
+}
 [role="dialog"] {
     background-color: #ffffff !important;
     color: #111111 !important;
@@ -1539,6 +1566,13 @@ html:not(.dark)
     justify-content: center;
     padding: 0.5rem;
     box-sizing: border-box;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.dark .stack-grid .skill-tile,
+.dark .stack-grid .skill-tile * {
+    border-color: transparent !important;
 }
 .stack-grid .grid > .skill-tile {
     height: auto;
@@ -1564,6 +1598,39 @@ html:not(.dark)
 #stack h3.text-sm.font-semibold,
 #stack .text-sm.font-semibold.mb-2 {
     margin-left: 30px;
+}
+
+/* Stack section group separators: one vertical line per group, not a continuous section-wide line */
+#stack .stack-group {
+    position: relative;
+    margin-left: 0;
+}
+
+#stack .stack-group::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+        to bottom,
+        rgba(11, 27, 32, 0.25),
+        rgba(11, 27, 32, 0.08)
+    );
+    border-radius: 999px;
+}
+
+.dark #stack .stack-group::before {
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.34),
+        rgba(255, 255, 255, 0.12)
+    );
+}
+
+#stack .stack-group .text-sm.font-semibold.mb-2 {
+    margin-left: 0;
 }
 
 /* Social icons : prefer stroke = currentColor so color controls them */
@@ -1970,12 +2037,18 @@ html:not(.dark) aside {
 /* Project cards, panels, and tiles should use the light surface token */
 html:not(.dark) .project-card,
 html:not(.dark) .rounded-md,
-html:not(.dark) .stack-grid .skill-tile,
 html:not(.dark) .skill-tile,
 html:not(.dark) [role="dialog"] {
     background: var(--surface) !important;
     color: var(--text) !important;
     border-color: var(--edge) !important;
+}
+
+/* Keep stack tiles transparent in light mode, regardless of the general tile override */
+html:not(.dark) .stack-grid .skill-tile {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* Tags and muted text */
@@ -2668,76 +2741,76 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
 /* Note: do not reset .mobile-offset on large screens here so Tailwind `lg:` utilities can apply. */
 
 /* Photo frame simplified for homepage
-   - No SVG textures: single colored rim + inner mat
-   - Rim width: 2.5vmin (half of previous 5vmin)
-   - Rim color: #2b8fb7 (requested)
-   - Inner mat: flat color close to previous tone (#eef5ea)
-   - Square corners as requested
+   - Minimalist structural frame around the square image
+   - Incomplete wireframe with roof-like geometry and a small lower-right notch
+   - Existing canvas and photo-toggle logic remain unchanged
 */
 .photo-frame {
     position: relative;
-    display: inline-block;
-    /* Use theme-aware accent if present, fallback to requested blue */
-    --photo-frame-accent: var(--accent-primary, #2b8fb7);
-    border: 2.5vmin solid var(--photo-frame-accent);
-    border-radius: 0; /* square corners */
-    /* Mat interior: flat neutral hue requested by user */
-    background-color: #eef5ea;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 3.49%;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
     box-sizing: border-box;
-    /* mat thickness ≈ 1/3 of rim */
-    padding: calc(2.5vmin / 3);
-    /* Relief: inner highlight + inner shadow (bevel) + plus forte ombre extérieure en mode clair */
-    box-shadow:
-        inset 0 8px 14px rgba(255, 255, 255, 0.75),
-        inset 0 -8px 16px rgba(0, 0, 0, 0.14),
-        0 30px 84px rgba(11, 38, 51, 0.26);
-    transition:
-        box-shadow 180ms ease,
-        transform 180ms ease;
+    isolation: isolate;
+    --photo-frame-image-inset: 3.49%;
+    --photo-frame-accent: color-mix(
+        in srgb,
+        var(--accent-primary, #2a8fb7) 88%,
+        white 12%
+    );
 }
 
-/* subtle inner varnish/highlight to enhance relief without textures */
-.photo-frame::before {
-    content: "";
+.photo-frame::before,
+.photo-frame::after {
+    content: none;
+}
+
+.photo-frame__wireframe {
     position: absolute;
-    left: -1vmin;
-    right: -1vmin;
-    top: -1vmin;
-    bottom: -1vmin;
-    border-radius: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.05),
-        rgba(255, 255, 255, 0)
-    );
-    mix-blend-mode: screen;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 0;
+    color: var(--photo-frame-accent);
+    fill: none;
+    overflow: visible;
 }
 
-/* outer shadow layer — softened for light mode; deepened in .dark below */
-.photo-frame::after {
-    content: "";
-    position: absolute;
-    left: -1.25vmin;
-    right: -1.25vmin;
-    top: -1.25vmin;
-    bottom: -1.25vmin;
-    border-radius: 0;
-    /* Ombre externe plus visible en clair */
-    box-shadow: 0 36px 100px rgba(11, 38, 51, 0.24);
-    pointer-events: none;
-    z-index: -1;
+.photo-frame__wireframe path {
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    vector-effect: non-scaling-stroke;
 }
 
-/* Keep the canvas squared and above the mat */
+/* The photo itself follows the inner hexagon seen in the reference. */
 .photo-frame > #photoCanvas,
 .photo-frame canvas {
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
     border-radius: 0 !important;
     display: block;
     width: 100%;
     height: auto;
-    overflow: visible;
+    clip-path: polygon(50% 3%, 88% 25%, 88% 75%, 50% 97%, 12% 75%, 12% 25%);
+}
+
+/* The transition canvas is generated by the existing click handler. Keep it
+   aligned with, and clipped like, the visible photo. */
+.photo-frame > .photo-transition-canvas {
+    left: var(--photo-frame-image-inset) !important;
+    top: var(--photo-frame-image-inset) !important;
+    clip-path: polygon(50% 3%, 88% 25%, 88% 75%, 50% 97%, 12% 75%, 12% 25%);
 }
 
 /* Caption immediately after the frame — rehaussée légèrement */
@@ -2747,21 +2820,13 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     font-size: 0.95rem;
     line-height: 1.15;
     color: inherit;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.12); /* subtle lift for readability */
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-/* Dark mode: keep rim color but deepen shadow for contrast */
+/* Dark mode: switch to a luminous cyan wireframe */
 .dark .photo-frame {
-    /* slightly darken the rim for contrast in dark mode */
-    --photo-frame-accent: color-mix(
-        in srgb,
-        var(--accent-primary, #2b8fb7) 84%,
-        black 16%
-    );
-    border-color: var(--photo-frame-accent);
-    /* deeper, softer shadow + stronger inner shadow for relief in dark */
-    box-shadow:
-        inset 0 6px 12px rgba(255, 255, 255, 0.02),
-        inset 0 -10px 18px rgba(0, 0, 0, 0.72),
-        0 28px 80px rgba(0, 0, 0, 0.7);
+    --photo-frame-accent: #72f5ff;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
 }
