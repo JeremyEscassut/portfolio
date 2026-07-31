@@ -236,22 +236,44 @@ document.addEventListener('alpine:init', () => {
     const sections = document.querySelectorAll('main#content > section[id]');
 
     function clearActive() {
-        navLinks.forEach(a => a.classList.remove('text-[#1b1b18]', 'font-semibold'));
+        navLinks.forEach((link) => {
+            link.classList.remove('text-[#1b1b18]', 'font-semibold');
+        });
     }
 
-    if (sections && navLinks) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.id;
-                    clearActive();
-                    const active = Array.from(navLinks).find(a => a.getAttribute('href') === '#' + id);
-                    if (active) active.classList.add('text-[#1b1b18]', 'font-semibold');
-                }
-            });
-        }, { root: null, rootMargin: '0px', threshold: 0.6 });
+    function setActive(id) {
+        clearActive();
+        const active = Array.from(navLinks).find((link) => link.getAttribute('href') === '#' + id);
+        if (active) {
+            active.classList.add('text-[#1b1b18]', 'font-semibold');
+        }
+    }
 
-        sections.forEach(s => observer.observe(s));
+    if (navLinks.length && sections.length) {
+        const observer = new IntersectionObserver((entries) => {
+            const visibleEntries = entries
+                .filter((entry) => entry.isIntersecting)
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+            if (visibleEntries.length > 0) {
+                setActive(visibleEntries[0].target.id);
+            }
+        }, {
+            root: null,
+            rootMargin: '-30% 0px -40% 0px',
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1]
+        });
+
+        sections.forEach((section) => observer.observe(section));
+
+        const initialSection = Array.from(sections).find((section) => {
+            const rect = section.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < window.innerHeight;
+        });
+
+        if (initialSection) {
+            setActive(initialSection.id);
+        }
     }
 
     // smooth-scroll behavior for nav links is left to CSS scroll-behavior; keep default handlers minimal

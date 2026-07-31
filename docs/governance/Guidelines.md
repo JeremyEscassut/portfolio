@@ -115,6 +115,8 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 - Les instructions de `copilot-instructions.md` et de ce document sont des obligations de travail, pas des recommandations facultatives.
 - Toute reponse doit commencer par un marqueur de conformite autorise ; aucune reponse courte, confirmation ou correction ne doit enfreindre cette regle.
 - Avant d'envoyer une reponse, l'assistant doit verifier qu'elle respecte ce format. Si le marqueur manque, la reponse doit etre corrigee avant transmission.
+- Toute reponse traitant de la roadmap, des guidelines, de la gouvernance ou du workflow Git doit commencer immediatement par un marqueur autorise ; l'absence de marqueur est consideree comme une violation de procedure.
+- Les fichiers de gouvernance ne doivent pas etre inclus dans un push de lot fonctionnel sans flux documentaire dedie et validation explicite ; en cas de doute, ils restent locaux et ne sont pas pousses.
 - Les changements doivent rester atomiques et alignes sur un seul sujet fonctionnel ; on ne melange pas feature photo, UX/UI, docs et corrections dans un meme lot sans justification explicite.
 - En cas d'ecart avec ces regles, l'assistant doit corriger le comportement avant de poursuivre la tache.
 
@@ -159,7 +161,15 @@ Maintenir un historique clair, des branches lisibles et des integrations sures.
 ### Synchronisation de la roadmap
 
 - La version la plus recente de `docs/governance/roadmap.md` fait foi et doit refleter l'etat reel du projet.
-- Des qu'une tache, un item de DoD ou un angle mort est cloture, `docs/governance/roadmap.md` doit etre mis a jour dans le meme cycle de travail, avant annonce de fin de lot.
+- Cette synchronisation est obligatoire et doit etre faite systematiquement au fur et a mesure de l'avancement, pas seulement a la fin d'un lot.
+- Des qu'une tache, un item de DoD, une priorite, une phase ou un angle mort est termine, `docs/governance/roadmap.md` doit etre mis a jour dans le meme cycle de travail, avant annonce de fin de lot.
+- La section `Plan par phases` est la source de verite des taches cochees ou non cochees ; elle doit rester la reference stable pour le suivi du travail.
+- Dans `Plan par phases`, l'assistant ne doit jamais supprimer une tache existante, ni retirer une ligne d'un item de phase. Il ne peut qu'ajouter de nouvelles taches si le scope evolue, et cocher une tache existante lorsqu'elle est terminee.
+- Les sections `Horizon`, `Priorites`, `Plan de priorisation - Reste de journee`, `Definition de pret pour demain` et `Definition of done globale` sont des vues dynamiques. Elles doivent etre re-evaluees et mises a jour a chaque changement de scope, a chaque fin de journee et au debut de chaque nouvelle session de travail.
+- Lorsqu'une action listée dans `Plan de priorisation - Reste de journee` est executee, l'assistant doit la cocher immédiatement dans la roadmap, sans attendre la fin du lot ni une étape ultérieure.
+- Lorsqu'une priorite de la section `Priorites` est terminee, elle doit etre retiree immédiatement de cette liste et remplacee par la priorite suivante si besoin ; aucune priorite terminee ne doit rester dans la liste sous forme de statut `En cours` ou `A faire`.
+- Si une priorite haute dans la liste est terminee, elle doit etre retiree de la section `Priorites` et remplacee par la priorite suivante ; les priorites du jour doivent toujours etre re-calibrees selon l'avancement reel.
+- Le `DoD pret pour demain` est un snapshot quotidien ; il ne doit pas rester fige d'un jour sur l'autre et doit etre rewrite a chaque nouvelle journee de travail.
 - Cette mise a jour est une digression documentaire : elle doit etre committee separement du code metier et integree sur `main` sans attendre la fin de la branche fonctionnelle.
 - Un lot dont la roadmap n'est pas synchronisee n'est pas considere comme termine.
 

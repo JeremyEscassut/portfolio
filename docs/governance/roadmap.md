@@ -81,14 +81,14 @@ Criteres de sortie :
 - [x] Ajouter un toggle de photo de profil original/IA avec transition visuelle, microcopy et comportement coherent sur le hero.
 - [x] Assurer l'accessibilite du toggle photo de profil via clic et clavier.
 - [x] Ajouter le volet de demonstration du projet CRM Admiral avec CTA de demo, carousel mono-slide, modal video et tests de non-regression.
-- [ ] Ajouter une section Projets pour l'experience CRM Admiral (ADM Assurances) sans lien Git, avec carousel de screenshots.
-- [ ] Ajouter une section Projets pour la PWA Budget (Lovable) avec lien public.
-- [ ] Ajouter l'experience "Chef de projet / Concepteur d'application metier - Stage" (fev. 2026 - avr. 2026, ADM Agen) en reformulant le contenu pour qu'il soit coherente avec le reste du portfolio.
-- [ ] Ajouter une section Etudes avec le Master en traduction et le titre de CDA, en separant clairement cette dimension des experiences professionnelles.
-- [ ] Reorganiser la section Experience pour y intégrer le parcours de traducteur, les experiences de chef de projets internationaux et l'experience de chef de projet / concepteur d'application metier.
-- [ ] Ajouter une section Recommandations avec une liste de recommandations et un point d'entree de telechargement PDF.
-- [ ] Appliquer une logique de storytelling plus coherente entre profil, etudes, experience, projets et recommandations.
-- [ ] Evaluer l'ajout d'un enregistrement ecran CRM Admiral en fonction du poids final deploye (Alwaysdata).
+- [x] Ajouter une section Projets pour l'experience CRM Admiral (ADM Assurances) sans lien Git, avec carousel de screenshots.
+- [x] Ajouter une section Projets pour la PWA Budget (Lovable) avec lien public.
+- [x] Ajouter l'experience "Chef de projet / Concepteur d'application metier - Stage" (fev. 2026 - avr. 2026, ADM Agen) en reformulant le contenu pour qu'il soit coherente avec le reste du portfolio.
+- [x] Ajouter une section Etudes avec le Master en traduction et le titre de CDA, en separant clairement cette dimension des experiences professionnelles.
+- [x] Reorganiser la section Experience pour y intégrer le parcours de traducteur, les experiences de chef de projets internationaux et l'experience de chef de projet / concepteur d'application metier.
+- [x] Ajouter une section Recommandations avec une liste de recommandations et un point d'entree de telechargement PDF.
+- [x] Appliquer une logique de storytelling plus coherente entre profil, etudes, experience, projets et recommandations.
+- [x] Evaluer l'ajout d'un enregistrement ecran CRM Admiral en fonction du poids final deploye (Alwaysdata).
 - [x] Ajouter un selecteur de CV au clic sur le bouton CV :
     - [x] version Chef de projet IT,
     - [x] version Developpeur Full Stack oriente Produit & UX,
@@ -100,25 +100,25 @@ Criteres de sortie :
 
 - [x] Finaliser l'ajustement de la photo de profil (toggle original/IA + microcopy accessible).
 - [ ] Finaliser la structure narrative du portfolio : profil, etudes, experience, projets, recommandations.
-- [ ] Ajouter les deux projets a la section Projets (CRM Admiral + PWA Budget) avec un niveau de detail suffisant pour une lecture claire.
-- [ ] Ajouter et reformuler l'experience de Chef de projet / Concepteur d'application metier - Stage pour qu'elle s'inscrive naturellement dans la ligne du portfolio.
-- [ ] Reorganiser la partie formation/experience en introduisant une section Etudes et en clarifiant le positionnement des experiences.
-- [ ] Ajouter la section Recommandations et preparer le dossier `public/recommendations/` pour le PDF a telecharger.
-- [ ] Verifier la coherence editoriale, le ton et la hierarchie sur desktop et mobile.
-- [ ] Si le temps le permet, preparer les visuels et elements de preuve associes aux projets.
+- [x] Ajouter les deux projets a la section Projets (CRM Admiral + PWA Budget) avec un niveau de detail suffisant pour une lecture claire.
+- [x] Ajouter et reformuler l'experience de Chef de projet / Concepteur d'application metier - Stage pour qu'elle s'inscrive naturellement dans la ligne du portfolio.
+- [x] Reorganiser la partie formation/experience en introduisant une section Etudes et en clarifiant le positionnement des experiences.
+- [x] Ajouter la section Recommandations et preparer le dossier `public/recommendations/` pour le PDF a telecharger.
+- [x] Verifier la coherence editoriale, le ton et la hierarchie sur desktop et mobile.
+- [x] Si le temps le permet, preparer les visuels et elements de preuve associes aux projets.
 
 ### Plan de travail aujourd'hui
 
 - [x] Implementer le toggle de photo de profil original/IA avec transition visuelle.
 - [x] Ajouter l'accessibilite clavier et la microcopy associee au toggle photo.
 - [x] Integrer le volet de demonstration CRM Admiral : CTA de demo, carousel, modal video et labels FR/EN.
-- [ ] Rediger le contenu du projet CRM Admiral : contexte, role, enjeux, solution, resultats, preuve de valeur.
-- [ ] Rediger le contenu du projet PWA Budget : contexte, role, solution, impact, lien public.
-- [ ] Rediger le contenu de l'experience ADM Agen en version coherente avec les autres rubriques.
-- [ ] Creer la structure Etudes et deplacer/adapter les elements de formation associes.
-- [ ] Creer la structure Recommandations et preparer l'entree de telechargement PDF.
-- [ ] Valider la coherence globale du contenu avant integration dans la page.
-- [ ] Preparer un lot de contenus plus complet si le temps le permet (temoignages, preuves, liens complementaires).
+- [x] Rediger le contenu du projet CRM Admiral : contexte, role, enjeux, solution, resultats, preuve de valeur.
+- [x] Rediger le contenu du projet PWA Budget : contexte, role, solution, impact, lien public.
+- [x] Rediger le contenu de l'experience ADM Agen en version coherente avec les autres rubriques.
+- [x] Creer la structure Etudes et deplacer/adapter les elements de formation associes.
+- [x] Creer la structure Recommandations et preparer l'entree de telechargement PDF.
+- [x] Valider la coherence globale du contenu avant integration dans la page.
+- [x] Preparer un lot de contenus plus complet si le temps le permet (temoignages, preuves, liens complementaires).
 
 ### A remettre a demain si besoin
 

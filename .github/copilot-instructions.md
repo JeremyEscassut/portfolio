@@ -1,6 +1,6 @@
 # Portfolio - AI Development Instructions
 
-> Derniere mise a jour : 2026-07-30
+> Derniere mise a jour : 2026-07-31
 > Ce fichier est la source de verite de gouvernance IA du projet.
 > Chemin : `.github/copilot-instructions.md`
 
@@ -27,6 +27,8 @@ Regles d'application :
 - Si un marqueur manque, corriger la reponse avant de la transmettre.
 - En cas de reponse relative a un bug, a des tests ou a une verification de travail local, utiliser le marqueur correspondant selon le contexte.
 - En cas de reponse sur l'etat d'un lot de travail, confirmer d'abord le scope reel, la branche active et la roadmap avant de decrire la tache en cours.
+- Toute reponse traitant de la roadmap, des guidelines, de la gouvernance ou du workflow Git doit commencer immediatement par un marqueur autorise ; le premier token du message doit etre visible sans ambiguite.
+- Lorsque la reponse suit une consultation explicite des fichiers de gouvernance, le marqueur doit etre `🤖📘` sauf si le contexte est un bug, une verification locale ou un sujet de test, auquel cas il faut utiliser `🌿`, `🪲` ou `🧪` selon le cas.
 
 ---
 
@@ -95,13 +97,21 @@ Ordre de priorite en cas de conflit :
 ## Discipline de travail
 
 - Chaque modification est bornee a un perimetre annonce.
-- Chaque lot doit rester atomique : un sujet, un objectif, un commit et une branche cohérents ; il ne faut pas melanger photo, UX/UI, docs et corrections de bug dans un meme lot sans justification expresse.
+- Chaque lot doit rester atomique : un sujet, un objectif, un commit et une branche coherents ; il ne faut pas melanger photo, UX/UI, docs et corrections de bug dans un meme lot sans justification expresse.
 - Validation locale minimale avant cloture : tests cibles + verification manuelle utile.
 - Avant toute implementation, verifier explicitement la branche active (`git branch --show-current`) et confirmer qu'elle correspond au scope demande.
+- Lorsqu'un lot touche a l'interface, au contenu visible ou a la UX du portfolio, l'assistant doit traiter la roadmap comme un artefact obligatoire de suivi :
+    1. ajouter ou enrichir les taches correspondantes dans la section Plan par phases ;
+    2. ajouter les taches pertinentes dans les sections Priorites, Priorites du jour et Plan de travail aujourd'hui ;
+    3. realiser le travail puis marquer les taches accomplies avec `[x]` dans les sections concernées ;
+    4. retirer de la priorisation generale les taches devenues accomplies si elles ne sont plus pertinentes comme priorites actives ;
+    5. ne pas considerer le lot comme termine tant que la roadmap n'est pas synchronisee avec l'etat reel.
+- L'absence de mise a jour de la roadmap dans le meme cycle de travail est consideree comme une erreur de gouvernance et doit etre corrigee immediatement.
 - Si la branche ne correspond pas au sujet, creer une branche dediee avant de coder et le signaler clairement.
 - Tout incident significatif est trace dans `docs/reports/INCIDENT_LOG.md`.
 - Lorsqu'il faut lancer un environnement de dev local, essayer d'abord `php artisan serve` ; si l'execution echoue sur un blocage OPcache (`Unable to create opcache lock file`), relancer avec `php -d opcache.enable=0 -d opcache.enable_cli=0 -d opcache.jit=0 artisan serve ...` et documenter le cas dans `docs/reports/SOLUTIONS_LOG.md`.
 - Convention de commits : `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`, `security:`.
+- Les fichiers de gouvernance ne doivent pas etre pousses dans une branche fonctionnelle comme partie d'un lot metier sans flux documentaire dedie et validation explicite ; en cas de doute, ils restent locaux et ne sont pas inclus dans le push.
 - Ces regles de travail sont des obligations de fonctionnement. Elles ne doivent pas etre contournees par des reponses rapides, des hypotheses non verifiees ou une interpretation laxiste du scope.
 
 ---

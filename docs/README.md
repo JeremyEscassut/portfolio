@@ -17,3 +17,4 @@ Ce dossier centralise la documentation projet.
 - `reports/INCIDENT_LOG.md`
 - `reports/SOLUTIONS_LOG.md`
 - `operations/MAIL_SETUP.md`
+- `operations/ROLLBACK_PROCEDURE.md`

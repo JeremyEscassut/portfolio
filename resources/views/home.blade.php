@@ -377,17 +377,17 @@
 			<div class="p-6">
 				<div class="space-y-6">
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-						<div class="text-sm text-[#706f6c] font-medium">{{ __('studies.master.dates') }}</div>
-						<div>
-							<h3 class="text-lg font-semibold tracking-tight">{{ __('studies.master.title') }}</h3>
-							<p class="mt-2 text-sm text-[#706f6c]">{{ __('studies.master.description') }}</p>
-						</div>
-					</div>
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						<div class="text-sm text-[#706f6c] font-medium">{{ __('studies.cda.dates') }}</div>
 						<div>
 							<h3 class="text-lg font-semibold tracking-tight">{{ __('studies.cda.title') }}</h3>
 							<p class="mt-2 text-sm text-[#706f6c]">{{ __('studies.cda.description') }}</p>
+						</div>
+					</div>
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+						<div class="text-sm text-[#706f6c] font-medium">{{ __('studies.master.dates') }}</div>
+						<div>
+							<h3 class="text-lg font-semibold tracking-tight">{{ __('studies.master.title') }}</h3>
+							<p class="mt-2 text-sm text-[#706f6c]">{{ __('studies.master.description') }}</p>
 						</div>
 					</div>
 				</div>
@@ -402,6 +402,13 @@
 				<p class="text-sm text-[#706f6c]">{{ __('recommendations.intro') }}</p>
 				<div class="mt-4 space-y-4">
 					<div class="rounded border-l-2 border-[#c7d8ca] bg-transparent py-4 pl-4 pr-2 text-sm text-[#706f6c]">
+						<p class="text-sm font-semibold text-[#1b1b18] dark:text-[#f5f5f0]">{{ __('recommendations.pdf.title') }}</p>
+						<p class="mt-2">{{ __('recommendations.pdf.body') }}</p>
+						<a href="{{ asset('recommandations/Jérémy Escassut - Lettre de recommandation par Pierre Souillé.pdf') }}" target="_blank" rel="noopener noreferrer" class="recommendation-pdf-button mt-4 inline-flex rounded-full border border-[#c9d7cb] bg-[#f3f7f1] px-4 py-2 text-sm font-medium text-[#314132] shadow-sm transition hover:bg-[#e8f1e8] dark:text-[#edf4eb]">
+							{{ __('recommendations.pdf.download') }}
+						</a>
+					</div>
+					<div class="rounded border-l-2 border-[#c7d8ca] bg-transparent py-4 pl-4 pr-2 text-sm text-[#706f6c]">
 						<p class="text-sm font-semibold text-[#1b1b18] dark:text-[#f5f5f0]">{{ __('recommendations.linkedin.title') }}</p>
 						<p class="mt-1 text-sm font-medium">{{ __('recommendations.linkedin.author') }}</p>
 						<p class="text-xs uppercase tracking-wide text-[#8b8a88]">{{ __('recommendations.linkedin.role') }}</p>
@@ -410,13 +417,6 @@
 							{{ __('recommendations.linkedin.quote') }}
 						</blockquote>
 						<a href="https://www.linkedin.com/in/leabuadasfleuriot/fr/" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex text-sm font-medium underline decoration-[#899f8a] underline-offset-4">{{ __('recommendations.linkedin.link') }}</a>
-					</div>
-					<div class="rounded border-l-2 border-[#c7d8ca] bg-transparent py-4 pl-4 pr-2 text-sm text-[#706f6c]">
-						<p class="text-sm font-semibold text-[#1b1b18] dark:text-[#f5f5f0]">{{ __('recommendations.pdf.title') }}</p>
-						<p class="mt-2">{{ __('recommendations.pdf.body') }}</p>
-						<a href="{{ asset('recommandations/Jérémy Escassut - Lettre de recommandation par Pierre Souillé.pdf') }}" target="_blank" rel="noopener noreferrer" class="recommendation-pdf-button mt-4 inline-flex rounded-full border border-[#c9d7cb] bg-[#f3f7f1] px-4 py-2 text-sm font-medium text-[#314132] shadow-sm transition hover:bg-[#e8f1e8] dark:text-[#edf4eb]">
-							{{ __('recommendations.pdf.download') }}
-						</a>
 					</div>
 				</div>
 			</div>

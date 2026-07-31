@@ -17,7 +17,7 @@ echo "Working directory: $PROJECT_ROOT"
 #   REMOTE_PATH (default: /home/jeremyescassut/www/Portfolio/)
 
 : ${REMOTE_USER:="jeremyescassut"}
-: ${REMOTE_HOST:="alwaysdata"}
+: ${REMOTE_HOST:="ssh-jeremyescassut.alwaysdata.net"}
 : ${REMOTE_PATH:="/home/jeremyescassut/www/Portfolio/"}
 
 DRY_RUN=0
@@ -57,6 +57,18 @@ echo "  Build step skipped: ${NO_BUILD}"
 
 timestamp() { date +"%Y-%m-%d_%H%M%S"; }
 
+create_backup_dir() {
+  ssh "${REMOTE_USER}@${REMOTE_HOST}" bash -s -- <<SSH_EOF
+set -e
+remote_root='${REMOTE_PATH}'
+backup_dir="\$remote_root/backups/$(timestamp)"
+mkdir -p "\$backup_dir"
+mkdir -p "\$remote_root"
+rsync -a --delete --exclude '.env' --exclude 'node_modules' --exclude 'vendor' --exclude 'bootstrap/cache' --exclude 'public/hot' "\$remote_root/" "\$backup_dir/"
+echo "\$backup_dir"
+SSH_EOF
+}
+
 # Quick connectivity check: avoid starting a build if the remote host is wrong/unreachable.
 # Skip this check during a dry-run so the script can still show planned actions.
 if [ "$DRY_RUN" -eq 0 ]; then
@@ -83,6 +95,13 @@ if [ "$NO_BUILD" -eq 0 ]; then
       exit 3
     fi
   fi
+fi
+
+if [ $DRY_RUN -eq 1 ]; then
+  echo "DRY RUN: would create a backup snapshot before deploy"
+else
+  echo "==> Creating backup snapshot before deploy"
+  create_backup_dir >/dev/null
 fi
 
 # rsync from current directory to remote
