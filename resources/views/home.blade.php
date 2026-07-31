@@ -416,7 +416,7 @@
 						<blockquote class="mt-3 border-l border-[#c9d7cb] pl-4 text-sm leading-6 text-[#4b504b] dark:border-[#3b4a3d] dark:text-[#d8e2d8]">
 							{{ __('recommendations.linkedin.quote') }}
 						</blockquote>
-						<a href="https://www.linkedin.com/in/leabuadasfleuriot/fr/" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex text-sm font-medium underline decoration-[#899f8a] underline-offset-4">{{ __('recommendations.linkedin.link') }}</a>
+						<a href="https://www.linkedin.com/in/jérémy-escassut-57773427/" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex text-sm font-medium underline decoration-[#899f8a] underline-offset-4">{{ __('recommendations.linkedin.link') }}</a>
 					</div>
 				</div>
 			</div>
