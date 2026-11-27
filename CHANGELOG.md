@@ -44,6 +44,9 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Fenêtre de choix du CV masquée par le bandeau de section et les icônes épinglées sur mobile en mode sombre.
 - Survol illisible en mode sombre : choix de CV, croix de fermeture, icônes thème, langue et contact.
 
+### Conformité
+- Mentions légales : déclaration de Google Analytics 4 (cookies `_ga`, finalité, transfert vers les États-Unis, moyens de refus). Reprise de la branche `claude/project-thread-v3ra6l` (commit 413f1ae). Le bandeau de consentement reste à faire.
+
 ### Sécurité
 - Le message de confirmation, qui reprend le nom saisi par le visiteur, est désormais échappé à l'affichage (il était inséré en HTML brut).
 
