@@ -2,8 +2,10 @@
 <html lang="fr">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6JG2Q1TZT8"></script>
+    <!-- Google Analytics: loaded by resources/js/app.js only after the visitor accepts (see #consent-banner). -->
+    <script>
+        window.GA_MEASUREMENT_ID = 'G-6JG2Q1TZT8';
+    </script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -41,6 +43,18 @@
 
 <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] min-h-screen">
     @yield('content')
+    <!-- Analytics consent banner: hidden until JS finds no stored choice. Not modal, never steals focus.
+         A <section> (not a <div>) on purpose: the dark theme resets `body > div` to position: static. -->
+    <section id="consent-banner" class="consent-banner" aria-label="{{ __('consent.label') }}" hidden>
+        <p class="consent-banner__text">
+            {{ __('consent.text') }}
+            <a href="{{ route('mentions', ['locale' => app()->getLocale()]) }}" class="consent-banner__link">{{ __('consent.more') }}</a>
+        </p>
+        <div class="consent-banner__actions">
+            <button type="button" class="consent-banner__button" data-consent="denied">{{ __('consent.refuse') }}</button>
+            <button type="button" class="consent-banner__button" data-consent="granted">{{ __('consent.accept') }}</button>
+        </div>
+    </section>
     <!-- Provide the application base path for client-side code. -->
     <script>
         // `getBasePath()` returns the path where the app is mounted ('' or '/portfolio').

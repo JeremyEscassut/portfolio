@@ -534,7 +534,7 @@
 		<footer id="footer" class="right-footer mt-6 p-6 text-sm text-[#706f6c] bg-transparent">
 			<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
 				<div class="text-center lg:text-left">
-					&copy; {{ date('Y') }} Jérémy Escassut<br><a href="{{ route('mentions', ['locale' => app()->getLocale()]) }}" class="underline" aria-label="{{ __('legal.title') }}">{{ __('legal.title') }}</a>
+					&copy; {{ date('Y') }} Jérémy Escassut<br><a href="{{ route('mentions', ['locale' => app()->getLocale()]) }}" class="underline" aria-label="{{ __('legal.title') }}">{{ __('legal.title') }}</a><br><button type="button" class="underline" data-consent-open>{{ __('consent.manage') }}</button>
 				</div>
 				<div class="text-center lg:text-right text-xs text-[#8b8a88]">
 					{{ __('footer.built_with') }}

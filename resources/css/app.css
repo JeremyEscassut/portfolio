@@ -2830,3 +2830,72 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     border: 0 !important;
     box-shadow: none !important;
 }
+
+/* Analytics consent banner: compact, bottom of the viewport, non-blocking.
+   Both buttons share the exact same style (no dark pattern). */
+.consent-banner {
+    position: fixed;
+    left: 50%;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 9000;
+    width: min(560px, calc(100vw - 24px));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    padding: 12px 14px;
+    border: 1px solid #d6dcd4;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #1b1b18;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+.consent-banner[hidden] { display: none; }
+.consent-banner__text { margin: 0; flex: 1 1 260px; color: #1b1b18; }
+.consent-banner__link { text-decoration: underline; text-underline-offset: 2px; color: inherit; }
+.consent-banner__actions { display: flex; gap: 8px; flex: 0 0 auto; }
+.consent-banner__button {
+    min-width: 96px;
+    min-height: 44px; /* touch target */
+    padding: 0 16px;
+    border: 1px solid #1b1b18;
+    border-radius: 9999px;
+    background: transparent;
+    color: #1b1b18;
+    font-weight: 600;
+    cursor: pointer;
+}
+.consent-banner__button:hover { background: #f0f4ef; }
+.consent-banner__button:focus-visible,
+.consent-banner__link:focus-visible { outline: 2px solid #40916c; outline-offset: 2px; }
+.dark .consent-banner { background: #161615; border-color: #3e3e3a; color: #ededec; }
+.dark .consent-banner__text,
+.dark .consent-banner__link,
+.dark .consent-banner__button { color: #ededec !important; }
+.dark .consent-banner__button { border-color: #ededec; }
+.dark .consent-banner__button:hover { background: #262624; }
+@media (max-width: 420px) {
+    .consent-banner__actions { width: 100%; }
+    .consent-banner__button { flex: 1 1 0; }
+}
+/* The global theme rules above reset `section`/`p` (transparent background,
+   no border, body font size) with !important; keep the banner's own look. */
+#consent-banner {
+    background: #ffffff !important;
+    border: 1px solid #d6dcd4 !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12) !important;
+}
+#consent-banner .consent-banner__text {
+    font-size: 0.875rem !important;
+    line-height: 1.4 !important;
+    hyphens: none;
+}
+.dark #consent-banner {
+    background: #161615 !important;
+    border-color: #3e3e3a !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5) !important;
+}
