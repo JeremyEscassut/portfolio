@@ -82,6 +82,9 @@
   "contact.form.submit": "Send",
 
   "legal.title": "Legal notice",
+  "errors.404.title": "Page not found",
+  "errors.404.text": "This address does not match any page of the portfolio.",
+  "errors.404.home": "Back to the home page",
   "ui.back": "Back",
   "cv.icon_alt": "CV icon",
 

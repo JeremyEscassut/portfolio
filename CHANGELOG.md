@@ -8,6 +8,9 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 ## [Non publié]
 
 ### Ajouté
+- Aperçu des liens partagés (LinkedIn, messageries) : balises Open Graph et Twitter, avec une image d'aperçu en français et en anglais (`public/images/og-fr.jpg`, `og-en.jpg`).
+- Référencement : URL canonique et liens `hreflang` FR/EN sur chaque page, données structurées `Person` (schema.org) sur l'accueil, `sitemap.xml` déclaré dans `robots.txt`.
+- Page 404 bilingue avec retour à l'accueil, non indexée.
 - Expérience Primever (développeur web, septembre à novembre 2026) en tête de la section Expérience : missions Okta, refonte de l'application de suivi de réunions, traduction automatique DeepL, et travail encadré avec Codex.
 - Paragraphe « À propos » sur la pratique de l'IA générative : donner le contexte, cadrer, vérifier chaque résultat.
 - Bandeau de consentement Google Analytics, court et non bloquant : « Refuser » et « Accepter » ont le même poids, GA ne se charge qu'après « Accepter », le choix est redemandé après 13 mois et le lien « Gérer les cookies » du pied de page permet d'en changer. Les mentions légales décrivent ce fonctionnement.
@@ -24,6 +27,8 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Carrousel Admiral : chaque capture est annoncée aux lecteurs d'écran (« Capture 2 sur 3 ») quand on change de capture, aux flèches, aux points ou au doigt.
 
 ### Modifié
+- Titre de l'onglet de l'accueil : « Jérémy Escassut · » suivi du métier, au lieu de « Portfolio - Jérémy Escassut ».
+- Les adresses inconnues renvoient une vraie page 404 au lieu de l'accueil (qui répondait avec un code 200). Les routes « attrape-tout » et le bloc de redirection devenu inaccessible sont supprimés de `routes/web.php`.
 - Les toasts du formulaire de contact disparaissent après 10 secondes au lieu de 20 (toujours en pause au survol et au focus).
 - CV mis à jour (versions de novembre 2026) pour les trois profils, allégés (photo recompressée : environ 140 Ko par fichier au lieu de 7 Mo) et renommés sans date (`ESCASSUT_JEREMY_-_CV_<profil>.pdf`). En anglais, la fenêtre de choix et la page CV précisent que les CV sont en français.
 - Lien LinkedIn mis à jour vers le nouveau profil `https://www.linkedin.com/in/jeremyescassut` (icône de la colonne de gauche et lien de la recommandation).

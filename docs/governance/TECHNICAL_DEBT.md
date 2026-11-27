@@ -25,6 +25,7 @@
 
 - Impact : risque de regression 404 sur routes localisees.
 - Cause : combinaison prefix optional + fallback + redirects compatibilite.
+- Avancement 2026-11-27 (lot SEO) : routes « attrape-tout » et redirections de compatibilite supprimees, adresses inconnues en 404 (`tests/Feature/SeoTest.php`). Reste : le prefixe `{locale?}` optionnel ne sert pas (`/cv` et `/mentions` sans langue renvoient 404, comme avant).
 - Priorite : high.
 - Plan : documenter clairement les scenarios et renforcer les tests Feature des routes critiques.
 
