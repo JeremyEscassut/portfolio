@@ -100,4 +100,77 @@ class ContactFormTest extends TestCase
         $response->assertRedirect();
         Mail::assertSent(ContactMessage::class);
     }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function success_message_follows_the_page_language()
+    {
+        Mail::fake();
+
+        $response = $this->post(route('contact.send', ['locale' => 'en']), [
+            'name' => 'Alice',
+            'email' => 'alice@example.test',
+            'message' => 'Hello',
+            'hp' => '',
+        ]);
+
+        $response->assertSessionHas('status', 'Your message has been sent. Thank you Alice — I will get back to you as soon as possible.');
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function failed_send_keeps_the_input_and_asks_the_page_to_offer_the_email_app_fallback()
+    {
+        config(['app.debug' => false]);
+        Mail::shouldReceive('to->send')->andThrow(new \Exception('SMTP down'));
+
+        $response = $this->from(route('home', ['locale' => 'fr']))
+            ->post(route('contact.send', ['locale' => 'fr']), [
+                'name' => 'Jean',
+                'email' => 'jean@example.test',
+                'message' => 'Mon message',
+                'hp' => '',
+            ]);
+
+        $response->assertRedirect(route('home', ['locale' => 'fr']));
+        $response->assertSessionHas('error', "Votre message n'a pas pu être envoyé.");
+        $response->assertSessionHas('contactFailed', true);
+        $response->assertSessionHasInput('message', 'Mon message');
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function page_after_a_failed_send_shows_the_mailto_fallback()
+    {
+        $response = $this->withSession(['contactFailed' => true, 'error' => "Votre message n'a pas pu être envoyé."])
+            ->get(route('home', ['locale' => 'fr']));
+
+        $response->assertOk();
+        $response->assertSee('data-mailto-fallback', false);
+        $response->assertSee('mailto:' . config('mail.public_contact_address'), false);
+        $response->assertSee('Ouvrir dans ma messagerie', false);
+        // The reopened dialog carries the message; no error toast behind the modal.
+        $response->assertSee('data-reopen="message"', false);
+        $response->assertDontSee('class="toast toast--error"', false);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function error_toast_is_still_shown_when_the_dialog_does_not_reopen()
+    {
+        $response = $this->withSession(['error' => 'Erreur'])
+            ->get(route('home', ['locale' => 'fr']));
+
+        $response->assertOk();
+        $response->assertSee('class="toast toast--error"', false);
+        $response->assertSee('data-reopen=""', false);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validation_messages_are_in_french_on_the_french_page()
+    {
+        $response = $this->post(route('contact.send', ['locale' => 'fr']), [
+            'email' => 'not-an-email',
+            'message' => 'Bonjour',
+            'hp' => '',
+        ]);
+
+        $response->assertSessionHasErrors(['email' => 'Le champ e-mail doit être une adresse e-mail valide.']);
+    }
 }

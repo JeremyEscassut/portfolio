@@ -1,11 +1,9 @@
 <!doctype html>
-<html lang="fr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <!-- Google Analytics: loaded by resources/js/app.js only after the visitor accepts (see #consent-banner). -->
-    <script>
-        window.GA_MEASUREMENT_ID = 'G-6JG2Q1TZT8';
-    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6JG2Q1TZT8"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -18,7 +16,21 @@
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Theme before first paint (no white flash): forced choice from localStorage, else the
+         system setting. Keep it inline and blocking (no defer/module). Logic: resources/js/theme.js -->
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            var dark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', dark);
+        })();
+    </script>
     <title>@yield('title', 'Portfolio - Jérémy Escassut')</title>
+    <meta name="description" content="@yield('description', __('home.meta_description'))">
+    <!-- Typeface: Schibsted Grotesk, served by Bunny Fonts (GDPR-friendly Google Fonts mirror) -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=schibsted-grotesk:400,500,600,700&display=swap">
     <!-- Prefer raster PNG (explicit sizes) to ensure correct tab rendering; keep SVG as fallback. -->
     <!-- Ensure public/favicon-32.png and public/favicon-16.png exist and contain the artwork filling the canvas. -->
     @php
@@ -37,24 +49,17 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $fsvg }}" sizes="any">
     <!-- Safari pinned tab (mask-icon) -->
     <link rel="mask-icon" href="{{ asset('favicon.svg') }}?v={{ $fsvg }}" color="#40916C">
+    <!-- Profile photo: drawn into a <canvas> by photoToggle.js, so the browser would only find it
+         after the JS loads. Preloading it lets the first visual on mobile arrive sooner. -->
+    @if(request()->routeIs('home', 'home.root'))
+    <link rel="preload" as="image" href="{{ asset('images/profile.jpg') }}" fetchpriority="high" crossorigin="anonymous">
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
 
 <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] min-h-screen">
     @yield('content')
-    <!-- Analytics consent banner: hidden until JS finds no stored choice. Not modal, never steals focus.
-         A <section> (not a <div>) on purpose: the dark theme resets `body > div` to position: static. -->
-    <section id="consent-banner" class="consent-banner" aria-label="{{ __('consent.label') }}" hidden>
-        <p class="consent-banner__text">
-            {{ __('consent.text') }}
-            <a href="{{ route('mentions', ['locale' => app()->getLocale()]) }}" class="consent-banner__link">{{ __('consent.more') }}</a>
-        </p>
-        <div class="consent-banner__actions">
-            <button type="button" class="consent-banner__button" data-consent="denied">{{ __('consent.refuse') }}</button>
-            <button type="button" class="consent-banner__button" data-consent="granted">{{ __('consent.accept') }}</button>
-        </div>
-    </section>
     <!-- Provide the application base path for client-side code. -->
     <script>
         // `getBasePath()` returns the path where the app is mounted ('' or '/portfolio').

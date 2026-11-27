@@ -1,13 +1,33 @@
 // File: resources/js/app.js
-// Purpose: Application entry with Alpine.js initialization and Laravel bootstrap.
+// Purpose: single JS entry point (loaded by Vite from layouts/app.blade.php).
+//
+// The page is server-rendered Blade; this file only adds behaviour. Blocks, in order:
+//   1. Theme ..................... theme.js (system by default, toggle forces the other)
+//   2. Icon hover styles .......... small CSS injected at runtime (lift + tilt on icons)
+//   3. Dialogs .................... dialogs.js (native <dialog>: contact, CV choice, video)
+//   4. CV selector modal .......... opened/closed through the URL hash #cv-selector-modal
+//   5. Section observer ........... highlights the section in view (desktop nav + mobile fan)
+//   6. data-x-* shim .............. turns valid data-x-* attributes into Alpine x-* attributes
+//   7. Pinned Contact/CV icons .... mobile: icons stick to the top once scrolled past;
+//                                   also sets <html>.is-past-actions for the section fan
+//   8. Theme toggle fallback / footer padding
+//   9. Alpine.start()
+//  10. CV link clone ............. clears a stuck hover/focus state after opening the CV
+//  Imported modules: photoToggle.js (photo swap), halo.js (cursor glow), sectionFab.js (mobile fan),
+//                    contactFeedback.js (toasts + email-app fallback after a failed send)
 
 import './bootstrap';
 
 // Alpine.js initialization
 import Alpine from 'alpinejs';
 
-// Ensure theme from localStorage is applied immediately (no 'auto' option):
-{ const stored = localStorage.getItem('theme'); if (stored === 'dark') { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); } }
+// Theme: follows the system by default, the toggle forces the other one (see theme.js).
+// The first paint is handled by the inline script in layouts/app.blade.php.
+import './theme';
+
+// Native modal dialogs (contact, CV choice, Admiral video), see dialogs.js.
+import './dialogs';
+import './carousel';
 
 // Inject small UI hover/focus styles for icon links (moved from Blade)
 (function injectIconHoverStyles() {
@@ -48,8 +68,14 @@ import Alpine from 'alpinejs';
 .social-link:focus-visible,
 #themeToggleButton:focus-visible,
 #langToggleButton:focus-visible {
-    outline: none;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .repo-link, .social-link, #themeToggleButton, #langToggleButton { transition: none; }
+    .repo-link:hover, .social-link:hover, #themeToggleButton:hover, #langToggleButton:hover,
+    .repo-link:focus-visible, .social-link:focus-visible, #themeToggleButton:focus-visible, #langToggleButton:focus-visible { transform: none; }
 }
 
 /* Cursor: show pointer (hand with index) on devices with fine pointer (desktop) */
@@ -65,86 +91,16 @@ import Alpine from 'alpinejs';
     document.head.appendChild(el);
 })();
 
-// Language toggle: small globe button with FR/EN badge — share behavior/colors with theme toggle
-(function initLangToggle() {
-    try {
-        const btn = document.getElementById('langToggleButton');
-        if (!btn) return;
-
-        const badge = btn.querySelector('.lang-badge');
-
-        function readLang() {
-            return (localStorage.getItem('siteLang') || 'FR');
-        }
-
-        function writeLang(l) {
-            localStorage.setItem('siteLang', l);
-        }
-
-        function render() {
-            const l = readLang();
-            if (badge) badge.textContent = l;
-            btn.setAttribute('aria-label', `Changer la langue — actuellement ${l}`);
-        }
-
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const current = readLang();
-            const next = current === 'FR' ? 'EN' : 'FR';
-            writeLang(next);
-            render();
-        });
-
-        // keyboard accessibility
-        btn.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                btn.click();
-            }
-        });
-
-        // initial render
-        render();
-    } catch (err) {
-        // ignore
-    }
-})();
-
-// Register contact modal factory and other small page behaviors here so markup can remain clean.
-// We keep a window.contactModal factory for compatibility with existing x-data="contactModal()" usage.
-window.contactModal = function () {
-    return {
-        isOpen: false,
-        lastActive: null,
-        openModal() {
-            this.lastActive = document.activeElement;
-            this.isOpen = true;
-            this.$nextTick(() => {
-                if (this.$refs && this.$refs.email) this.$refs.email.focus();
-            });
-            document.addEventListener('keydown', this._escHandler = (e) => {
-                if (e.key === 'Escape') this.closeModal();
-            });
-        },
-        closeModal() {
-            this.isOpen = false;
-            document.removeEventListener('keydown', this._escHandler);
-            this.$nextTick(() => {
-                if (this.lastActive && typeof this.lastActive.focus === 'function') this.lastActive.focus();
-            });
-        }
-    }
-}
-
+// CV selector modal: its open state lives in the URL hash so it also works without
+// Alpine and survives a reload. Opening = set #cv-selector-modal, closing = clear it;
+// syncCvSelectorModalState() reflects the hash on the modal (display + aria-hidden).
 function syncCvSelectorModalState() {
-    const modal = document.getElementById('cv-selector-modal');
-    if (!modal) return false;
+    const dialog = document.getElementById('cv-selector-modal');
+    if (!dialog || typeof dialog.showModal !== 'function') return false;
 
     const shouldOpen = window.location.hash === '#cv-selector-modal';
-    modal.style.display = shouldOpen ? 'flex' : 'none';
-    modal.classList.toggle('hidden', !shouldOpen);
-    modal.classList.toggle('flex', shouldOpen);
-    modal.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+    if (shouldOpen && !dialog.open) dialog.showModal();
+    if (!shouldOpen && dialog.open) dialog.close();
 
     return shouldOpen;
 }
@@ -164,6 +120,9 @@ window.closeCvSelectorModal = function () {
 
 window.addEventListener('DOMContentLoaded', () => {
     syncCvSelectorModalState();
+    // Closed natively (Escape, back gesture, click outside, close button): clear the hash too.
+    const cvDialog = document.getElementById('cv-selector-modal');
+    if (cvDialog) cvDialog.addEventListener('close', () => window.closeCvSelectorModal());
     document.querySelectorAll('[data-cv-open]').forEach((button) => {
         button.addEventListener('click', (event) => {
             event.preventDefault();
@@ -193,41 +152,6 @@ window.downloadSelectedCv = function (url) {
     }
 };
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-        window.closeCvSelectorModal();
-    }
-});
-
-// Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
-window.addEventListener('open-contact', function _openContactFallback() {
-    function tryOpen() {
-        const el = document.querySelector('[x-data="contactModal()"]');
-        if (!el) return false;
-        try {
-            if (el.__x && el.__x.$data) {
-                el.__x.$data.isOpen = true;
-                setTimeout(() => {
-                    try {
-                        const email = el.querySelector('[x-ref="email"]');
-                        if (email && typeof email.focus === 'function') email.focus();
-                    } catch (e) {
-                        // ignore
-                    }
-                }, 40);
-                return true;
-            }
-        } catch (e) {
-            // ignore
-        }
-        return false;
-    }
-
-    if (!tryOpen()) {
-        setTimeout(tryOpen, 50);
-        setTimeout(tryOpen, 200);
-    }
-});
 
 // Page-specific UI helpers moved from home.blade.php
 document.addEventListener('alpine:init', () => {
@@ -247,9 +171,14 @@ document.addEventListener('alpine:init', () => {
         if (active) {
             active.classList.add('text-[#1b1b18]', 'font-semibold');
         }
+        // Same highlight in the mobile section fan (defined in sectionFab.js)
+        if (typeof window.markSectionFabCurrent === 'function') window.markSectionFabCurrent(id);
     }
 
     if (navLinks.length && sections.length) {
+        // rootMargin shrinks the viewport to a band between 30% from the top and 40% from
+        // the bottom: a section counts as "current" when it crosses that reading band,
+        // and the most visible one wins when two sections share it.
         const observer = new IntersectionObserver((entries) => {
             const visibleEntries = entries
                 .filter((entry) => entry.isIntersecting)
@@ -359,9 +288,13 @@ function applyDataXShim() {
     }
 
     function onScroll() {
-        if (window.innerWidth > 640) { removeFixed(); return; }
         if (origRect === null) recalc();
-        if (window.scrollY > target.__origTop) applyFixed(); else removeFixed();
+        const pastActions = window.scrollY > target.__origTop;
+        // Shared signal for the other floating control (section fan, sectionFab.js):
+        // it appears at the same scroll position, on every viewport below desktop.
+        document.documentElement.classList.toggle('is-past-actions', pastActions);
+        if (window.innerWidth > 640) { removeFixed(); return; }
+        if (pastActions) applyFixed(); else removeFixed();
     }
 
     window.addEventListener('resize', () => { recalc(); onScroll(); });
@@ -371,29 +304,17 @@ function applyDataXShim() {
     setTimeout(() => { recalc(); onScroll(); }, 120);
 })();
 
-// Theme toggle fallback: if Alpine isn't active for some reason, provide
-// a small JS handler to ensure the button still toggles the theme class.
+// Theme toggle fallback: if Alpine isn't active for some reason, the button still
+// toggles the theme through theme.js.
 (function initThemeToggleFallback() {
-    try {
-        const btn = document.getElementById('themeToggleButton');
-        if (!btn) return;
-
-        btn.addEventListener('click', function (e) {
-            // If Alpine is handling the event, prefer Alpine behaviour
-            if (window.Alpine && btn.hasAttribute('x-on:click')) return;
-
-            // Use the same cycle logic as the Alpine component
-            const stored = localStorage.getItem('theme') || 'light';
-            const order = ['light', 'dark'];
-            let i = order.indexOf(stored);
-            if (i === -1) i = 0;
-            const next = order[(i + 1) % order.length];
-            if (next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', next);
-        });
-    } catch (e) {
-        // noop
-    }
+    const btn = document.getElementById('themeToggleButton');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        // Alpine handles the click (@click="cycle()"); only act when it is missing,
+        // otherwise the theme would be toggled twice.
+        if (window.Alpine) return;
+        window.toggleTheme();
+    });
 })();
 
 // Ensure footer reserved space on mobile when it becomes stuck
@@ -501,82 +422,5 @@ Alpine.start();
 // Ambient halo: small, non-intrusive background glow updated on scroll/mousemove
 import './photoToggle';
 import './halo';
-
-// Analytics consent (CNIL-friendly): Google Analytics is only loaded after an
-// explicit "Accepter". Refusing is one click, same weight as accepting. The
-// choice is stored in localStorage (not a cookie) and asked again after 13 months.
-(function () {
-    const KEY = 'analytics-consent';
-    const MAX_AGE_MS = 395 * 24 * 60 * 60 * 1000; // ~13 months
-    const gaId = window.GA_MEASUREMENT_ID;
-
-    function readChoice() {
-        try {
-            const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
-            if (!raw || !raw.value || Date.now() - raw.at > MAX_AGE_MS) return null;
-            return raw.value;
-        } catch (e) { return null; }
-    }
-
-    function saveChoice(value) {
-        try { localStorage.setItem(KEY, JSON.stringify({ value, at: Date.now() })); } catch (e) { /* private mode */ }
-    }
-
-    function loadAnalytics() {
-        if (!gaId) return;
-        window['ga-disable-' + gaId] = false;
-        if (window.__gaLoaded) return;
-        window.__gaLoaded = true;
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function () { window.dataLayer.push(arguments); };
-        window.gtag('js', new Date());
-        window.gtag('config', gaId);
-        const s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
-        document.head.appendChild(s);
-    }
-
-    function stopAnalytics() {
-        if (gaId) window['ga-disable-' + gaId] = true;
-        const host = window.location.hostname;
-        const parts = host.split('.');
-        const domains = ['', host, '.' + host];
-        if (parts.length > 2) domains.push('.' + parts.slice(-2).join('.'));
-        document.cookie.split(';')
-            .map((c) => c.split('=')[0].trim())
-            .filter((name) => name === '_ga' || name.startsWith('_ga_'))
-            .forEach((name) => domains.forEach((d) => {
-                document.cookie = name + '=; Max-Age=0; path=/' + (d ? '; domain=' + d : '');
-            }));
-    }
-
-    function init() {
-        const banner = document.getElementById('consent-banner');
-        const choice = readChoice();
-        if (choice === 'granted') loadAnalytics();
-        if (!banner) return;
-        if (choice === null) banner.hidden = false;
-
-        banner.querySelectorAll('[data-consent]').forEach((btn) => {
-            btn.addEventListener('click', () => {
-                const value = btn.dataset.consent === 'granted' ? 'granted' : 'denied';
-                saveChoice(value);
-                banner.hidden = true;
-                if (value === 'granted') loadAnalytics(); else stopAnalytics();
-            });
-        });
-
-        document.querySelectorAll('[data-consent-open]').forEach((el) => {
-            el.addEventListener('click', (e) => {
-                e.preventDefault();
-                banner.hidden = false;
-                const first = banner.querySelector('[data-consent]');
-                if (first) first.focus();
-            });
-        });
-    }
-
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-    else init();
-})();
+import './sectionFab';
+import './contactFeedback';

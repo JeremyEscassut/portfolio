@@ -48,6 +48,6 @@ class CvPageTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Product Owner', false);
-        $response->assertSee('ESCASSUT_JEREMY_-_CV_Product_Owner_|_Transformation_digitale_Juillet_2026.pdf', false);
+        $response->assertSee('ESCASSUT_JEREMY_-_CV_Product_Owner_-_Transformation_digitale.pdf', false);
     }
 }

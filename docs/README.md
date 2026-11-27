@@ -10,6 +10,7 @@ Ce dossier centralise la documentation projet.
 
 ## Fichiers principaux
 
+- `PARCOURS_DE_LECTURE.md` : guide de lecture du code (a lire en premier)
 - `governance/ARCHITECTURE.md`
 - `governance/Guidelines.md`
 - `governance/roadmap.md`

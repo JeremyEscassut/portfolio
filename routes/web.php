@@ -1,5 +1,23 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| URL map (read top to bottom: Laravel uses the first route that matches)
+|--------------------------------------------------------------------------
+|   GET  /                 French home page (no locale in the URL)
+|   GET  /{fr|en}          home page in that language
+|   GET  /{locale?}/cv     CV page
+|   GET  /{locale?}/mentions  legal notice
+|   POST /{locale?}/contact   contact form -> ContactController@send
+|   GET  /{locale?}/{any}  anything else falls back to the home page
+|
+| The language itself is resolved by App\Http\Middleware\SetLocale
+| (URL segment, then `site_locale` cookie, then config default).
+|
+| The site may be served under a sub-path in production (e.g. /portfolio):
+| always build links with route() / asset(), never with hard-coded paths.
+*/
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 

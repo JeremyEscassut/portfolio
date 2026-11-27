@@ -77,3 +77,58 @@ Ce fichier centralise les solutions appliquees au projet, au format court et reu
 - Procedure a retenir pour la prochaine fois: 1) verifier la branche et le scope demande, 2) tenter `php artisan serve`, 3) si erreur OPcache, relancer avec OPcache desactive, 4) documenter le cas ici.
 - References: terminal local, `php artisan serve`, `php -i`.
 - Tags: infra | dev | php | ops
+
+## 8) Erreur JavaScript du carrousel CRM (apostrophe dans une expression Alpine)
+
+- Date: 2026-11-27
+- Contexte: la console affichait `Uncaught SyntaxError: Unexpected identifier 'écran'` au chargement de la page d'accueil.
+- Cause: le libellé traduit « captures d'écran » etait injecte tel quel dans une expression Alpine (`:aria-label="'…' + …"`) ; l'apostrophe fermait la chaine JavaScript.
+- Solution: passer les textes traduits injectes dans du JavaScript par `@js(__('cle'))`, qui echappe l'apostrophe.
+- References: `resources/views/home.blade.php` (points du carrousel), `tests/Feature/HomePageContentTest.php` (test `carousel_labels_with_apostrophes_are_escaped_for_alpine`).
+- Tags: ui | bug | i18n | js
+
+## 9) Fenetre de choix du CV affichee en bas de page en mode sombre
+
+- Date: 2026-11-27
+- Contexte: en mode sombre, la fenetre « Choisissez un CV » s'ouvrait en bas de la page au lieu d'etre centree a l'ecran.
+- Cause: la regle `.dark body > div { position: static !important }` s'appliquait aussi a `#cv-selector-modal`, enfant direct de `<body>`, et annulait son `position: fixed`.
+- Solution: `html.dark #cv-selector-modal { position: fixed !important; }` dans le bloc « UX quick wins » de `app.css`. Le bouton de sections mobile, egalement enfant de `<body>`, positionne ses elements individuellement pour la meme raison.
+- Non-regression: pas de test automatise possible (rendu CSS) ; verification manuelle en mode sombre, desktop et mobile.
+- References: `resources/css/app.css`.
+- Tags: ui | bug | css | dark-mode
+
+## 10) Tester l'echec d'envoi du formulaire sans rien envoyer
+
+- Date: 2026-11-27
+- Contexte: verifier le repli de contact (toast, fenetre rouverte, `mailto:`) sans envoyer de vrai message.
+- Cause: le repli ne s'affiche que si l'envoi SMTP echoue.
+- Solution: lancer le profil `portfolio-mail-fail` de `.claude/launch.json` (port 8010). Il passe `MAIL_MAILER=smtp`, `MAIL_HOST=127.0.0.1`, `MAIL_PORT=9` en variables d'environnement, qui priment sur `.env` ; l'envoi echoue toujours.
+- References: `.claude/launch.json`, `app/Http/Controllers/ContactController.php`.
+- Tags: tests | mail | dev
+
+## 11) Couleur d'un bouton ecrasee par une regle sombre generique
+
+- Date: 2026-11-27
+- Contexte: libelle de bouton illisible en mode sombre dans une fenetre.
+- Cause: `.dark [role="dialog"] button { color: ... !important }` (deux classes) l'emporte sur un selecteur a une classe.
+- Solution: ecrire les couleurs des composants avec au moins deux classes (`.pf-btn.pf-btn--primary`) ou un identifiant, avec `!important` si la regle concurrente en a un.
+- References: `resources/css/app.css` (bloc « UX quick wins »).
+- Tags: ui | css | dark-mode
+
+## 12) Classes Tailwind `dark:` qui ne suivent pas le bouton theme
+
+- Date: 2026-11-27
+- Contexte: le site bascule le theme avec la classe `.dark` sur `<html>`, mais Tailwind v4 lie `dark:` a `prefers-color-scheme` par defaut.
+- Cause: variante `dark` par defaut de Tailwind v4.
+- Solution: `@custom-variant dark (&:where(.dark, .dark *));` juste apres `@import "tailwindcss";` dans `resources/css/app.css`.
+- References: `resources/css/app.css`.
+- Tags: ui | css | dark-mode | tailwind
+
+## 13) Auditer les contrastes au survol et au focus
+
+- Date: 2026-11-27
+- Contexte: les etats survol/focus ne sont pas lisibles par `getComputedStyle` sans interaction reelle.
+- Cause: les pseudo-classes `:hover` / `:focus-visible` ne peuvent pas etre forcees par script.
+- Solution: `tools/qa-contrast-audit.js` copie les regles `:hover` / `:focus-visible` sur des classes `.qa-hover` / `.qa-focus`, desactive les transitions et calcule le contraste texte/icone contre le fond reel (y compris `::before` / `::after`). A lancer en clair et en sombre, fenetres ouvertes.
+- References: `tools/qa-contrast-audit.js`.
+- Tags: ui | accessibilite | tests

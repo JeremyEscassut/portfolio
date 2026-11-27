@@ -9,7 +9,13 @@ use Illuminate\Support\Facades\App;
 class SetLocale
 {
     /**
-     * Handle an incoming request.
+     * Pick the language of the page.
+     *
+     * Order of precedence:
+     *   1. the {locale} segment of the URL (/fr/..., /en/...),
+     *   2. the `site_locale` cookie written by the language button (home.blade.php),
+     *   3. config('app.locale').
+     * Anything other than "fr" or "en" falls back to the default.
      */
     public function handle(Request $request, Closure $next)
     {
