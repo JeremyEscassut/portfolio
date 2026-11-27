@@ -19,7 +19,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Balise `meta description` et langue de la page (`lang`) conforme à la langue affichée.
 
 ### Modifié
-- CV mis à jour (versions de novembre 2026) pour les trois profils, aux mêmes adresses. En anglais, la fenêtre de choix et la page CV précisent que les CV sont en français.
+- CV mis à jour (versions de novembre 2026) pour les trois profils, allégés (photo recompressée : environ 140 Ko par fichier au lieu de 7 Mo) et renommés sans date (`ESCASSUT_JEREMY_-_CV_<profil>.pdf`). En anglais, la fenêtre de choix et la page CV précisent que les CV sont en français.
 - Lien LinkedIn mis à jour vers le nouveau profil `https://www.linkedin.com/in/jeremyescassut` (icône de la colonne de gauche et lien de la recommandation).
 - Titre : « Product owner, chef de projet IT et développeur UX/UI ».
 - Police Schibsted Grotesk, texte plus foncé et lignes plus courtes pour la lisibilité.
