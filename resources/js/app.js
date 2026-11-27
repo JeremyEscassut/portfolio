@@ -424,3 +424,4 @@ import './photoToggle';
 import './halo';
 import './sectionFab';
 import './contactFeedback';
+import './consent';
