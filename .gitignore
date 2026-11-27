@@ -22,3 +22,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Secrets et sauvegardes locales (ne jamais versionner)
+.env.*
+!.env.example
+mailgundata.md
