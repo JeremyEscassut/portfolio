@@ -17,7 +17,7 @@ class HomePageContentTest extends TestCase
         $response->assertSee('Voir les captures d&#039;écran précédentes', false);
         $response->assertSee('Voir les captures d&#039;écran suivantes', false);
         $response->assertSee('x-show="videoOpen"', false);
-        $response->assertSee('video/quicktime', false);
+        $response->assertSee('video/mp4', false);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -31,6 +31,6 @@ class HomePageContentTest extends TestCase
         $response->assertSee('View previous screenshots', false);
         $response->assertSee('View next screenshots', false);
         $response->assertSee('x-show="videoOpen"', false);
-        $response->assertSee('video/quicktime', false);
+        $response->assertSee('video/mp4', false);
     }
 }

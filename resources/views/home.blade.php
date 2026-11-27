@@ -234,7 +234,7 @@
 					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
 						<div class="flex-1 text-sm text-[#706f6c]">
 							<div class="flex items-center">
-								<span class="text-base font-semibold">{{ __('projects.crm.title') }}</span>
+								<h3 class="text-base font-semibold">{{ __('projects.crm.title') }}</h3>
 							</div>
 							<p class="mt-2 text-sm text-[#706f6c]">{{ __('projects.crm.description') }}</p>
 							<div class="project-tags mt-3">
@@ -269,8 +269,9 @@
 										<p class="text-sm font-semibold text-[#1b1b18]">{{ __('projects.crm.video.title') }}</p>
 										<button type="button" @click="videoOpen = false" class="text-sm text-[#706f6c] hover:text-[#1b1b18]" aria-label="{{ __('projects.crm.video.close') }}">✕</button>
 									</div>
-									<video controls playsinline preload="metadata" class="w-full rounded-lg">
-										<source src="{{ asset('mov/Demo Admiral.mov') }}" type="video/quicktime">
+									<video controls playsinline preload="metadata" class="w-full rounded-lg" aria-label="{{ __('projects.crm.video.title') }}">
+										<source src="{{ asset('mov/demo-admiral-720p.mp4') }}" type="video/mp4" media="(max-width: 768px)">
+										<source src="{{ asset('mov/demo-admiral-1080p.mp4') }}" type="video/mp4">
 										{{ __('projects.crm.video.unsupported') }}
 									</video>
 								</div>
@@ -281,7 +282,7 @@
 					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
 						<div class="flex-1 text-sm text-[#706f6c]">
 							<div class="flex items-center">
-								<span class="text-base font-semibold">{{ __('projects.pwa.title') }}</span>
+								<h3 class="text-base font-semibold">{{ __('projects.pwa.title') }}</h3>
 								@if($a2Svg)
 								<a href="https://a2balles.com" target="_blank" rel="noopener noreferrer" aria-label="{{ __('projects.repo.pwa') }}" class="repo-link project-link--a2balles ml-5 inline-flex items-center justify-center rounded p-1 hover:bg-gray-100 dark:hover:bg-neutral-800">
 									{!! $a2Svg !!}
@@ -302,7 +303,7 @@
 					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
 						<div class="flex-1 text-sm text-[#706f6c]">
 							<div class="flex items-center">
-								<span class="text-base font-semibold">{{ __('projects.livret.title') }}</span>
+								<h3 class="text-base font-semibold">{{ __('projects.livret.title') }}</h3>
 								@php $repoSvg = ''; try { $repoSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab-repo-link.svg')); } catch (Exception $e) { } @endphp
 								<a href="https://gitlab.com/JeremyEscassut/livret-cda" target="_blank" rel="noopener noreferrer" aria-label="{{ __('projects.repo.livret') }}" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
 									@if($repoSvg) {!! $repoSvg !!} @endif
@@ -322,7 +323,7 @@
 					<div class="w-full p-4 bg-white/70 rounded flex flex-col gap-4 project-card">
 						<div class="flex-1 text-sm text-[#706f6c]">
 							<div class="flex items-center">
-								<span class="text-base font-semibold">{{ __('projects.breakingcat.title') }}</span>
+								<h3 class="text-base font-semibold">{{ __('projects.breakingcat.title') }}</h3>
 								@php $repoSvg = ''; try { $repoSvg = file_get_contents(resource_path('svg'.DIRECTORY_SEPARATOR.'icon-gitlab-repo-link.svg')); } catch (Exception $e) { } @endphp
 								<a href="https://gitlab.com/JeremyEscassut/breakingcat" target="_blank" rel="noopener noreferrer" aria-label="{{ __('projects.repo.breakingcat') }}" class="ml-5 repo-link p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800">
 									@if($repoSvg) {!! $repoSvg !!} @endif
@@ -351,8 +352,8 @@
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						<div class="text-sm text-[#706f6c] font-medium">{{ __('experience.current.dates') }}</div>
 						<div>
-							<h2 class="text-lg font-semibold tracking-tight">{{ __('experience.current.title') }}</h2>
-							<h3 class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.current.subtitle') }}</h3>
+							<h3 class="text-lg font-semibold tracking-tight">{{ __('experience.current.title') }}</h3>
+							<p class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.current.subtitle') }}</p>
 							<p class="text-sm text-[#706f6c] mt-2">{{ __('experience.current.description') }}</p>
 							<p class="text-sm text-[#706f6c] mt-2">{{ __('experience.current.internship') }}</p>
 						</div>
@@ -361,8 +362,8 @@
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 						<div class="text-sm text-[#706f6c] font-medium">{{ __('experience.previous.dates') }}</div>
 						<div>
-							<h2 class="text-lg font-semibold tracking-tight">{{ __('experience.previous.title') }}</h2>
-							<h3 class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.previous.subtitle') }}</h3>
+							<h3 class="text-lg font-semibold tracking-tight">{{ __('experience.previous.title') }}</h3>
+							<p class="text-sm font-medium text-[#5f615f] mt-1">{{ __('experience.previous.subtitle') }}</p>
 							<p class="text-sm text-[#706f6c] mt-2">{{ __('experience.previous.description') }}</p>
 						</div>
 					</div>
