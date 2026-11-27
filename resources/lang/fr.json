@@ -140,7 +140,7 @@
 
   "mentions.data_protection": "Responsable du traitement : Jérémy Escassut — contact : j.losaint@gmail.com. Finalités : gestion des demandes de contact transmises via le formulaire de contact (réponse aux messages reçus). Base légale : traitement nécessaire à l'exécution de la demande de l'utilisateur. Droits : vous pouvez demander l'accès, la rectification ou la suppression des données vous concernant en contactant : j.losaint@gmail.com.",
 
-  "mentions.cookies": "Ce site utilise Google Analytics 4, un service de mesure d’audience fourni par Google Ireland Limited, pour comprendre comment les visiteurs le consultent : pages vues, durée de visite, type d’appareil et de navigateur, pays ou ville approximatifs. Google Analytics dépose pour cela des cookies dans votre navigateur (_ga et _ga_*). Les données sont collectées sous forme pseudonymisée, servent uniquement à établir des statistiques de fréquentation et peuvent être transférées vers les États‑Unis dans le cadre du Data Privacy Framework UE–États‑Unis. Vous pouvez refuser ou supprimer ces cookies à tout moment depuis les réglages de votre navigateur, ou installer le module de désactivation de Google Analytics (https://tools.google.com/dlpage/gaoptout). L’hébergeur (Alwaysdata) collecte par ailleurs des données d’usage agrégées pour l’exploitation du service (par exemple : nombre de visites uniques par mois), qui ne permettent pas d’identifier personnellement les visiteurs.",
+  "mentions.cookies": "Ce site utilise Google Analytics 4, un service de mesure d’audience fourni par Google Ireland Limited, pour comprendre comment les visiteurs le consultent : pages vues, durée de visite, type d’appareil et de navigateur, pays ou ville approximatifs. Google Analytics dépose pour cela des cookies dans votre navigateur (_ga et _ga_*). Les données sont collectées sous forme pseudonymisée, servent uniquement à établir des statistiques de fréquentation et peuvent être transférées vers les États‑Unis dans le cadre du Data Privacy Framework UE–États‑Unis. Ces cookies ne sont déposés qu’après votre accord, donné via le bandeau affiché lors de votre première visite. Vous pouvez changer d’avis à tout moment grâce au lien « Gérer les cookies » en bas de la page d’accueil, supprimer ces cookies depuis les réglages de votre navigateur, ou installer le module de désactivation de Google Analytics (https://tools.google.com/dlpage/gaoptout). L’hébergeur (Alwaysdata) collecte par ailleurs des données d’usage agrégées pour l’exploitation du service (par exemple : nombre de visites uniques par mois), qui ne permettent pas d’identifier personnellement les visiteurs.",
 
   "mentions.responsibility": "Les informations publiées sur ce site sont fournies à titre informatif. L’éditeur met en œuvre ses meilleurs efforts pour assurer l’exactitude et la mise à jour des contenus, mais ne peut garantir l’exhaustivité ni l’absence d’erreurs. L’éditeur décline toute responsabilité pour les dommages directs ou indirects résultant de l’accès ou de l’utilisation du site.",
 
@@ -190,5 +190,12 @@
   "toast.region": "Notifications",
   "cv.page_title": "CV de Jérémy Escassut",
   "cv.heading": "Curriculum Vitae",
-  "contact.fallback.not_opened": "Rien ne s'est ouvert ? Aucune messagerie n'est configurée sur cet appareil. Copiez le message et collez-le dans un nouvel e-mail adressé à"
+  "contact.fallback.not_opened": "Rien ne s'est ouvert ? Aucune messagerie n'est configurée sur cet appareil. Copiez le message et collez-le dans un nouvel e-mail adressé à",
+
+  "consent.label": "Mesure d’audience",
+  "consent.text": "Avec votre accord, j’utilise Google Analytics pour savoir combien de personnes visitent ce site.",
+  "consent.more": "En savoir plus",
+  "consent.refuse": "Refuser",
+  "consent.accept": "Accepter",
+  "consent.manage": "Gérer les cookies"
 }

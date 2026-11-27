@@ -407,6 +407,7 @@ $icon = function (string $name): string {
 					<span>&copy; {{ date('Y') }} Jérémy Escassut</span>
 					<button type="button" class="site-footer__link" onclick="setTimeout(()=>window.dispatchEvent(new CustomEvent('open-contact')), 0)">{{ __('footer.contact') }}</button>
 					<a href="{{ route('mentions', ['locale' => app()->getLocale()]) }}" class="site-footer__link">{{ __('legal.title') }}</a>
+					<button type="button" class="site-footer__link" data-consent-open>{{ __('consent.manage') }}</button>
 				</div>
 				<div class="text-center lg:text-right site-footer__meta">
 					{{ __('footer.built_with') }}

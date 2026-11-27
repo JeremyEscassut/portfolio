@@ -8,6 +8,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 ## [Non publié]
 
 ### Ajouté
+- Bandeau de consentement Google Analytics, court et non bloquant : « Refuser » et « Accepter » ont le même poids, GA ne se charge qu'après « Accepter », le choix est redemandé après 13 mois et le lien « Gérer les cookies » du pied de page permet d'en changer. Les mentions légales décrivent ce fonctionnement.
 - Bouton de sections mobile et tablette : un hexagone en bas à droite qui ouvre les sections en éventail (quart de cercle), avec la section en cours surlignée.
 - Défilement animé vers la section choisie dans l'éventail : on voit la page monter ou descendre jusqu'à la section. Saut direct si le téléphone demande de réduire les animations.
 - Toasts de confirmation et d'erreur après l'envoi du formulaire de contact.
