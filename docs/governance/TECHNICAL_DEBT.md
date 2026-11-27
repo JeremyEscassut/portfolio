@@ -13,6 +13,7 @@
 - Cause : deprecations upstream Laravel/vendor (`PDO::MYSQL_ATTR_SSL_CA`, `ReflectionMethod::setAccessible`).
 - Priorite : medium.
 - Plan : suivre versions Laravel/collision compatibles PHP 8.5, valider apres upgrade.
+- Statut : **clos le 2026-11-27** : apres la mise a jour des dependances (lot securite), les tests ne remontent plus de deprecations.
 
 ## D-002 - ContactRequest non utilise
 
