@@ -84,6 +84,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Vidéo de démo convertie de `.mov` (62 Mo) en `.mp4` (4,9 Mo), lisible dans tous les navigateurs et chargée seulement à l'ouverture.
 
 ### Supprimé
+- Anciens CV de `public/cv-archive/`, encore accessibles en ligne mais liés nulle part (décision de Jérémy).
 - Fichiers de brouillon et sources remplacées, inutilisés par le site (environ 130 Mo) : dossier `backups/`, vidéos `Demo Admiral.mov`, captures et photos d'origine, motifs `cherry-wood*.svg`, vue `welcome.blade.php`, `LARAVEL_README.md`, `.envsed`, doublon `tools/extract-blade-strings.js` et sa sortie générée. Dette D-006 close.
 - `public/cv/README.md`, qui était consultable en ligne.
 
