@@ -160,6 +160,7 @@ $icon = function (string $name): string {
 			<div class="section-body">
 				<p>{{ __('about.p1') }}</p>
 				<p>{{ __('about.p2') }}</p>
+				<p>{{ __('about.ai') }}</p>
 				<p>{{ __('about.p3') }}</p>
 				<p>{{ __('about.p4') }}</p>
 			</div>
@@ -293,6 +294,17 @@ $icon = function (string $name): string {
 				<h2 id="experience-title" class="section-title">{{ __('home.section.experience') }}</h2>
 			</div>
 			<div class="section-body timeline">
+				<div class="timeline__item">
+					<p class="timeline__date">{{ __('experience.primever.dates') }}</p>
+					<div>
+						<h3 class="timeline__title">{{ __('experience.primever.title') }}</h3>
+						<p class="timeline__subtitle">{{ __('experience.primever.subtitle') }}</p>
+						<p>{{ __('experience.primever.description') }}</p>
+						<p>{{ __('experience.primever.missions') }}</p>
+						<p>{{ __('experience.primever.ai') }}</p>
+					</div>
+				</div>
+
 				<div class="timeline__item">
 					<p class="timeline__date">{{ __('experience.current.dates') }}</p>
 					<div>

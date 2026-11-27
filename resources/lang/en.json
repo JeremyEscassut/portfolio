@@ -23,6 +23,7 @@
 
   "about.p1": "After several years in translation and IT project management, I naturally moved into development — a field I've always been passionate about. There I find the same rigor, attention to detail, and the satisfaction of turning an idea into a concrete, useful solution.",
   "about.p2": "Over the course of my journey, I have adopted an approach that is both technical and business-focused: I design solutions with a strong product mindset, I help technical and business teams collaborate effectively, and I support projects from idea to delivery with method and clarity.",
+  "about.ai": "I use generative AI (Claude, Codex, Lovable) as a supervised work tool, with three rules: give it the context it needs (goals, constraints, existing code), frame precisely what it can and should do, and check every result before keeping it. This portfolio is an example: its repository contains written rules for AI assistants, with mandatory checks before each change, a ban on confirming an assumption without evidence, and a log of incidents and solutions.",
   "about.p3": "I am particularly interested in product owner, IT project manager and UX/UI developer roles: they combine understanding user needs, steering delivery and hands-on execution. My training in cybersecurity (ANSSI, LinkedIn Learning) reinforces this approach centred on quality, security and continuity.",
   "about.p4": "Outside of coding, I find balance in sport and music — badminton, running, salsa and bachata punctuate my free time. Professionally, I continue to train in networking, cybersecurity and AI to complement my development specialisation with coherent, complementary skills.",
 
@@ -90,6 +91,13 @@
   "place.example.name": "John Doe",
   "place.example.email": "name@example.com",
   "place.greeting": "Hello…",
+
+  "experience.primever.dates": "September–November 2026",
+  "experience.primever.title": "Web developer - Primever",
+  "experience.primever.subtitle": "Business application development and maintenance",
+  "experience.primever.description": "Within Primever's development team, I evolved and maintained internal applications in an Agile environment (PHP Symfony, PostgreSQL, React Native, REST APIs).",
+  "experience.primever.missions": "Missions: prepare a notification application that sends automatic e-mails to receive Okta requests; redesign a meeting-tracking application (interface, usability and code); implement automatic translation of fields and labels in a business application with the DeepL API. All three missions were completed successfully.",
+  "experience.primever.ai": "With AI: I worked daily with Codex to generate code and to understand the existing code and how the applications worked. I gave it the context it needed, framed what it could and should do, then checked every result before integrating it.",
 
   "experience.current.dates": "February–April 2026",
   "experience.current.title": "Internship - ADM Assurances",
