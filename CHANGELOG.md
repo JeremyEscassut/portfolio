@@ -22,6 +22,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Carrousel Admiral : chaque capture est annoncée aux lecteurs d'écran (« Capture 2 sur 3 ») quand on change de capture, aux flèches, aux points ou au doigt.
 
 ### Modifié
+- Les toasts du formulaire de contact disparaissent après 10 secondes au lieu de 20 (toujours en pause au survol et au focus).
 - CV mis à jour (versions de novembre 2026) pour les trois profils, allégés (photo recompressée : environ 140 Ko par fichier au lieu de 7 Mo) et renommés sans date (`ESCASSUT_JEREMY_-_CV_<profil>.pdf`). En anglais, la fenêtre de choix et la page CV précisent que les CV sont en français.
 - Lien LinkedIn mis à jour vers le nouveau profil `https://www.linkedin.com/in/jeremyescassut` (icône de la colonne de gauche et lien de la recommandation).
 - Titre : « Product owner, chef de projet IT et développeur UX/UI ».

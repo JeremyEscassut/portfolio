@@ -173,4 +173,14 @@ class ContactFormTest extends TestCase
 
         $response->assertSessionHasErrors(['email' => 'Le champ e-mail doit être une adresse e-mail valide.']);
     }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function toasts_hide_themselves_after_ten_seconds()
+    {
+        $response = $this->withSession(['status' => 'Merci, message envoyé.'])
+            ->get(route('home', ['locale' => 'fr']));
+
+        $response->assertOk();
+        $response->assertSee('class="toast toast--success" role="status" data-autohide="10000"', false);
+    }
 }

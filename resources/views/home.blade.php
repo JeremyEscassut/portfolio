@@ -423,13 +423,13 @@ $icon = function (string $name): string {
      behind a modal dialog would be missed (and announced twice by screen readers). --}}
 <div id="toast-region" class="toast-region" role="region" aria-label="{{ __('toast.region') }}">
 	@if(session('status'))
-	<div class="toast toast--success" role="status" data-autohide="20000">
+	<div class="toast toast--success" role="status" data-autohide="10000">
 		<p class="toast__text">{{ session('status') }}</p>
 		<button type="button" class="toast__close" aria-label="{{ __('toast.close') }}">✕</button>
 	</div>
 	@endif
 	@if(session('error') && ! session('contactFailed'))
-	<div class="toast toast--error" role="alert" data-autohide="20000">
+	<div class="toast toast--error" role="alert" data-autohide="10000">
 		<p class="toast__text">{{ session('error') }}</p>
 		<button type="button" class="toast__close" aria-label="{{ __('toast.close') }}">✕</button>
 	</div>

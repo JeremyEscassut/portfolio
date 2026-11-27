@@ -196,6 +196,7 @@ Evaluation du 2026-11-27 : code pret (tests, build, audit de contraste au vert),
 - [x] Integrer les retours de Jeremy : icones regroupees, Contact/CV epingles sur mobile, formes, cadre photo, stack IA.
 - [x] Ajouter le bouton de sections mobile et le defilement anime.
 - [x] Ajouter un lien « Haut de page » en tete de l'eventail des sections mobile.
+- [x] Raccourcir l'affichage des toasts a 10 s (demande de Jeremy).
 - [x] Fiabiliser le formulaire de contact (toasts, repli messagerie, bilinguisme).
 - [x] Synchroniser les fichiers de gouvernance avec l'etat reel.
 - [ ] Relire les textes rediges et decouper le lot en commits.

@@ -2,7 +2,7 @@
 // Purpose: what the visitor sees after submitting the contact form (markup in home.blade.php).
 //
 // 1. Toasts (#toast-region): the server flashes 'status' (sent) or 'error' (not sent);
-//    Blade renders them as toasts; each one hides itself after `data-autohide` ms (20 s,
+//    Blade renders them as toasts; each one hides itself after `data-autohide` ms (10 s,
 //    paused on hover and focus) or when closed. After a failed send there is no error
 //    toast: the reopened contact dialog shows the message itself.
 // 2. Fallback when the server could not send the mail: the contact modal reopens with the
