@@ -134,12 +134,11 @@ set -e
 cd "${REMOTE_PATH}"
 # remove any stale bootstrap caches that can cause provider/autoload mismatches
 rm -f bootstrap/cache/*.php || true
-# Run composer if vendor is absent or to regenerate autoload (optional)
-if [ -f composer.json ] && [ ! -d vendor ]; then
-  composer install --no-dev --optimize-autoloader --prefer-dist
-elif [ -f composer.json ]; then
-  # regenerate autoload (safe)
-  composer dump-autoload -o || true
+# Install PHP dependencies exactly as locked in composer.lock (vendor/ is not sent by
+# rsync). Fast when nothing changed; required to apply security updates of Laravel
+# and its packages in production.
+if [ -f composer.json ]; then
+  composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
 fi
 # Clear and recache Laravel artefacts
 php artisan view:clear || true
@@ -157,12 +156,11 @@ set -e
 cd "${REMOTE_PATH}"
 # remove any stale bootstrap caches that can cause provider/autoload mismatches
 rm -f bootstrap/cache/*.php || true
-# Run composer if vendor is absent or to regenerate autoload (optional)
-if [ -f composer.json ] && [ ! -d vendor ]; then
-  composer install --no-dev --optimize-autoloader --prefer-dist
-elif [ -f composer.json ]; then
-  # regenerate autoload (safe)
-  composer dump-autoload -o || true
+# Install PHP dependencies exactly as locked in composer.lock (vendor/ is not sent by
+# rsync). Fast when nothing changed; required to apply security updates of Laravel
+# and its packages in production.
+if [ -f composer.json ]; then
+  composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
 fi
 # Clear and recache Laravel artefacts
 php artisan view:clear || true

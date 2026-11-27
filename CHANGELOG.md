@@ -68,6 +68,11 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Mentions légales : déclaration de Google Analytics 4 (cookies `_ga`, finalité, transfert vers les États-Unis, moyens de refus). Reprise de la branche `claude/project-thread-v3ra6l` (commit 413f1ae). Le bandeau de consentement a été ajouté ensuite (PR #2).
 
 ### Sécurité
+- Dépendances PHP mises à jour (Laravel 12.34 → 12.74, Symfony, Guzzle, CommonMark…) : `composer audit` passe de 62 alertes, dont une critique, à zéro. `composer.json` fixe la plateforme à PHP 8.2.36, la version du serveur, pour que le verrouillage reste installable en production.
+- En-têtes de sécurité HTTP sur toutes les réponses : `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` et `frame-ancestors`, `Permissions-Policy`, et `Strict-Transport-Security` en HTTPS (middleware `SecurityHeaders`, et `.htaccess` pour les fichiers statiques).
+- Formulaire de contact limité à 3 messages par visiteur toutes les 10 minutes. Au-delà, la fenêtre se rouvre avec le texte conservé et propose de l'envoyer depuis sa messagerie (FR/EN).
+- Le déploiement installe désormais sur le serveur les dépendances PHP de `composer.lock` (`composer install --no-dev`) : les mises à jour de sécurité de Laravel étaient jusqu'ici ignorées en production.
+- L'adresse de destination du formulaire n'est lue que depuis la configuration (`env()` renvoie `null` une fois la configuration mise en cache).
 - Dépendances npm de compilation mises à jour (`npm audit fix`) : 14 alertes corrigées (Vite, PostCSS, Rollup, axios, concurrently, tar…), sans changement de version majeure.
 - Le message de confirmation, qui reprend le nom saisi par le visiteur, est désormais échappé à l'affichage (il était inséré en HTML brut).
 

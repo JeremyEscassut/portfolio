@@ -33,7 +33,8 @@ class ContactController extends Controller
 
         $nameForMessage = $data['name'] ?? null;
 
-        $to = config('mail.contact_address') ?? env('MAIL_CONTACT_ADDRESS');
+        // Read from config only: env() returns null once `php artisan config:cache` has run (prod).
+        $to = config('mail.contact_address');
 
         try {
             // avoid passing a key named "message" (conflicts with Mail\Message in Blade)

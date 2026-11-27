@@ -190,6 +190,7 @@
   "contact.sent": "Votre message a bien été envoyé. Merci:name — je vous répondrai dès que possible.",
   "contact.sent_short": "Votre message a bien été envoyé. Merci !",
   "contact.failed": "Votre message n'a pas pu être envoyé.",
+  "contact.throttled": "Vous avez envoyé plusieurs messages en peu de temps. Merci de réessayer dans quelques minutes.",
   "contact.failed_debug": "Erreur lors de l'envoi (mode debug).",
   "contact.fallback.intro": "Votre texte est conservé. Vous pouvez l'envoyer depuis votre messagerie : il sera déjà rédigé et adressé à",
   "contact.fallback.open_mail": "Ouvrir dans ma messagerie",

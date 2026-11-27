@@ -36,7 +36,9 @@ Route::group([
     'middleware' => [\App\Http\Middleware\SetLocale::class]
 ], function () {
 
-    Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+    Route::post('/contact', [ContactController::class, 'send'])
+        ->middleware('throttle:contact') // 3 messages / 10 min per IP (AppServiceProvider)
+        ->name('contact.send');
 
     // Home page at /{locale} (the language is set by SetLocale)
     Route::get('/', function () {
