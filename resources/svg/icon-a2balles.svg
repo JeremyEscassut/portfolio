@@ -1,0 +1,98 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background blanc -->
+  <rect width="512" height="512" rx="110" fill="white"/>
+
+  <defs>
+    <!-- Gradient Bleu "Essentiels" -->
+    <radialGradient id="blueGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="rgb(56, 189, 248)" />
+      <stop offset="100%" stop-color="rgb(14, 165, 233)" />
+    </radialGradient>
+
+    <!-- Gradient Jaune "Plaisirs" -->
+    <radialGradient id="yellowGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="rgb(250, 204, 21)" />
+      <stop offset="100%" stop-color="rgb(234, 179, 8)" />
+    </radialGradient>
+
+    <!-- Ombres douces pour effet 3D -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8" />
+      <feOffset dx="0" dy="8" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Logo centré et agrandi (scale 2.0 pour bien remplir l'icône) -->
+  <g transform="translate(56, 56) scale(2.0)">
+    <!-- Courbe "Sourire/Hamac" Turquoise - en arrière-plan -->
+    <path
+      d="M 30 140 Q 100 180 170 140"
+      stroke="rgb(45, 212, 191)"
+      stroke-width="12"
+      stroke-linecap="round"
+      fill="none"
+      opacity="0.9"
+    />
+
+    <!-- Pièce Bleue (Gauche) - Posée sur la courbe -->
+    <g filter="url(#softShadow)">
+      <!-- Corps de la pièce -->
+      <circle cx="60" cy="112" r="35" fill="url(#blueGradient)" />
+
+      <!-- Bordure intérieure pour effet pièce -->
+      <circle
+        cx="60"
+        cy="112"
+        r="30"
+        fill="none"
+        stroke="rgb(8, 145, 213)"
+        stroke-width="1.5"
+        opacity="0.6"
+      />
+
+      <!-- Effet de brillance -->
+      <ellipse
+        cx="60"
+        cy="102"
+        rx="15"
+        ry="10"
+        fill="white"
+        opacity="0.3"
+      />
+    </g>
+
+    <!-- Pièce Jaune (Droite) - Posée sur la courbe -->
+    <g filter="url(#softShadow)">
+      <!-- Corps de la pièce -->
+      <circle cx="140" cy="112" r="35" fill="url(#yellowGradient)" />
+
+      <!-- Bordure intérieure pour effet pièce -->
+      <circle
+        cx="140"
+        cy="112"
+        r="30"
+        fill="none"
+        stroke="rgb(202, 138, 4)"
+        stroke-width="1.5"
+        opacity="0.6"
+      />
+
+      <!-- Effet de brillance -->
+      <ellipse
+        cx="140"
+        cy="102"
+        rx="15"
+        ry="10"
+        fill="white"
+        opacity="0.3"
+      />
+    </g>
+  </g>
+</svg>

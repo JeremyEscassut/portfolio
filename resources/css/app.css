@@ -4,74 +4,20 @@
 :root {
     /* Background & surfaces */
     --bg: #f3f7f6; /* very light aqua-gray (not pure white) */
+    --bg-gradient: linear-gradient(
+        160deg,
+        #f6fbff 0%,
+        #eef8f3 48%,
+        #f9f6ee 100%
+    );
     --surface: #fbfdfe; /* slightly brighter surface (cards) */
     --edge: rgba(11, 23, 26, 0.06); /* subtle borders */
-
-    /* Typography */
-    --text: #0b1b20; /* dark warm-blue/charcoal for high contrast */
-    --muted: #51636a; /* muted text for secondary information */
-
-    /* Accents (muted badminton court colors) */
-    --accent-primary: #2a8fb7; /* muted court blue */
-    --accent-secondary: #7fb77e; /* soft court green */
-
-    /* Halo / ambient glow */
-    --halo-x: 50%;
-    --halo-y: 40%; /* start visible and centered lower */
-    --halo-opacity: 0.16; /* slightly stronger intensity without increasing size */
-    --halo-enabled: 1; /* can be set to 0 to disable */
-
-    /* Misc */
-    --radius: 0.5rem;
-    --shadow-subtle: 0 6px 18px rgba(11, 23, 26, 0.04);
-    /* Accessibility: body copy color/size tokens (used for improved contrast on body text) */
-    --body-font-size: 1rem; /* base paragraph size */
-    --body-line-height: 1.65; /* comfortable reading line-height */
-    /* body-copy is intentionally a tad darker than --text in light mode to improve contrast
-       without affecting headings (headings continue to use --text). */
-    --body-copy: color-mix(in srgb, var(--text) 92%, black 8%);
-    /* per-element surfaces reused in dark mode */
-    --tag-bg: color-mix(
-        in srgb,
-        var(--accent-secondary) 12%,
-        var(--surface) 88%
-    );
-    --tile-bg: color-mix(
-        in srgb,
-        var(--accent-secondary) 14%,
-        var(--surface) 86%
-    );
-    /* Fixed light-mode surface colors for tags/tiles so they don't shift in dark mode */
-    --tag-bg-light: #ecf5ef;
-    --tile-bg-light: #eaf3ec;
+    --tag-bg-light: #ecf5ef; /* light tag background used in dark-mode tags */
 }
 
-/* (previously contained @source/@theme metadata; removed to avoid parser warnings) */
-
-/* Global base styles for the light, minimal theme */
-html,
 body {
-    height: 100%;
-}
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(
-        --font-sans,
-        system-ui,
-        -apple-system,
-        "Segoe UI",
-        Roboto,
-        "Helvetica Neue",
-        Arial
-    );
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.45;
-    transition: background-color 240ms ease, color 240ms ease;
-    position: relative;
-    /* make stacking context so the halo can be placed behind content */
-    isolation: isolate;
+    background: var(--bg-gradient) !important;
+    background-attachment: fixed;
 }
 
 /* Subtle selection color */
@@ -89,7 +35,8 @@ body::before {
     /* keep the halo behind normal content by default */
     z-index: -1 !important;
     /* keep gradients compact but increase visibility: intensity up, sizes moderate */
-    background: radial-gradient(
+    background:
+        radial-gradient(
             600px 600px at var(--halo-x) var(--halo-y),
             rgba(42, 143, 183, var(--halo-opacity)) 0%,
             rgba(127, 183, 126, calc(var(--halo-opacity) * 0.45)) 28%,
@@ -202,8 +149,21 @@ aside > div.shadow {
     transition: transform 160ms ease;
 }
 
+.dark .recommendation-pdf-button {
+    background-color: var(--bg) !important;
+    border-color: #5d735f !important;
+    box-shadow: 0 2px 6px rgba(237, 244, 235, 0.36) !important;
+}
+
+.dark .recommendation-pdf-button:hover,
+.dark .recommendation-pdf-button:focus-visible {
+    background-color: var(--bg) !important;
+    border-color: #718574 !important;
+    box-shadow: 0 2px 8px rgba(237, 244, 235, 0.46) !important;
+}
+
 /* Skill icon tiles: keep a slightly different, matched light-green background */
-.skills-grid .skill-tile,
+.stack-grid .skill-tile,
 .skill-tile {
     background-color: color-mix(
         in srgb,
@@ -216,7 +176,7 @@ aside > div.shadow {
 }
 
 /* If markup still uses explicit utility class bg-white on tiles, override it */
-.skills-grid .bg-white.skill-tile,
+.stack-grid .bg-white.skill-tile,
 .skill-tile.bg-white {
     background-color: color-mix(
         in srgb,
@@ -251,6 +211,12 @@ aside > div.shadow {
     color: initial !important;
     fill: initial !important;
     stroke: initial !important;
+}
+
+.project-link--a2balles svg {
+    width: 2.5em;
+    height: 2.5em;
+    display: block;
 }
 
 /* ------------------------------------------------------------------
@@ -305,8 +271,10 @@ aside > div.shadow {
     /* Project tags keep a fixed light-mode background color so their appearance
        doesn't shift when switching to dark mode. Text/icons remain black. */
     .project-tag {
+        /* Keep a light, pill-like tag in dark mode but use readable text color */
         border: 1px solid rgba(127, 183, 126, 0.18) !important;
-        background-color: var(--tag-bg-light) !important;
+        background-color: #ecf5ef !important;
+        /* original appearance: light background with black text */
         color: #000 !important;
         box-shadow: none !important;
     }
@@ -476,6 +444,14 @@ aside > div.shadow {
 }
 
 /* Modal/dialog should stay solid and readable regardless of global card translucency */
+#cv-selector-modal {
+    display: none;
+}
+
+#cv-selector-modal:target,
+#cv-selector-modal[aria-hidden="false"] {
+    display: flex !important;
+}
 [role="dialog"] {
     background-color: #ffffff !important;
     color: #111111 !important;
@@ -994,7 +970,9 @@ body
     background: color-mix(in srgb, white 10%, var(--bg) 90%);
     opacity: 0.95;
     z-index: -1;
-    transition: background-color 220ms ease, transform 180ms ease,
+    transition:
+        background-color 220ms ease,
+        transform 180ms ease,
         opacity 180ms ease;
 }
 
@@ -1060,7 +1038,9 @@ aside nav a.font-semibold::before {
     background: color-mix(in srgb, var(--accent-secondary) 50%, white 90%);
     opacity: 0.95;
     z-index: -1;
-    transition: background-color 220ms ease, transform 180ms ease,
+    transition:
+        background-color 220ms ease,
+        transform 180ms ease,
         opacity 180ms ease;
 }
 
@@ -1384,10 +1364,129 @@ html:not(.dark)
 
 /* =============================================================== */
 /* Page-scoped: home.blade.php overrides (migrés depuis @push('styles')) */
-/* Canonicalisé : footer sticky, skills, social-link svgs, modal Contact, */
+/* Canonicalisé : footer sticky, stack, social-link svgs, modal Contact, */
 /* accessibility tokens, and targeted dark-mode fixes. Keep this block at */
 /* the end of the file so it can safely override Tailwind utilities.     */
 /* =============================================================== */
+
+/* Photo transition: overlay canvas crossfade (GPU-accelerated)
+     - Keeps layout stable (no <img> insertion that shifts elements)
+     - Uses opacity + transform transitions (GPU-friendly)
+*/
+.photo-transition-wrap {
+    /* Ensure container is a positioned context for the overlay canvas.
+       Do NOT override the container's display (e.g. `flex`) because that
+       caused layout shifts when we added this class dynamically. */
+    position: relative;
+}
+
+/* Overlay canvas used for crossfades. We avoid any scaling/enlarging here.
+   The effect uses opacity + blur to produce a smooth, professional crossfade
+   that does not change the image size. */
+.photo-transition-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    filter: blur(2px);
+    transition:
+        opacity 420ms cubic-bezier(0.2, 0.95, 0.24, 1),
+        filter 420ms cubic-bezier(0.2, 0.95, 0.24, 1);
+    will-change: opacity, filter;
+    z-index: 2; /* sit under the decorative frame */
+    background: transparent;
+}
+
+.photo-transition-canvas.show {
+    opacity: 1;
+    filter: blur(0);
+}
+
+/* Cadre photo ajusté : bord carré, épaisseur réduite, couleur plein #2b8fb7
+   + demi-épaisseur du rim précédent (5vmin -> 2.5vmin)
+   + ombre discrète visible en clair et foncé
+*/
+.photo-frame {
+    position: relative;
+    display: inline-block;
+    background: none;
+    /* Rim coloré plein, moitié de l'épaisseur précédente */
+    border: solid 2.5vmin #2b8fb7;
+    border-radius: 0; /* coins carrés demandés */
+    /* Ombre renforcée en mode clair pour meilleure visibilité */
+    box-shadow: 0 26px 70px rgba(11, 38, 51, 0.22);
+    box-sizing: border-box;
+    /* Mat intérieur proportionnel à la bordure */
+    padding: calc(2.5vmin / 3);
+}
+
+/* Petit inset intérieur (effet de gorge) — adapté à la nouvelle épaisseur */
+.photo-frame::before {
+    content: "";
+    position: absolute;
+    /* proportion conservée par rapport au rim d'origine */
+    left: -1vmin;
+    right: -1vmin;
+    top: -1vmin;
+    bottom: -1vmin;
+    border-radius: 0;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.06);
+    pointer-events: none;
+}
+
+/* Ombre externe ajustée pour le nouveau rim */
+.photo-frame::after {
+    content: "";
+    position: absolute;
+    left: -1.25vmin;
+    right: -1.25vmin;
+    top: -1.25vmin;
+    bottom: -1.25vmin;
+    border-radius: 0;
+    box-shadow: 0 6px 18px rgba(11, 38, 51, 0.12);
+    pointer-events: none;
+}
+
+/* Force square corners on the canvas so the image meets the mat edge */
+.photo-frame > #photoCanvas,
+.photo-frame canvas {
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* Ensure caption placed immediately after the framed photo is not
+   obscured by the decorative rim which extends outside the wrapper.
+   Use a responsive offset (vmin) plus a baseline margin to keep the
+   caption visible across viewports. */
+.photo-frame > #photoCanvas,
+.photo-frame canvas {
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+/* Ensure caption placed immediately after the framed photo is not
+   obscured by the decorative rim which extends outside the wrapper.
+   We also rehausse légèrement la légende demandée par l'utilisateur. */
+.photo-frame + #photoCaption {
+    margin-top: calc(1.25vmin + 0.5rem);
+    font-weight: 600; /* rehausse du texte */
+    font-size: 0.95rem;
+    line-height: 1.15;
+}
+
+/* Dark mode : garder la couleur du rim (bleu) mais adoucir l'ombre */
+.dark .photo-frame {
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.5);
+}
 
 /* Footer / right-column sticky behaviour */
 #footer {
@@ -1401,6 +1500,11 @@ html:not(.dark)
     background: transparent !important;
     box-shadow: none !important;
     z-index: 40;
+}
+
+/* Alpine x-cloak helper: hide elements until Alpine removes the attribute */
+[x-cloak] {
+    display: none !important;
 }
 
 /* Desktop: constrain stuck footer to main column */
@@ -1430,12 +1534,15 @@ html:not(.dark)
     }
 }
 
-/* Contact/CV actions when fixed on small screens */
+/* Contact/CV actions when fixed on small screens
+   Note: `top` is intentionally not hard-coded here so JS can compute
+   a vertical position that centers the actions within the aside sticky
+   region. We keep `position: fixed` and `right` control in CSS. */
 #home-contact-cv-icons.fixed {
     position: fixed !important;
-    top: 0 !important;
-    right: 55px !important;
-    left: auto !important;
+    /* top and right are set dynamically by JS to place the actions where
+       they visually matched their original inline position. */
+    right: auto !important;
     z-index: 60 !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -1443,14 +1550,14 @@ html:not(.dark)
     align-items: center !important;
 }
 
-/* Skills / tiles */
+/* Stack / tiles */
 .skill-php svg {
     width: 2rem;
     height: 2rem;
     display: inline-block;
     vertical-align: middle;
 }
-.skills-grid .skill-tile {
+.stack-grid .skill-tile {
     aspect-ratio: 1/1;
     min-width: 3.5rem;
     width: 100%;
@@ -1459,11 +1566,18 @@ html:not(.dark)
     justify-content: center;
     padding: 0.5rem;
     box-sizing: border-box;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
-.skills-grid .grid > .skill-tile {
+.dark .stack-grid .skill-tile,
+.dark .stack-grid .skill-tile * {
+    border-color: transparent !important;
+}
+.stack-grid .grid > .skill-tile {
     height: auto;
 }
-.skills-grid svg {
+.stack-grid svg {
     width: 1.9rem;
     height: 1.9rem;
     display: block;
@@ -1472,27 +1586,67 @@ html:not(.dark)
     object-fit: contain;
 }
 @media (min-width: 1024px) {
-    .skills-grid .skill-tile {
+    .stack-grid .skill-tile {
         min-width: 5rem;
     }
-    .skills-grid svg {
+    .stack-grid svg {
         width: 2.4rem;
         height: 2.4rem;
     }
 }
-/* Group headings inside the Skills section: add left offset for visual alignment */
-#skills h3.text-sm.font-semibold,
-#skills .text-sm.font-semibold.mb-2 {
+/* Group headings inside the Stack section: add left offset for visual alignment */
+#stack h3.text-sm.font-semibold,
+#stack .text-sm.font-semibold.mb-2 {
     margin-left: 30px;
+}
+
+/* Stack section group separators: one vertical line per group, not a continuous section-wide line */
+#stack .stack-group {
+    position: relative;
+    margin-left: 0;
+}
+
+#stack .stack-group::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+        to bottom,
+        rgba(11, 27, 32, 0.25),
+        rgba(11, 27, 32, 0.08)
+    );
+    border-radius: 999px;
+}
+
+.dark #stack .stack-group::before {
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.34),
+        rgba(255, 255, 255, 0.12)
+    );
+}
+
+#stack .stack-group .text-sm.font-semibold.mb-2 {
+    margin-left: 0;
 }
 
 /* Social icons : prefer stroke = currentColor so color controls them */
 .social-link svg {
     fill: none;
     stroke: currentColor;
-    stroke-width: 2;
+    /* reduced default stroke so inline SVGs with smaller stroke are visible */
+    stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+/* Make contact icon slightly thinner for a lighter appearance. Use !important
+   to override any other theme rules that might apply to this specific button. */
+.social-link--contact svg {
+    stroke-width: 1.2 !important;
 }
 
 /* Social brand colors */
@@ -1883,12 +2037,18 @@ html:not(.dark) aside {
 /* Project cards, panels, and tiles should use the light surface token */
 html:not(.dark) .project-card,
 html:not(.dark) .rounded-md,
-html:not(.dark) .skills-grid .skill-tile,
 html:not(.dark) .skill-tile,
 html:not(.dark) [role="dialog"] {
     background: var(--surface) !important;
     color: var(--text) !important;
     border-color: var(--edge) !important;
+}
+
+/* Keep stack tiles transparent in light mode, regardless of the general tile override */
+html:not(.dark) .stack-grid .skill-tile {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* Tags and muted text */
@@ -2006,7 +2166,9 @@ html:not(.dark) main#content * {
 html:not(.dark) .social-link,
 html:not(.dark) .repo-link,
 html:not(.dark) .social-link button {
-    transition: background-color 120ms ease, color 120ms ease;
+    transition:
+        background-color 120ms ease,
+        color 120ms ease;
 }
 /* subtle neutral highlight for general social links (slightly stronger for better contrast) */
 html:not(.dark) .social-link:hover,
@@ -2014,26 +2176,34 @@ html:not(.dark) .social-link:focus-visible {
     background-color: rgba(0, 0, 0, 0.1) !important;
 }
 
-/* stronger dark highlight for contact / CV buttons but keep icon visible as white */
-html:not(.dark) .social-link--contact:hover,
-html:not(.dark) .social-link--contact:focus-visible,
+/* Stronger hover highlight for CV button in light mode: keep icon white for contrast */
 html:not(.dark) .social-link--cv:hover,
 html:not(.dark) .social-link--cv:focus-visible {
-    /* soften the contrast while keeping a clear highlight; slightly darker so white icons pop */
     background-color: rgba(0, 0, 0, 0.18) !important;
     color: #ffffff !important;
 }
-html:not(.dark) .social-link--contact:hover svg,
 html:not(.dark) .social-link--cv:hover svg,
-html:not(.dark) .social-link--contact:focus-visible svg,
 html:not(.dark) .social-link--cv:focus-visible svg,
-html:not(.dark) .social-link--contact:hover svg *,
 html:not(.dark) .social-link--cv:hover svg *,
-html:not(.dark) .social-link--contact:focus-visible svg *,
 html:not(.dark) .social-link--cv:focus-visible svg * {
-    /* Keep the icon visible: remove fills and use white stroke when hovered */
+    /* CV icon: white stroke on hover in light mode */
     fill: none !important;
     stroke: #ffffff !important;
+}
+
+/* Separate hover behaviour for Contact button in light mode: keep icon strokes dark/black */
+html:not(.dark) .social-link--contact:hover,
+html:not(.dark) .social-link--contact:focus-visible {
+    background-color: rgba(0, 0, 0, 0.18) !important;
+    /* keep icon/text dark so stroke remains visible as black */
+    color: #0b1b20 !important;
+}
+html:not(.dark) .social-link--contact:hover svg,
+html:not(.dark) .social-link--contact:focus-visible svg,
+html:not(.dark) .social-link--contact:hover svg *,
+html:not(.dark) .social-link--contact:focus-visible svg * {
+    fill: none !important;
+    stroke: #0b1b20 !important;
 }
 
 /* Ensure social svgs follow currentColor when possible */
@@ -2121,6 +2291,14 @@ html:not(.dark) .social-link--cv:focus-visible svg * {
     flex: 0 0 auto;
     position: relative;
 }
+
+/* MySQL logo is more detailed (wordmark + symbol), so give it a small boost
+   to keep perceived size consistent with simpler icons. */
+.skill-mysql svg {
+    width: 46px;
+    height: 46px;
+}
+
 .skill-tile[data-name]::after {
     content: attr(data-name);
     position: absolute;
@@ -2148,12 +2326,8 @@ html:not(.dark) .social-link--cv:focus-visible svg * {
         margin-left: 20px;
     }
 
-    /* when contact/CV actions become fixed on small screens, move them slightly upward
-       so they don't overlap or sit below the section title banner */
-    #home-contact-cv-icons.fixed {
-        /* keep existing fixed positioning but lift visually */
-        transform: translateY(-20px) !important;
-    }
+    /* when contact/CV actions become fixed on small screens, we let JS compute
+         a vertical offset so the actions are centered within the aside sticky area. */
 }
 
 /* ------------------------------------------------------------------
@@ -2259,4 +2433,400 @@ html:not(.dark) .social-link--cv:focus-visible svg * {
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
+}
+
+/* Dark mode: forcer les traits (stroke) des icônes des boutons thème/langue en noir
+   lors du hover ou du focus-visible afin d'assurer un contraste élevé. Ceci n'affecte
+   que `#themeToggleButton` et `#langToggleButton` (classe theme-lang-button). */
+.dark #themeToggleButton.theme-lang-button:hover svg,
+.dark #themeToggleButton.theme-lang-button:focus-visible svg,
+.dark #themeToggleButton.theme-lang-button:active svg,
+.dark #themeToggleButton.theme-lang-button:hover svg *,
+.dark #themeToggleButton.theme-lang-button:focus-visible svg *,
+.dark #themeToggleButton.theme-lang-button:active svg *,
+.dark #langToggleButton.theme-lang-button:hover svg,
+.dark #langToggleButton.theme-lang-button:focus-visible svg,
+.dark #langToggleButton.theme-lang-button:active svg,
+.dark #langToggleButton.theme-lang-button:hover svg *,
+.dark #langToggleButton.theme-lang-button:focus-visible svg *,
+.dark #langToggleButton.theme-lang-button:active svg * {
+    /* En mode sombre, forcer les icônes des boutons thème/langue en blanc
+       pour assurer un contraste élevé sur fonds sombres/verts (mobile inclus). */
+    stroke: #fff !important;
+    color: #fff !important;
+}
+
+/* Desktop dark mode: on hover/focus, keep a light hover background and
+   switch icon strokes to dark for stronger visual feedback. */
+@media (min-width: 1024px) {
+    .dark #themeToggleButton.theme-lang-button:hover,
+    .dark #themeToggleButton.theme-lang-button:focus-visible,
+    .dark #langToggleButton.theme-lang-button:hover,
+    .dark #langToggleButton.theme-lang-button:focus-visible {
+        background-color: #f3f4f6 !important;
+    }
+
+    .dark #themeToggleButton.theme-lang-button:hover svg,
+    .dark #themeToggleButton.theme-lang-button:focus-visible svg,
+    .dark #themeToggleButton.theme-lang-button:hover svg *,
+    .dark #themeToggleButton.theme-lang-button:focus-visible svg *,
+    .dark #langToggleButton.theme-lang-button:hover svg,
+    .dark #langToggleButton.theme-lang-button:focus-visible svg,
+    .dark #langToggleButton.theme-lang-button:hover svg *,
+    .dark #langToggleButton.theme-lang-button:focus-visible svg * {
+        stroke: #111827 !important;
+        color: #111827 !important;
+    }
+}
+
+/* ------------------------------------------------------------------
+   Targeted styles: uniquement pour les boutons Theme et Langue
+   - assure que seules ces deux commandes sont affectées
+   - double la taille des SVG et ajuste le focus/hover
+   ------------------------------------------------------------------ */
+
+#themeToggleButton.theme-lang-button,
+#langToggleButton.theme-lang-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem; /* proche de p-3 */
+    border-radius: 9999px;
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        background-color 120ms ease;
+}
+
+#themeToggleButton.theme-lang-button svg,
+#langToggleButton.theme-lang-button svg {
+    width: 36px;
+    height: 36px;
+    display: block;
+}
+
+@media (hover: hover) {
+    #themeToggleButton.theme-lang-button,
+    #langToggleButton.theme-lang-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px; /* container slightly smaller than Contact/CV (40px) */
+        height: 36px;
+        padding: 0; /* use explicit width/height to control size */
+        border-radius: 9999px;
+        transition:
+            transform 160ms ease,
+            box-shadow 160ms ease,
+            background-color 120ms ease;
+    }
+
+    #themeToggleButton.theme-lang-button svg,
+    #langToggleButton.theme-lang-button svg {
+        width: 32px; /* slightly smaller than contact/cv icons (40px) */
+        height: 32px;
+        display: block;
+    }
+
+    @media (hover: hover) {
+        #themeToggleButton.theme-lang-button:hover,
+        #langToggleButton.theme-lang-button:hover {
+            transform: translateY(-4px) rotate(-3deg);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+        }
+    }
+
+    #themeToggleButton.theme-lang-button:focus-visible,
+    #langToggleButton.theme-lang-button:focus-visible {
+        outline: 2px solid rgba(59, 130, 246, 0.6);
+        outline-offset: 4px;
+    }
+
+    .lang-badge {
+        background: rgba(0, 0, 0, 0.06);
+        color: inherit;
+        font-weight: 600;
+    }
+}
+
+/* Badge language: position top-right outside the icon, not inside SVG */
+.theme-lang-button {
+    position: relative; /* ensure the badge can be absolutely positioned relative to button */
+}
+.theme-lang-button .lang-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    transform: translate(0, 0);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.06);
+    color: inherit;
+    padding: 0.125rem 0.35rem;
+    font-size: 0.65rem;
+    line-height: 1;
+    border-radius: 0.375rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* Slightly stronger badge background in dark mode for readability */
+.dark .theme-lang-button .lang-badge {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Desktop-only compartmented layout for the left aside:
+   - top row: name/title/intro
+   - second row: 2 sub-columns (photo area + sections/actions area)
+   This prevents overlap when the viewport width shrinks. */
+@media (min-width: 1024px) {
+    #home-interactions {
+        display: contents;
+    }
+
+    #home {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) clamp(140px, 22%, 180px);
+        grid-template-rows: auto 1fr;
+        column-gap: 1rem;
+        row-gap: 1rem;
+    }
+
+    #home-title {
+        grid-column: 1;
+        grid-row: 1;
+        margin-bottom: 0;
+    }
+
+    #home-left-col {
+        grid-column: 1;
+        grid-row: 2;
+        min-width: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #home-photo {
+        width: 100%;
+        max-width: 430px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #home-right-col {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        width: clamp(140px, 22%, 180px);
+        max-width: 180px;
+        min-height: 30rem;
+        justify-content: flex-start;
+        gap: 0.625rem;
+        padding-top: 0.75rem;
+    }
+
+    #home-right-col nav {
+        margin-bottom: 0 !important;
+    }
+
+    /* Keep nav/title area high while grouping action icons near the bottom. */
+    #home-social-icons {
+        margin-top: auto;
+    }
+
+    #theme-toggle-wrapper {
+        margin-top: 0 !important;
+    }
+
+    #home-contact-cv-icons {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Keep the profile centered inside its own photo column. */
+    #profilePhotoContainer {
+        transform: none;
+    }
+}
+
+/* Mobile icon layout (<=1023px): enforce a coherent 2x3 grid for
+   LinkedIn, GitLab, Theme, Language, Contact, CV without affecting desktop. */
+@media (max-width: 1023px) {
+    #home-right-col {
+        width: fit-content;
+        max-width: none;
+        margin-left: auto;
+        margin-right: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 40px);
+        justify-content: end;
+        justify-items: center;
+        align-items: center;
+        gap: 10px 12px;
+    }
+
+    /* Flatten only social and theme wrappers so they populate rows 1 and 2. */
+    #home-social-icons,
+    #theme-toggle-wrapper {
+        display: contents;
+    }
+
+    /* Keep Contact/CV wrapper as a real box: JS needs it for sticky behavior. */
+    #home-contact-cv-icons {
+        grid-column: 1 / span 2;
+        display: grid !important;
+        grid-template-columns: repeat(2, 40px);
+        justify-content: center;
+        justify-self: center;
+        align-items: center;
+        gap: 10px 12px;
+        margin: 0 !important;
+    }
+
+    /* Remove legacy mobile offsets that caused right-shift on some devices. */
+    .mobile-offset,
+    #themeToggleButton.mobile-offset,
+    #langToggleButton.mobile-offset {
+        transform: none !important;
+    }
+
+    /* Keep the no-offset baseline, but restore hover/focus motion for pointer devices. */
+    @media (hover: hover) {
+        #themeToggleButton.theme-lang-button:hover,
+        #langToggleButton.theme-lang-button:hover {
+            transform: translateY(-4px) rotate(-3deg) !important;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        #themeToggleButton.theme-lang-button:focus-visible,
+        #langToggleButton.theme-lang-button:focus-visible {
+            transform: translateY(-2px) !important;
+        }
+    }
+
+    /* Keep all icon containers on the same footprint for visual alignment. */
+    #home-social-icons .social-link,
+    #home-contact-cv-icons .social-link,
+    #themeToggleButton.theme-lang-button,
+    #langToggleButton.theme-lang-button {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px;
+        min-height: 40px;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #themeToggleButton.theme-lang-button svg,
+    #langToggleButton.theme-lang-button svg {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    /* When sticky is activated by JS, keep Contact/CV on the same two columns. */
+    #home-contact-cv-icons.fixed {
+        grid-template-columns: repeat(2, 40px) !important;
+        display: grid !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px 12px !important;
+        width: 92px !important;
+        height: auto !important;
+        right: auto !important;
+    }
+}
+
+/* Note: do not reset .mobile-offset on large screens here so Tailwind `lg:` utilities can apply. */
+
+/* Photo frame simplified for homepage
+   - Minimalist structural frame around the square image
+   - Incomplete wireframe with roof-like geometry and a small lower-right notch
+   - Existing canvas and photo-toggle logic remain unchanged
+*/
+.photo-frame {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1;
+    padding: 3.49%;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    isolation: isolate;
+    --photo-frame-image-inset: 3.49%;
+    --photo-frame-accent: color-mix(
+        in srgb,
+        var(--accent-primary, #2a8fb7) 88%,
+        white 12%
+    );
+}
+
+.photo-frame::before,
+.photo-frame::after {
+    content: none;
+}
+
+.photo-frame__wireframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    color: var(--photo-frame-accent);
+    fill: none;
+    overflow: visible;
+}
+
+.photo-frame__wireframe path {
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    vector-effect: non-scaling-stroke;
+}
+
+/* The photo itself follows the inner hexagon seen in the reference. */
+.photo-frame > #photoCanvas,
+.photo-frame canvas {
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+    clip-path: polygon(50% 3%, 88% 25%, 88% 75%, 50% 97%, 12% 75%, 12% 25%);
+}
+
+/* The transition canvas is generated by the existing click handler. Keep it
+   aligned with, and clipped like, the visible photo. */
+.photo-frame > .photo-transition-canvas {
+    left: var(--photo-frame-image-inset) !important;
+    top: var(--photo-frame-image-inset) !important;
+    clip-path: polygon(50% 3%, 88% 25%, 88% 75%, 50% 97%, 12% 75%, 12% 25%);
+}
+
+/* Caption immediately after the frame — rehaussée légèrement */
+.photo-frame + #photoCaption {
+    margin-top: calc(1.25vmin + 0.5rem);
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    color: inherit;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Dark mode: switch to a luminous cyan wireframe */
+.dark .photo-frame {
+    --photo-frame-accent: #72f5ff;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
 }

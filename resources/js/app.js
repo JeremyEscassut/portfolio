@@ -9,6 +9,107 @@ import Alpine from 'alpinejs';
 // Ensure theme from localStorage is applied immediately (no 'auto' option):
 { const stored = localStorage.getItem('theme'); if (stored === 'dark') { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); } }
 
+// Inject small UI hover/focus styles for icon links (moved from Blade)
+(function injectIconHoverStyles() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById('ui-icon-hover-styles')) return;
+    const css = `
+/* Subtle lift + slight clockwise rotation on hover/focus for icon links and small buttons */
+.repo-link,
+.social-link,
+#themeToggleButton,
+#langToggleButton,
+.repo-link .repo-icon,
+.social-link .repo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .16s ease;
+    will-change: transform;
+}
+.repo-link:hover,
+.social-link:hover,
+#themeToggleButton:hover,
+#langToggleButton:hover,
+.repo-link:focus-visible,
+.social-link:focus-visible,
+#themeToggleButton:focus-visible,
+#langToggleButton:focus-visible {
+    transform: translateY(-4px) rotate(4deg);
+}
+.repo-link:active,
+.social-link:active,
+#themeToggleButton:active,
+#langToggleButton:active {
+    transform: translateY(-1px) rotate(2deg);
+}
+.repo-link:focus-visible,
+.social-link:focus-visible,
+#themeToggleButton:focus-visible,
+#langToggleButton:focus-visible {
+    outline: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* Cursor: show pointer (hand with index) on devices with fine pointer (desktop) */
+@media (hover: hover) and (pointer: fine) {
+    #themeToggleButton, #langToggleButton {
+        cursor: pointer;
+    }
+}
+`;
+    const el = document.createElement('style');
+    el.id = 'ui-icon-hover-styles';
+    el.appendChild(document.createTextNode(css));
+    document.head.appendChild(el);
+})();
+
+// Language toggle: small globe button with FR/EN badge — share behavior/colors with theme toggle
+(function initLangToggle() {
+    try {
+        const btn = document.getElementById('langToggleButton');
+        if (!btn) return;
+
+        const badge = btn.querySelector('.lang-badge');
+
+        function readLang() {
+            return (localStorage.getItem('siteLang') || 'FR');
+        }
+
+        function writeLang(l) {
+            localStorage.setItem('siteLang', l);
+        }
+
+        function render() {
+            const l = readLang();
+            if (badge) badge.textContent = l;
+            btn.setAttribute('aria-label', `Changer la langue — actuellement ${l}`);
+        }
+
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const current = readLang();
+            const next = current === 'FR' ? 'EN' : 'FR';
+            writeLang(next);
+            render();
+        });
+
+        // keyboard accessibility
+        btn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                btn.click();
+            }
+        });
+
+        // initial render
+        render();
+    } catch (err) {
+        // ignore
+    }
+})();
+
 // Register contact modal factory and other small page behaviors here so markup can remain clean.
 // We keep a window.contactModal factory for compatibility with existing x-data="contactModal()" usage.
 window.contactModal = function () {
@@ -34,6 +135,69 @@ window.contactModal = function () {
         }
     }
 }
+
+function syncCvSelectorModalState() {
+    const modal = document.getElementById('cv-selector-modal');
+    if (!modal) return false;
+
+    const shouldOpen = window.location.hash === '#cv-selector-modal';
+    modal.style.display = shouldOpen ? 'flex' : 'none';
+    modal.classList.toggle('hidden', !shouldOpen);
+    modal.classList.toggle('flex', shouldOpen);
+    modal.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+
+    return shouldOpen;
+}
+
+window.openCvSelectorModal = function () {
+    window.location.hash = '#cv-selector-modal';
+    return true;
+};
+
+window.closeCvSelectorModal = function () {
+    if (window.location.hash === '#cv-selector-modal') {
+        window.location.hash = '';
+        return;
+    }
+    syncCvSelectorModalState();
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+    syncCvSelectorModalState();
+    document.querySelectorAll('[data-cv-open]').forEach((button) => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            window.openCvSelectorModal();
+        });
+    });
+});
+
+window.addEventListener('hashchange', syncCvSelectorModalState);
+window.addEventListener('load', syncCvSelectorModalState);
+
+window.downloadSelectedCv = function (url) {
+    if (!url) return;
+    window.closeCvSelectorModal();
+    try {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.download = '';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (e) {
+        window.location.assign(url);
+    }
+};
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        window.closeCvSelectorModal();
+    }
+});
 
 // Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
 window.addEventListener('open-contact', function _openContactFallback() {
@@ -72,26 +236,79 @@ document.addEventListener('alpine:init', () => {
     const sections = document.querySelectorAll('main#content > section[id]');
 
     function clearActive() {
-        navLinks.forEach(a => a.classList.remove('text-[#1b1b18]', 'font-semibold'));
+        navLinks.forEach((link) => {
+            link.classList.remove('text-[#1b1b18]', 'font-semibold');
+        });
     }
 
-    if (sections && navLinks) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.id;
-                    clearActive();
-                    const active = Array.from(navLinks).find(a => a.getAttribute('href') === '#' + id);
-                    if (active) active.classList.add('text-[#1b1b18]', 'font-semibold');
-                }
-            });
-        }, { root: null, rootMargin: '0px', threshold: 0.6 });
+    function setActive(id) {
+        clearActive();
+        const active = Array.from(navLinks).find((link) => link.getAttribute('href') === '#' + id);
+        if (active) {
+            active.classList.add('text-[#1b1b18]', 'font-semibold');
+        }
+    }
 
-        sections.forEach(s => observer.observe(s));
+    if (navLinks.length && sections.length) {
+        const observer = new IntersectionObserver((entries) => {
+            const visibleEntries = entries
+                .filter((entry) => entry.isIntersecting)
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+            if (visibleEntries.length > 0) {
+                setActive(visibleEntries[0].target.id);
+            }
+        }, {
+            root: null,
+            rootMargin: '-30% 0px -40% 0px',
+            threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1]
+        });
+
+        sections.forEach((section) => observer.observe(section));
+
+        const initialSection = Array.from(sections).find((section) => {
+            const rect = section.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < window.innerHeight;
+        });
+
+        if (initialSection) {
+            setActive(initialSection.id);
+        }
     }
 
     // smooth-scroll behavior for nav links is left to CSS scroll-behavior; keep default handlers minimal
 });
+
+// Shim: copy all attributes named data-x-* to x-* so server-side HTML is W3C-valid
+// while Alpine receives its expected attributes at runtime. Executed before
+// Alpine.start() below so component initialization works as expected.
+function applyDataXShim() {
+    if (typeof document === 'undefined') return;
+    try {
+        document.querySelectorAll('*').forEach(el => {
+            // copy attributes that start with data-x- or data-x-on- (events)
+            Array.prototype.slice.call(el.attributes).forEach(attr => {
+                if (!attr || typeof attr.name !== 'string') return;
+
+                // special-case event handlers encoded as data-x-on-<event>
+                if (attr.name.indexOf('data-x-on-') === 0) {
+                    // convert to Alpine's x-on:<event> form (colon included)
+                    const newName = attr.name.replace('data-x-on-', 'x-on:');
+                    if (!el.hasAttribute(newName)) el.setAttribute(newName, attr.value);
+                    return;
+                }
+
+                // generic data-x-* → x-* mapping (for x-data, x-init, x-ref, etc.)
+                if (attr.name.indexOf('data-x-') === 0) {
+                    const newName = attr.name.replace('data-x-', 'x-');
+                    if (!el.hasAttribute(newName)) el.setAttribute(newName, attr.value);
+                }
+            });
+        });
+    } catch (e) {
+        // silently ignore shim failures
+    }
+}
 
 // Contact/CV actions: make them fixed on small screens when scrolled past their original top
 (function () {
@@ -102,6 +319,12 @@ document.addEventListener('alpine:init', () => {
     let origRect = null;
 
     function recalc() {
+        // Mobile browsers can emit resize events while scrolling.
+        // If we recompute while fixed, we capture the fixed top (8px)
+        // instead of the natural document position and the sticky can flicker/disappear.
+        if (target.classList.contains('fixed') && target.__origTop !== undefined) {
+            return;
+        }
         origRect = target.getBoundingClientRect();
         target.__origTop = origRect.top + window.scrollY;
     }
@@ -113,6 +336,16 @@ document.addEventListener('alpine:init', () => {
         target.style.width = w + 'px';
         target.style.height = h + 'px';
         target.classList.add('fixed');
+
+        // Pin to the top as soon as the original top reaches viewport top,
+        // while preserving each icon column's horizontal alignment.
+        target.style.top = '8px';
+        if (origRect) {
+            target.style.left = Math.round(Math.max(6, origRect.left)) + 'px';
+        } else {
+            target.style.left = '8px';
+        }
+        target.style.right = 'auto';
     }
 
     function removeFixed() {
@@ -120,6 +353,9 @@ document.addEventListener('alpine:init', () => {
         target.classList.remove('fixed');
         target.style.width = '';
         target.style.height = '';
+        target.style.top = '';
+        target.style.left = '';
+        target.style.right = '';
     }
 
     function onScroll() {
@@ -133,6 +369,31 @@ document.addEventListener('alpine:init', () => {
     window.addEventListener('load', () => { recalc(); onScroll(); });
     window.addEventListener('scroll', onScroll, { passive: true });
     setTimeout(() => { recalc(); onScroll(); }, 120);
+})();
+
+// Theme toggle fallback: if Alpine isn't active for some reason, provide
+// a small JS handler to ensure the button still toggles the theme class.
+(function initThemeToggleFallback() {
+    try {
+        const btn = document.getElementById('themeToggleButton');
+        if (!btn) return;
+
+        btn.addEventListener('click', function (e) {
+            // If Alpine is handling the event, prefer Alpine behaviour
+            if (window.Alpine && btn.hasAttribute('x-on:click')) return;
+
+            // Use the same cycle logic as the Alpine component
+            const stored = localStorage.getItem('theme') || 'light';
+            const order = ['light', 'dark'];
+            let i = order.indexOf(stored);
+            if (i === -1) i = 0;
+            const next = order[(i + 1) % order.length];
+            if (next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', next);
+        });
+    } catch (e) {
+        // noop
+    }
 })();
 
 // Ensure footer reserved space on mobile when it becomes stuck
@@ -164,6 +425,9 @@ document.addEventListener('alpine:init', () => {
     setTimeout(applyFooterPadding, 60);
 })();
 
+// Ensure any data-x-* attributes are copied to x-* before Alpine initializes
+try { applyDataXShim(); } catch (e) { /* ignore shim failures */ }
+
 // Initialize Alpine after we've registered data and listeners
 window.Alpine = Alpine;
 Alpine.start();
@@ -181,6 +445,18 @@ Alpine.start();
             // replace in DOM
             el.parentNode.replaceChild(clone, el);
             try { clone.blur && clone.blur(); } catch (e) { /* ignore */ }
+            // After cloning, ensure any data-x-* attributes are applied and
+            // Alpine re-initializes behaviour on the new node so interactions
+            // (x-on, x-show, etc.) continue to work on the replaced node.
+            try {
+                if (typeof applyDataXShim === 'function') applyDataXShim();
+                // Alpine exposes initTree in v3 — use it to init the newly cloned node.
+                if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+                    try { window.Alpine.initTree(clone); } catch (e) { /* ignore */ }
+                }
+            } catch (e) {
+                // ignore failures; best-effort re-init only
+            }
         } catch (e) {
             // ignore failures to clone
         }
@@ -209,8 +485,8 @@ Alpine.start();
         try {
             const a = e.target && e.target.closest && e.target.closest('a.social-link--cv, a.social-link.social-link--cv');
             if (!a) return;
-            // tag for debugging if needed
-            a.dataset._cvClicked = String(Date.now());
+            // replace shortly after click so the browser can open the target _blank,
+            // then we swap the node to clear any lingering visual state.
             setTimeout(() => replaceWithClone(a), 120);
         } catch (err) { /* ignore */ }
     }, true);
@@ -223,4 +499,5 @@ Alpine.start();
 })();
 
 // Ambient halo: small, non-intrusive background glow updated on scroll/mousemove
+import './photoToggle';
 import './halo';

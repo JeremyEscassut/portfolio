@@ -6,8 +6,9 @@
     RewriteEngine On
     # When serving the app from a subdirectory (example: /portfolio/ on Alwaysdata)
     # set the RewriteBase so relative asset and front-controller rules work correctly.
-    # If you later serve from root, change/remove this line.
-    RewriteBase /portfolio/
+    # On this deployment the site is served from the web root, so use '/'.
+    # If you later serve from a subdirectory, change this line accordingly.
+    RewriteBase /
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
