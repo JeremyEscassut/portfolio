@@ -1,4 +1,30 @@
+/* ==================================================================
+   resources/css/app.css — every style of the site.
+
+   How to read this file
+   - Tailwind utilities are used directly in the Blade views.
+   - The first ~2800 lines are historical page rules. Many of them use
+     !important and broad selectors (e.g. `.dark body > div`,
+     `html:not(.dark) main#content *`), which is why later rules need
+     strong selectors.
+   - The "UX quick wins" block at the END of the file is the current design
+     layer: colour tokens (--pf-*), typography, buttons, sections, projects,
+     timeline, recommendations, stack, footer, section fan, reduced motion.
+     Start there when changing the look of the page.
+   - Dark mode = `.dark` class on <html> (set by the theme button), not the
+     OS preference.
+   ================================================================== */
 @import "tailwindcss";
+
+/* `dark:` utilities follow the site's theme button (.dark on <html>), not the OS
+   setting. Without this, a visitor in dark mode on a light OS got light hover
+   backgrounds behind light text (e.g. the CV choices). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Typeface loaded in layouts/app.blade.php (Bunny Fonts) */
+@theme {
+    --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 
 /* Theme variables: palette épurée, non-blanc (inspiré badminton: bleu/vert atténués) */
 :root {
@@ -2829,4 +2855,1178 @@ html:not(.dark) .social-link--contact:focus-visible svg * {
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
+}
+
+
+/* ==================================================================
+   UX quick wins (2026-11) — kept at the end of the file on purpose.
+   The rules above rely heavily on !important and on broad selectors
+   such as `html:not(.dark) main#content *`, so the rules below are
+   prefixed with `html body #content` / `#home-aside` to win the cascade.
+
+   Palette (unchanged identity, consolidated):
+   - ink / copy / muted : text hierarchy
+   - action             : the only colour for clickable things
+   - rule               : separators and quiet borders
+   - green (#40916C)    : kept for the active section in the nav
+   ================================================================== */
+:root {
+    --pf-ink: #0f2328;
+    --pf-copy: #2c3d41;
+    --pf-muted: #55676b;
+    --pf-action: #1f6f8f;
+    --pf-action-hover: #185a75;
+    --pf-on-action: #ffffff;
+    --pf-rule: rgba(15, 35, 40, 0.14);
+    --pf-surface: #ffffff;
+    --pf-raised: #ffffff; /* floating elements above the page (section fan) */
+    --pf-page: #f3f7f6; /* page background, used to "hollow out" outlined shapes */
+    --pf-dialog: #ffffff;
+}
+
+.dark {
+    --pf-ink: #f5f7f6;
+    --pf-copy: rgba(255, 255, 255, 0.88);
+    --pf-muted: rgba(255, 255, 255, 0.68);
+    --pf-action: #bfeef9;
+    --pf-action-hover: #e2f8fd;
+    --pf-on-action: #0b1b20;
+    --pf-rule: rgba(255, 255, 255, 0.16);
+    --pf-surface: #111a1c;
+    --pf-raised: #2a383c;
+    --pf-page: rgb(30, 41, 32);
+    --pf-dialog: #0f1113;
+}
+
+/* `.dark body > div { position: static !important }` (above) also caught the
+   CV modal, which then rendered at the bottom of the page in dark mode. */
+html.dark #cv-selector-modal {
+    position: fixed !important;
+    /* the same rule also forces z-index: auto, which let the sticky section
+       banner and the pinned Contact/CV icons paint over the dialog */
+    z-index: 10000 !important;
+}
+
+/* Visible keyboard focus everywhere */
+html body :focus-visible {
+    outline: 2px solid var(--pf-action) !important;
+    outline-offset: 3px !important;
+}
+
+/* ---------- Background ----------
+   Flat page colour in light mode (the dark theme already was flat).
+   The cursor halo stays as the only atmospheric effect: it reacts to the
+   visitor, a static gradient wash does not. */
+html:not(.dark) body {
+    background: var(--bg) !important;
+}
+
+/* ---------- Buttons ----------
+   Shape borrowed from the photo frame: a horizontal hexagon. The shape is
+   drawn by ::before so the button itself is not clipped and its keyboard
+   focus outline stays visible. */
+html body .pf-btn {
+    --pf-btn-bg: transparent;
+    --pf-btn-tip: 12px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.625rem calc(var(--pf-btn-tip) + 0.875rem);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+html body .pf-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--pf-btn-bg);
+    clip-path: polygon(var(--pf-btn-tip) 0, calc(100% - var(--pf-btn-tip)) 0, 100% 50%, calc(100% - var(--pf-btn-tip)) 100%, var(--pf-btn-tip) 100%, 0 50%);
+    transition: background-color 0.15s ease;
+}
+
+/* `.pf-btn.pf-btn--x` (two classes) so `.dark [role="dialog"] button { color … !important }`
+   cannot turn the label light-on-light inside the contact dialog. */
+html body .pf-btn.pf-btn--primary,
+html body #content .pf-btn--primary {
+    --pf-btn-bg: var(--pf-action);
+    color: var(--pf-on-action) !important;
+}
+
+html body .pf-btn--primary:hover {
+    --pf-btn-bg: var(--pf-action-hover);
+}
+
+/* Secondary: outlined hexagon. ::before draws the outline in the action colour,
+   ::after fills it 1.5px inside with the surface colour (page or dialog). */
+html body .pf-btn.pf-btn--secondary,
+html body #content .pf-btn--secondary {
+    --pf-btn-bg: var(--pf-action);
+    --pf-btn-fill: var(--pf-page);
+    color: var(--pf-action) !important;
+}
+
+html body .pf-btn.pf-btn--secondary::after {
+    content: "";
+    position: absolute;
+    inset: 1.5px;
+    z-index: -1;
+    background: var(--pf-btn-fill);
+    clip-path: polygon(var(--pf-btn-tip) 0, calc(100% - var(--pf-btn-tip)) 0, 100% 50%, calc(100% - var(--pf-btn-tip)) 100%, var(--pf-btn-tip) 100%, 0 50%);
+    transition: background-color 0.15s ease;
+}
+
+html body [role="dialog"] .pf-btn.pf-btn--secondary {
+    --pf-btn-fill: var(--pf-dialog);
+}
+
+html body .pf-btn.pf-btn--secondary:hover,
+html body .pf-btn.pf-btn--secondary:focus-visible {
+    --pf-btn-fill: color-mix(in srgb, var(--pf-action) 12%, var(--pf-page));
+}
+
+html body [role="dialog"] .pf-btn.pf-btn--secondary:hover,
+html body [role="dialog"] .pf-btn.pf-btn--secondary:focus-visible {
+    --pf-btn-fill: color-mix(in srgb, var(--pf-action) 12%, var(--pf-dialog));
+}
+
+html body .pf-btn--small {
+    --pf-btn-tip: 10px;
+    min-height: 38px;
+    padding: 0.5rem calc(var(--pf-btn-tip) + 0.75rem);
+    font-size: 0.9rem;
+}
+
+/* ---------- Left column: identity ---------- */
+#home-aside .home-name {
+    margin: 0;
+    font-size: clamp(2.25rem, 1.5rem + 2.2vw, 3rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--pf-ink) !important;
+}
+
+#home-aside .home-role {
+    margin-top: 0.75rem;
+    max-width: 32ch;
+    font-size: 1.125rem !important;
+    font-weight: 500;
+    line-height: 1.4 !important;
+    color: var(--pf-ink) !important;
+}
+
+#home-aside .home-pitch {
+    margin-top: 1rem;
+    max-width: 44ch;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    color: var(--pf-copy) !important;
+}
+
+#home-aside .photo-caption {
+    margin-top: 0.75rem;
+    max-width: 34ch;
+    font-size: 0.875rem !important;
+    line-height: 1.45 !important;
+    color: var(--pf-muted) !important;
+}
+
+/* Mobile / tablet: photo + one 2-column group of icons.
+   Icons grow from 40px to 48px: easier to hit with a thumb (WCAG 2.5.5 recommends 44px+). */
+@media (max-width: 1023px) {
+    #home-aside #home-interactions {
+        align-items: center;
+    }
+
+    #home-aside #home-photo {
+        max-width: 240px;
+        margin: 0 auto;
+    }
+
+    #home-aside #home-right-col,
+    #home-aside #home-contact-cv-icons {
+        grid-template-columns: repeat(2, 48px) !important;
+        gap: 12px 14px !important;
+    }
+
+    #home-aside #home-social-icons .social-link,
+    #home-aside #home-contact-cv-icons .social-link,
+    #home-aside #themeToggleButton.theme-lang-button,
+    #home-aside #langToggleButton.theme-lang-button {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        min-height: 48px !important;
+    }
+
+    #home-aside #home-social-icons .social-link svg,
+    #home-aside #home-contact-cv-icons .social-link svg,
+    #home-aside #themeToggleButton.theme-lang-button svg,
+    #home-aside #langToggleButton.theme-lang-button svg {
+        width: 34px !important;
+        height: 34px !important;
+    }
+
+    #home-aside #home-contact-cv-icons .social-link img {
+        width: 34px;
+        height: 34px;
+    }
+
+    /* Pinned state (set by app.js after scrolling past the icons): keep both
+       icons legible over the content with a light surface behind them. */
+    #home-aside #home-contact-cv-icons.fixed {
+        top: 0 !important;
+        width: 124px !important;
+        height: 56px !important;
+        padding: 4px 7px;
+        border-radius: 0 0 0 12px;
+        background: color-mix(in srgb, var(--pf-surface) 88%, transparent) !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Desktop: identity spans the full aside width; photo + nav/icons share the row below */
+@media (min-width: 1024px) {
+    #home-aside #home {
+        grid-template-rows: auto 1fr;
+        row-gap: 2rem;
+    }
+
+    #home-aside #home-title {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    #home-aside #home-left-col {
+        grid-column: 1;
+        grid-row: 2;
+        align-items: flex-start;
+    }
+
+    #home-aside #home-right-col {
+        grid-column: 2;
+        grid-row: 2;
+        min-height: 0;
+        padding-top: 0.5rem;
+    }
+
+    #home-aside #home-photo {
+        max-width: min(300px, 34vh);
+    }
+}
+
+/* ---------- Right column: sections and separators ---------- */
+html body #content .section-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .home-section + .home-section {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--pf-rule);
+}
+
+html body #content .section-body {
+    padding: 0 1.5rem;
+}
+
+html body #content .section-body p {
+    max-width: 68ch;
+    color: var(--pf-copy) !important;
+}
+
+html body #content .section-body > p + p,
+html body #content .project > p + p,
+html body #content .timeline__item p + p {
+    margin-top: 0.875rem;
+}
+
+/* No automatic hyphenation in short, prominent lines */
+#home-aside .home-role,
+#home-aside .photo-caption,
+html body #content .section-title,
+html body #content .project__title,
+html body #content .timeline__title,
+html body #content .timeline__subtitle,
+html body #content .reco__role {
+    hyphens: manual;
+    -webkit-hyphens: manual;
+}
+
+/* Mobile / tablet: sticky section banner aligned with the text, on an opaque band */
+@media (max-width: 1023px) {
+    html body #content .section-banner {
+        top: 0 !important;
+        margin-top: 0 !important;
+        display: flex;
+        align-items: center;
+        min-height: 56px;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0.75rem 1.5rem;
+        background: color-mix(in srgb, var(--pf-surface) 88%, transparent) !important;
+    }
+
+    html body #content .section-title {
+        margin-left: 0 !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    html body #content .home-section + .home-section {
+        margin-top: 3.5rem;
+        padding-top: 3rem;
+    }
+
+    /* On desktop the banner becomes a plain heading sitting under the separator */
+    html body #content .home-section:not(.home-section--first) .section-banner {
+        position: static;
+        width: auto;
+        margin: 0 0 1.5rem;
+        padding: 0 1.5rem;
+        background: transparent !important;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    html body #content .section-title {
+        font-size: 1.5rem;
+        letter-spacing: -0.01em;
+        margin-left: 0;
+    }
+}
+
+/* ---------- Projects ---------- */
+html body #content .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+html body #content .project__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .project__role strong {
+    font-weight: 600;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .project .project-tags {
+    margin-top: 1rem;
+}
+
+html body #content .project__media,
+html body #content .project__image {
+    margin-top: 1.25rem;
+}
+
+html body #content .project__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--pf-rule);
+    border-radius: 8px;
+}
+
+html body #content .carousel {
+    padding: 0.5rem;
+    border: 1px solid var(--pf-rule);
+    border-radius: 8px;
+    background: var(--pf-surface);
+}
+
+html body #content .carousel img {
+    border-radius: 4px;
+}
+
+html body #content .carousel__dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.875rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+html body #content .carousel__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--pf-ink) 25%, transparent);
+}
+
+html body #content .carousel__dot.is-active {
+    background: var(--pf-ink);
+}
+
+html body #content .carousel__nav {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transform: translateY(-50%);
+    border: 1px solid var(--pf-rule);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--pf-surface) 92%, transparent);
+    font-size: 1.1rem;
+    color: var(--pf-ink) !important;
+    cursor: pointer;
+}
+
+html body #content .carousel__nav--prev { left: 0.75rem; }
+html body #content .carousel__nav--next { right: 0.75rem; }
+
+html body #content .project__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Project links ("Visit the site", "View the code") use the hexagonal .pf-btn,
+   like "See the demo"; the logo sits before the label. */
+html body #content .project-link {
+    gap: 0.625rem;
+    text-decoration: none;
+}
+
+html body #content .project-link svg {
+    flex: none;
+    width: 26px !important;
+    height: 26px !important;
+}
+
+html body #content .video-dialog {
+    background: var(--pf-surface);
+}
+
+html body #content .video-dialog__title {
+    font-size: 0.95rem !important;
+    font-weight: 600;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .video-dialog__close {
+    color: var(--pf-muted) !important;
+    cursor: pointer;
+}
+
+/* ---------- Stack icons: one optical size for every logo ----------
+   Earlier overrides shrank PHP (2rem) and boosted MySQL (46px); both now
+   follow the shared size. */
+html body #stack .stack-grid .skill-tile svg {
+    width: 1.9rem !important;
+    height: 1.9rem !important;
+}
+
+/* Keep the icon centred in the space above its label (labels are shown from 641px) */
+@media (min-width: 641px) {
+    html body #stack .stack-grid .skill-tile {
+        padding-bottom: 30px !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    html body #stack .stack-grid .skill-tile svg {
+        width: 2.4rem !important;
+        height: 2.4rem !important;
+    }
+}
+
+/* ---------- Experience / studies ---------- */
+html body #content .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+html body #content .timeline__item {
+    display: grid;
+    gap: 0.25rem 1.5rem;
+}
+
+html body #content .timeline__date {
+    margin: 0;
+    padding-top: 0.15rem;
+    font-size: 0.9rem !important;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--pf-muted) !important;
+}
+
+html body #content .timeline__title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .timeline__item p.timeline__subtitle {
+    margin: 0.25rem 0 0.625rem;
+    font-weight: 500;
+    color: var(--pf-muted) !important;
+}
+
+@media (min-width: 1024px) {
+    html body #content .timeline__item {
+        grid-template-columns: 9.5rem minmax(0, 1fr);
+    }
+}
+
+/* ---------- Recommendations ---------- */
+html body #content .recommendations {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+html body #content .reco {
+    margin: 0;
+}
+
+html body #content .reco__quote {
+    margin: 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--pf-action);
+}
+
+html body #content .reco__quote p {
+    font-size: 1.0625rem !important;
+    line-height: 1.7 !important;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .reco__author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin-top: 1rem;
+    padding-left: 1.25rem;
+}
+
+html body #content .reco__name {
+    font-size: 1rem !important;
+    font-weight: 600;
+    color: var(--pf-ink) !important;
+}
+
+html body #content .reco__role,
+html body #content .reco__context {
+    font-size: 0.9rem !important;
+    color: var(--pf-muted) !important;
+}
+
+html body #content .reco__link {
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: var(--pf-action) !important;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+html body #content .reco--letter {
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--pf-rule);
+}
+
+html body #content .reco--letter .reco__context {
+    margin-top: 0.125rem;
+}
+
+html body #content .reco--letter .pf-btn {
+    margin-top: 1rem;
+}
+
+/* ---------- Footer ---------- */
+html body #content .site-footer {
+    margin-top: 3.5rem;
+    padding: 2rem 1.5rem;
+    border-top: 1px solid var(--pf-rule);
+    font-size: 0.875rem;
+    color: var(--pf-muted) !important;
+}
+
+html body #content .site-footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.25rem;
+}
+
+html body #content .site-footer__link {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--pf-muted) !important;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+html body #content .site-footer__meta {
+    font-size: 0.8rem;
+    color: var(--pf-muted) !important;
+}
+
+@media (min-width: 1024px) {
+    html body #content .site-footer__links {
+        justify-content: flex-start;
+    }
+}
+
+/* ---------- Section fan (mobile / tablet) ----------
+   Markup: home.blade.php (#section-fab). Behaviour: resources/js/sectionFab.js.
+   The #section-fab wrapper is a direct child of <body>, which an old dark-mode
+   rule forces to `position: static; z-index: auto`, so every piece below is
+   positioned on its own instead of relying on the wrapper. */
+.section-fab__toggle,
+.section-fab__menu {
+    position: fixed;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    width: 56px;
+    height: 64px;
+    z-index: 70;
+}
+
+/* Hexagonal toggle, same shape as the photo frame (drawn by ::before so the
+   focus outline is not clipped). Hidden until <html>.is-past-actions. */
+.section-fab__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--pf-on-action);
+    cursor: pointer;
+    filter: drop-shadow(0 2px 4px rgba(11, 27, 32, 0.25));
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
+
+/* `.dark button { color: … !important }` (above) would turn the icon light-on-light */
+html body .section-fab__toggle {
+    color: var(--pf-on-action) !important;
+}
+
+.section-fab__toggle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--pf-action);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+.section-fab__icon--close,
+.section-fab__toggle[aria-expanded="true"] .section-fab__icon--open {
+    display: none;
+}
+
+.section-fab__toggle[aria-expanded="true"] .section-fab__icon--close {
+    display: block;
+}
+
+/* The menu box has the toggle's size and position: links are placed from it */
+.section-fab__menu {
+    pointer-events: none;
+    visibility: hidden;
+    /* stay visible while the links fold back, then become unfocusable */
+    transition: visibility 0s linear 0.22s;
+}
+
+.section-fab__menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Closed: every link is stacked on the toggle. Open: it moves to its fan
+   position (--dx / --dy computed in sectionFab.js), one after the other (--i). */
+.section-fab__item {
+    position: absolute;
+    right: 0;
+    bottom: 10px; /* centres a 44px link on the 64px toggle */
+    opacity: 0;
+    transform: translate(0, 0) scale(0.85);
+    transform-origin: right center;
+    filter: drop-shadow(0 1px 3px rgba(11, 27, 32, 0.22));
+    transition: opacity 0.16s ease, transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+html body .section-fab__link {
+    --pf-btn-bg: var(--pf-raised);
+    white-space: nowrap;
+    color: var(--pf-ink) !important;
+}
+
+html body .section-fab__link[aria-current="true"] {
+    --pf-btn-bg: var(--pf-action);
+    color: var(--pf-on-action) !important;
+}
+
+.section-fab.is-open .section-fab__menu {
+    visibility: visible;
+    transition: none;
+}
+
+.section-fab.is-open .section-fab__item {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(calc(-1 * var(--dx, 0px)), calc(-1 * var(--dy, 0px))) scale(1);
+    transition-delay: calc(var(--i) * 25ms);
+}
+
+.section-fab__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 65;
+    background: rgba(11, 27, 32, 0.28);
+}
+
+@media (max-width: 1023px) {
+    html.is-past-actions .section-fab__toggle {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
+    }
+
+    /* Keep the footer readable above the floating button */
+    html body #content .site-footer {
+        padding-bottom: 6.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section-fab__toggle,
+    .section-fab__menu,
+    .section-fab__backdrop {
+        display: none !important;
+    }
+}
+
+/* ---------- Shape system ----------
+   Three shapes, each with one meaning, so a shape tells what an element does:
+   - hexagon .............. actions (buttons, section fan, carousel arrows, icon
+                            buttons on hover) — same geometry as the photo frame;
+   - rectangle, 6px ....... surfaces and media (images, carousel, dialogs, inputs,
+                            toasts, CV choices);
+   - rectangle, 4px ....... passive labels (project tags, stack labels, language
+                            badge) — square-ish so they do not look clickable.
+   Circles are kept only for the carousel position dots. */
+:root {
+    --pf-radius-surface: 6px;
+    --pf-radius-label: 4px;
+    --pf-hexagon: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+/* Labels */
+html body .project-tag {
+    border-radius: var(--pf-radius-label) !important;
+    border: 1px solid var(--pf-rule) !important;
+}
+
+/* Light mode: white label on the tinted page, so tags read as distinct items */
+html:not(.dark) body .project-tag {
+    background: var(--pf-surface) !important;
+}
+
+html body .project-tag:hover {
+    transform: none; /* not interactive: no lift */
+}
+
+html body .skill-tile[data-name]::after,
+html body .theme-lang-button .lang-badge {
+    border-radius: var(--pf-radius-label) !important;
+}
+
+/* Stack labels: same fine border as the project tags */
+html body .skill-tile[data-name]::after {
+    border: 1px solid var(--pf-rule) !important;
+}
+
+/* Surfaces and media */
+html body #content .project__image,
+html body #content .carousel,
+html body #content .video-dialog,
+html body [role="dialog"],
+html body .cv-option,
+html body [role="dialog"] input,
+html body [role="dialog"] textarea {
+    border-radius: var(--pf-radius-surface) !important;
+}
+
+html body #content .carousel img,
+html body #content .video-dialog video {
+    border-radius: 3px !important;
+}
+
+#home-aside #home-contact-cv-icons.fixed {
+    border-radius: 0 0 0 var(--pf-radius-surface) !important;
+}
+
+/* Carousel arrows: hexagonal actions */
+html body #content .carousel__nav {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    isolation: isolate;
+    width: 40px;
+    height: 46px;
+    filter: drop-shadow(0 1px 2px rgba(11, 27, 32, 0.25));
+}
+
+html body #content .carousel__nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--pf-raised);
+    clip-path: var(--pf-hexagon);
+}
+
+/* Icon buttons of the aside: the hover/focus background becomes a hexagon.
+   Older rules paint a round/rounded background on the element itself, so it is
+   cleared and redrawn on ::before. Dark mode keeps a light background on hover,
+   which the existing black-on-hover icon variants rely on. */
+#home-aside .social-link,
+#home-aside .theme-lang-button {
+    position: relative;
+    isolation: isolate;
+    border-radius: 0 !important;
+}
+
+#home-aside .social-link:hover,
+#home-aside .social-link:focus-visible,
+#home-aside .theme-lang-button:hover,
+#home-aside .theme-lang-button:focus-visible {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#home-aside .social-link::before,
+#home-aside .theme-lang-button::before {
+    content: "";
+    position: absolute;
+    inset: -2px 0;
+    z-index: -1;
+    clip-path: var(--pf-hexagon);
+    background: transparent;
+    transition: background-color 0.15s ease;
+}
+
+#home-aside .social-link:hover::before,
+#home-aside .social-link:focus-visible::before,
+#home-aside .theme-lang-button:hover::before,
+#home-aside .theme-lang-button:focus-visible::before {
+    background: rgba(15, 35, 40, 0.1);
+}
+
+html.dark #home-aside .social-link:hover::before,
+html.dark #home-aside .social-link:focus-visible::before,
+html.dark #home-aside .theme-lang-button:hover::before,
+html.dark #home-aside .theme-lang-button:focus-visible::before {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+/* Older dark-mode rules turned these icons black on hover (made for a white
+   hover background). With the subtle hexagon above they keep the text colour. */
+html.dark #home-aside #themeToggleButton.theme-lang-button:hover svg,
+html.dark #home-aside #themeToggleButton.theme-lang-button:hover svg *,
+html.dark #home-aside #themeToggleButton.theme-lang-button:focus-visible svg,
+html.dark #home-aside #themeToggleButton.theme-lang-button:focus-visible svg *,
+html.dark #home-aside #langToggleButton.theme-lang-button:hover svg,
+html.dark #home-aside #langToggleButton.theme-lang-button:hover svg *,
+html.dark #home-aside #langToggleButton.theme-lang-button:focus-visible svg,
+html.dark #home-aside #langToggleButton.theme-lang-button:focus-visible svg *,
+html.dark #home-aside .social-link.social-link--contact:hover svg,
+html.dark #home-aside .social-link.social-link--contact:hover svg *,
+html.dark #home-aside .social-link.social-link--contact:focus-visible svg,
+html.dark #home-aside .social-link.social-link--contact:focus-visible svg * {
+    stroke: var(--pf-ink) !important;
+    color: var(--pf-ink) !important;
+}
+
+/* GitLab orange (#fc6d26) is 2.6:1 on the light page: use GitLab's darker
+   brand orange in light mode (3.8:1). */
+html:not(.dark) #home-aside .social-link--gitlab {
+    color: #e24329 !important;
+}
+
+/* ---------- Dialog details ---------- */
+html body .pf-close {
+    padding: 4px 6px;
+    border: 0;
+    background: none;
+    font-size: 1rem;
+    line-height: 1;
+    color: var(--pf-muted) !important;
+    cursor: pointer;
+}
+
+html body .pf-close:hover,
+html body .pf-close:focus-visible {
+    color: var(--pf-ink) !important;
+}
+
+html body #cv-selector-modal .cv-option {
+    border: 1px solid var(--pf-rule) !important;
+    background: transparent !important;
+    color: var(--pf-ink) !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+html body #cv-selector-modal .cv-option:hover,
+html body #cv-selector-modal .cv-option:focus-visible {
+    border-color: var(--pf-action) !important;
+    background: color-mix(in srgb, var(--pf-action) 10%, var(--pf-dialog)) !important;
+}
+
+html body #cv-selector-modal .cv-option span + span,
+html body #cv-selector-modal [role="dialog"] p {
+    color: var(--pf-muted) !important;
+}
+
+/* Older rules (`.dark #themeToggleButton.theme-lang-button:hover`, the 36px
+   desktop block) paint a square/round background and a rectangular shadow on the
+   theme and language buttons; IDs are needed to win over them. */
+html #home-aside #themeToggleButton.theme-lang-button:hover,
+html #home-aside #themeToggleButton.theme-lang-button:focus-visible,
+html #home-aside #langToggleButton.theme-lang-button:hover,
+html #home-aside #langToggleButton.theme-lang-button:focus-visible {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Desktop: same 44px footprint for the six icon buttons, more air between them */
+@media (min-width: 1024px) {
+    #home-aside #home-right-col {
+        gap: 1rem !important;
+    }
+
+    #home-aside #home-right-col nav {
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Short laptop screens (≤ 820px high): tighten the aside so the last row of
+       icons stays on screen (the aside is sticky and as tall as the viewport). */
+    @media (max-height: 820px) {
+        #home-aside {
+            padding-top: 1.5rem !important;
+            padding-bottom: 1rem !important;
+        }
+
+        #home-aside #home {
+            padding-top: 1.5rem !important;
+            padding-bottom: 1rem !important;
+            row-gap: 1.25rem !important;
+        }
+
+        #home-aside #home-sections-list > li + li {
+            margin-top: 0.5rem !important;
+        }
+    }
+
+    #home-aside #home-social-icons,
+    #home-aside #theme-toggle-wrapper,
+    #home-aside #home-contact-cv-icons {
+        gap: 1.25rem !important;
+        justify-content: flex-end;
+    }
+
+    #home-aside #home-social-icons .social-link,
+    #home-aside #home-contact-cv-icons .social-link,
+    html #home-aside #themeToggleButton.theme-lang-button,
+    html #home-aside #langToggleButton.theme-lang-button {
+        width: 44px !important;
+        height: 44px !important;
+        padding: 0 !important;
+        translate: none; /* drop the old lg:-translate-x-2 offset so the grid lines up */
+    }
+
+    #home-aside #home-social-icons .social-link svg,
+    #home-aside #home-contact-cv-icons .social-link svg,
+    #home-aside #home-contact-cv-icons .social-link img,
+    html #home-aside #themeToggleButton.theme-lang-button svg,
+    html #home-aside #langToggleButton.theme-lang-button svg {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    /* Vertical hexagon around a 44px square: 44 wide x 50 high */
+    #home-aside .social-link::before,
+    #home-aside .theme-lang-button::before {
+        inset: -3px 0;
+    }
+}
+
+/* Section reached from the section fan receives focus (tabindex=-1):
+   no outline around the whole section. */
+html body #content section[tabindex="-1"]:focus {
+    outline: none !important;
+}
+
+/* ---------- Toasts (contact form result) ---------- */
+#toast-region {
+    position: fixed !important; /* also beats `.dark body > div { position: static }` */
+    top: 16px;
+    left: 50%;
+    z-index: 10001 !important; /* above the contact modal */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: min(92vw, 30rem);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--pf-radius-surface);
+    border-left: 4px solid var(--pf-action);
+    background: var(--pf-raised);
+    color: var(--pf-ink);
+    box-shadow: 0 6px 20px rgba(11, 27, 32, 0.18);
+    pointer-events: auto;
+    animation: pf-toast-in 0.25s ease-out;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast--success { border-left-color: #2f8a5f; }
+.toast--error { border-left-color: #c2413b; }
+
+.toast.is-leaving {
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+html body .toast__text {
+    flex: 1;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--pf-ink) !important;
+}
+
+html body .toast__close {
+    flex: none;
+    padding: 0 2px;
+    border: 0;
+    background: none;
+    color: var(--pf-muted) !important;
+    cursor: pointer;
+}
+
+@keyframes pf-toast-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ---------- Contact modal: feedback and actions ---------- */
+html body [role="dialog"] .contact-feedback {
+    padding: 12px 14px;
+    border-radius: var(--pf-radius-surface);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+html body [role="dialog"] .contact-feedback--error {
+    background: color-mix(in srgb, #c2413b 10%, transparent);
+    border-left: 3px solid #c2413b;
+}
+
+html body [role="dialog"] .contact-feedback--error ul {
+    margin: 0.25rem 0 0;
+    padding-left: 1.1rem;
+    list-style: disc;
+}
+
+html body [role="dialog"] .contact-feedback--fallback {
+    background: color-mix(in srgb, var(--pf-action) 10%, transparent);
+    border-left: 3px solid var(--pf-action);
+}
+
+html body [role="dialog"] .contact-feedback a:not(.pf-btn) {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+html body [role="dialog"] .contact-feedback__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 10px;
+}
+
+html body [role="dialog"] .contact-feedback__hint {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+html body [role="dialog"] .contact-feedback__not-opened {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--pf-rule);
+    font-size: 0.85rem;
+}
+
+html body [role="dialog"] .contact-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
