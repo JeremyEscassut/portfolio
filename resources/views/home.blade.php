@@ -86,7 +86,7 @@ $icon = function (string $name): string {
 					</nav>
 
 					<div id="home-social-icons" class="flex gap-3 items-center text-sm text-[#706f6c] justify-end">
-						<a href="https://www.linkedin.com/in/jérémy-escassut-57773427" target="_blank" rel="noopener noreferrer" aria-label="{{ __('social.linkedin') }}" title="LinkedIn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
+						<a href="https://www.linkedin.com/in/jeremyescassut" target="_blank" rel="noopener noreferrer" aria-label="{{ __('social.linkedin') }}" title="LinkedIn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--linkedin">
 							{!! $icon('icon-linkedin') !!}
 						</a>
 						<a href="https://gitlab.com/JeremyEscassut" id="gitlab-link" target="_blank" rel="noopener noreferrer" aria-label="{{ __('social.gitlab') }}" title="GitLab" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 flex items-center justify-center social-link social-link--gitlab">
@@ -349,7 +349,7 @@ $icon = function (string $name): string {
 						<span class="reco__name">{{ __('recommendations.linkedin.author') }}</span>
 						<span class="reco__role">{{ __('recommendations.linkedin.role') }}</span>
 						<span class="reco__context">{{ __('recommendations.linkedin.context') }}</span>
-						<a href="https://www.linkedin.com/in/jérémy-escassut-57773427/" target="_blank" rel="noopener noreferrer" class="reco__link">{{ __('recommendations.linkedin.link') }}</a>
+						<a href="https://www.linkedin.com/in/jeremyescassut" target="_blank" rel="noopener noreferrer" class="reco__link">{{ __('recommendations.linkedin.link') }}</a>
 					</figcaption>
 				</figure>
 
@@ -544,9 +544,9 @@ $contactAddress = config('mail.public_contact_address');
 
 @php
 $cvs = [
-	['file' => 'ESCASSUT_JEREMY_-_CV_Développeur_Full_Stack_orienté_Produit_&_UX_Juillet_2026.pdf', 'title' => 'cv.modal.dev', 'desc' => 'cv.modal.dev_desc'],
-	['file' => 'ESCASSUT_JEREMY_-_CV_Chef_de_projet_Coordination_internationale_Juillet_2026.pdf', 'title' => 'cv.modal.pm', 'desc' => 'cv.modal.pm_desc'],
-	['file' => 'ESCASSUT_JEREMY_-_CV_Product_Owner_|_Transformation_digitale_Juillet_2026.pdf', 'title' => 'cv.modal.po', 'desc' => 'cv.modal.po_desc'],
+	['file' => 'ESCASSUT_JEREMY_-_CV_Développeur_Full_Stack_orienté_Produit_&_UX.pdf', 'title' => 'cv.modal.dev', 'desc' => 'cv.modal.dev_desc'],
+	['file' => 'ESCASSUT_JEREMY_-_CV_Chef_de_projet_Coordination_internationale.pdf', 'title' => 'cv.modal.pm', 'desc' => 'cv.modal.pm_desc'],
+	['file' => 'ESCASSUT_JEREMY_-_CV_Product_Owner_-_Transformation_digitale.pdf', 'title' => 'cv.modal.po', 'desc' => 'cv.modal.po_desc'],
 ];
 @endphp
 {{-- Native modal dialog, opened through the URL hash #cv-selector-modal (resources/js/app.js). --}}

@@ -17,7 +17,7 @@
   "cv.preview_pdf": "CV preview (PDF)",
   "cv.open_new_tab": "Open CV (new tab)",
   "cv.download": "Download CV",
-  "cv.intro": "You can view or download my CV in PDF format.",
+  "cv.intro": "You can view or download my CV in PDF format (in French).",
 
   "home.job_title": "Product owner, IT project manager and UX/UI developer",
 
@@ -163,7 +163,7 @@
   "recommendations.pdf.context": "Recommendation letter, 24 July 2026",
   "recommendations.linkedin.context": "LinkedIn recommendation, 3 January 2022",
   "stack.ai": "AI",
-  "cv.modal.hint": "Each version highlights a different profile. The PDF opens in a new tab.",
+  "cv.modal.hint": "Each version highlights a different profile. The CVs are in French. The PDF opens in a new tab.",
   "cv.modal.dev": "Full stack developer CV",
   "cv.modal.dev_desc": "Product- and UX-focused",
   "cv.modal.pm": "Project manager CV",
