@@ -193,11 +193,11 @@ Source : `docs/reports/AUDIT_2026-11-27.md`.
 
 - [x] Audit securite, proprete et SEO.
 - [x] Nettoyage des fichiers inutiles (P-1 a P-3, D-006).
-- [ ] Securite : mise a jour des dependances, installation cote serveur, en-tetes HTTP, limite d'envoi du formulaire (S-3 a S-7).
-- [ ] SEO : Open Graph, canonical, hreflang, sitemap, vraie 404, titres (SEO-1 a SEO-7, P-5).
-- [ ] Decider du sort de `public/cv-archive/` (P-4) et de la licence (P-8).
-- [ ] README de presentation du depot (P-7).
-- [ ] Nouveau depot public depuis l'historique propre, ancien archive (S-1, S-2) ; lien « Voir le code » dans le paragraphe IA.
+- [x] Securite : mise a jour des dependances, installation cote serveur, en-tetes HTTP, limite d'envoi du formulaire (S-3 a S-7, PR #13).
+- [x] SEO : Open Graph, canonical, hreflang, sitemap, vraie 404, titres (PR #14 ; SEO-6 non retenu : titres de fenetre en `h1` voulus pour l'accessibilite).
+- [ ] Decider du sort de `public/cv-archive/` (P-4). Licence (P-8) : pas de licence, droits reserves, precise dans le README.
+- [x] README de presentation du depot (P-7).
+- [x] Nouveau depot public `JeremyEscassut/portfolio` depuis l'historique propre, ancien renomme `portfolio-archive` et archive (S-1, S-2) ; lien « Voir le code » dans le paragraphe IA (2026-11-27).
 
 ## Plan du jour - execution rapide (2026-11-27)
 
