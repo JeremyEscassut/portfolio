@@ -98,14 +98,14 @@
   "place.example.email": "prenom@exemple.com",
   "place.greeting": "Bonjour…",
 
-  "experience.primever.dates": "Sept. - Nov. 2026",
+  "experience.primever.dates": "Sept - Nov 2026",
   "experience.primever.title": "Développeur web - Primever",
   "experience.primever.subtitle": "Développement et maintenance d'applications métier",
   "experience.primever.description": "Au sein de l'équipe de développement de Primever, j'ai fait évoluer et maintenu des applications internes en environnement Agile (PHP Symfony, PostgreSQL, React Native, API REST).",
   "experience.primever.missions": "Missions : préparer la réception des requêtes Okta dans une application de notification qui envoie des e-mails automatiques ; refondre une application de suivi de réunions (interface, ergonomie et code) ; mettre en place la traduction automatique des champs et libellés d'une application métier avec l'API DeepL. Les trois missions ont été menées à bien.",
   "experience.primever.ai": "Avec l'IA : j'ai travaillé au quotidien avec Codex pour générer du code, comprendre le code existant et le fonctionnement des applications. Je lui fournissais le contexte nécessaire, je cadrais ce qu'il pouvait et devait faire, puis je vérifiais chaque résultat avant de l'intégrer.",
 
-  "experience.current.dates": "Févr. - Avr. 2026",
+  "experience.current.dates": "Févr - Avr 2026",
   "experience.current.title": "Stage - ADM Assurances",
   "experience.current.subtitle": "Chef de projet / Concepteur d'application métier",
   "experience.current.description": "Stage de fin d’études au sein d’ADM Assurances, où j’ai contribué à la conception et à la coordination d’outils et de parcours métier autour de la transformation digitale et de l’amélioration des processus.",
