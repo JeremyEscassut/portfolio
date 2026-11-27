@@ -8,6 +8,8 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 ## [Non publié]
 
 ### Ajouté
+- Expérience Primever (développeur web, septembre à novembre 2026) en tête de la section Expérience : missions Okta, refonte de l'application de suivi de réunions, traduction automatique DeepL, et travail encadré avec Codex.
+- Paragraphe « À propos » sur la pratique de l'IA générative : donner le contexte, cadrer, vérifier chaque résultat.
 - Bandeau de consentement Google Analytics, court et non bloquant : « Refuser » et « Accepter » ont le même poids, GA ne se charge qu'après « Accepter », le choix est redemandé après 13 mois et le lien « Gérer les cookies » du pied de page permet d'en changer. Les mentions légales décrivent ce fonctionnement.
 - Bouton de sections mobile et tablette : un hexagone en bas à droite qui ouvre les sections en éventail (quart de cercle), avec la section en cours surlignée.
 - Défilement animé vers la section choisie dans l'éventail : on voit la page monter ou descendre jusqu'à la section. Saut direct si le téléphone demande de réduire les animations.
