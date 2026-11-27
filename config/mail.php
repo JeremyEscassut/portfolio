@@ -115,6 +115,11 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    // Inbox that receives the contact form (server side, see ContactController).
     'contact_address' => env('MAIL_CONTACT_ADDRESS', 'j.losaint@gmail.com'),
+
+    // Address shown to visitors (mailto fallback when sending fails). Kept separate
+    // from contact_address until the professional inbox is set up on Alwaysdata.
+    'public_contact_address' => env('MAIL_PUBLIC_CONTACT_ADDRESS', 'jeremyescassut@gmail.com'),
 
 ];

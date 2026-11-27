@@ -1,5 +1,12 @@
-// Photo toggle with pixel-dissolve transition
-// Reads image URLs from data attributes on #profilePhotoContainer
+// Photo toggle: click (or Enter/Space) on the profile photo switches between the
+// original photo and its AI-generated version, with a crossfade.
+//
+// Inputs (data attributes on #profilePhotoContainer, set in home.blade.php):
+//   data-original / data-ai                  image URLs
+//   data-caption-original / data-caption-ai  translated captions shown under the photo
+//
+// Both images are drawn into a <canvas> (#photoCanvas). The hexagonal shape comes from
+// a CSS clip-path on the canvas, the outline from the SVG wireframe next to it.
 
 (function () {
     function initPhotoToggle() {
@@ -11,6 +18,8 @@
         const ctx = canvas.getContext('2d');
         const caption = document.getElementById('photoCaption');
 
+        const captionOriginal = container.dataset.captionOriginal || '';
+        const captionAi = container.dataset.captionAi || '';
         const originalSrc = container.dataset.original;
         const aiSrc = container.dataset.ai;
         if (!originalSrc || !aiSrc) return;
@@ -31,17 +40,20 @@
             imagesLoaded++;
             if (imagesLoaded === 2) {
                 // Canvas size is fixed via HTML attributes (width/height).
-                // Just draw the original image to start. Do not show a caption
-                // for the original image – only show a caption when the AI
-                // version is displayed.
                 drawImage(imgOriginal);
-                if (caption) caption.innerHTML = '';
+                if (caption) caption.textContent = captionOriginal;
             }
         }
 
         imgOriginal.onload = onImageLoad;
         imgAI.onload = onImageLoad;
 
+        /**
+         * "object-fit: cover" for a canvas: scale the image so it fills the canvas,
+         * centre it, then nudge it down by 12px so the face sits in the hexagon's centre.
+         * The AI picture is framed slightly wider than the photo, hence its 3% zoom.
+         * (Both values were tuned by eye on the current pictures.)
+         */
         function getImageLayout(img, width, height) {
             const isAiPhoto = img === imgAI;
             const scale = Math.max(width / img.width, height / img.height) * (isAiPhoto ? 1.03 : 1);
@@ -159,11 +171,13 @@
             if (isTransitioning || imagesLoaded < 2) return;
             if (currentPhoto === 'original') {
                 cssCanvasCrossfadeTransition(imgOriginal, imgAI);
-                if (caption) caption.innerHTML = "Version Arcane, générée par l'IA Bing GPT-4o<br>Cliquez pour voir l'original";
+                if (caption) caption.textContent = captionAi;
+                container.setAttribute('aria-pressed', 'true');
                 currentPhoto = 'ai';
             } else {
                 cssCanvasCrossfadeTransition(imgAI, imgOriginal);
-                if (caption) caption.innerHTML = '';
+                if (caption) caption.textContent = captionOriginal;
+                container.setAttribute('aria-pressed', 'false');
                 currentPhoto = 'original';
             }
         }

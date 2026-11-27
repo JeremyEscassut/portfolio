@@ -1,5 +1,20 @@
 // File: resources/js/app.js
-// Purpose: Application entry with Alpine.js initialization and Laravel bootstrap.
+// Purpose: single JS entry point (loaded by Vite from layouts/app.blade.php).
+//
+// The page is server-rendered Blade; this file only adds behaviour. Blocks, in order:
+//   1. Theme bootstrap ............ apply the saved light/dark theme before first paint
+//   2. Icon hover styles .......... small CSS injected at runtime (lift + tilt on icons)
+//   3. Contact modal .............. window.contactModal() Alpine factory + 'open-contact' event
+//   4. CV selector modal .......... opened/closed through the URL hash #cv-selector-modal
+//   5. Section observer ........... highlights the section in view (desktop nav + mobile fan)
+//   6. data-x-* shim .............. turns valid data-x-* attributes into Alpine x-* attributes
+//   7. Pinned Contact/CV icons .... mobile: icons stick to the top once scrolled past;
+//                                   also sets <html>.is-past-actions for the section fan
+//   8. Theme toggle fallback / footer padding
+//   9. Alpine.start()
+//  10. CV link clone ............. clears a stuck hover/focus state after opening the CV
+//  Imported modules: photoToggle.js (photo swap), halo.js (cursor glow), sectionFab.js (mobile fan),
+//                    contactFeedback.js (toasts + email-app fallback after a failed send)
 
 import './bootstrap';
 
@@ -48,8 +63,14 @@ import Alpine from 'alpinejs';
 .social-link:focus-visible,
 #themeToggleButton:focus-visible,
 #langToggleButton:focus-visible {
-    outline: none;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .repo-link, .social-link, #themeToggleButton, #langToggleButton { transition: none; }
+    .repo-link:hover, .social-link:hover, #themeToggleButton:hover, #langToggleButton:hover,
+    .repo-link:focus-visible, .social-link:focus-visible, #themeToggleButton:focus-visible, #langToggleButton:focus-visible { transform: none; }
 }
 
 /* Cursor: show pointer (hand with index) on devices with fine pointer (desktop) */
@@ -63,51 +84,6 @@ import Alpine from 'alpinejs';
     el.id = 'ui-icon-hover-styles';
     el.appendChild(document.createTextNode(css));
     document.head.appendChild(el);
-})();
-
-// Language toggle: small globe button with FR/EN badge — share behavior/colors with theme toggle
-(function initLangToggle() {
-    try {
-        const btn = document.getElementById('langToggleButton');
-        if (!btn) return;
-
-        const badge = btn.querySelector('.lang-badge');
-
-        function readLang() {
-            return (localStorage.getItem('siteLang') || 'FR');
-        }
-
-        function writeLang(l) {
-            localStorage.setItem('siteLang', l);
-        }
-
-        function render() {
-            const l = readLang();
-            if (badge) badge.textContent = l;
-            btn.setAttribute('aria-label', `Changer la langue — actuellement ${l}`);
-        }
-
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const current = readLang();
-            const next = current === 'FR' ? 'EN' : 'FR';
-            writeLang(next);
-            render();
-        });
-
-        // keyboard accessibility
-        btn.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                btn.click();
-            }
-        });
-
-        // initial render
-        render();
-    } catch (err) {
-        // ignore
-    }
 })();
 
 // Register contact modal factory and other small page behaviors here so markup can remain clean.
@@ -136,6 +112,9 @@ window.contactModal = function () {
     }
 }
 
+// CV selector modal: its open state lives in the URL hash so it also works without
+// Alpine and survives a reload. Opening = set #cv-selector-modal, closing = clear it;
+// syncCvSelectorModalState() reflects the hash on the modal (display + aria-hidden).
 function syncCvSelectorModalState() {
     const modal = document.getElementById('cv-selector-modal');
     if (!modal) return false;
@@ -199,7 +178,9 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur
+// Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur.
+// Every "contact" control dispatches a window 'open-contact' event (see home.blade.php);
+// the modal component listens with @open-contact.window, this is the safety net.
 window.addEventListener('open-contact', function _openContactFallback() {
     function tryOpen() {
         const el = document.querySelector('[x-data="contactModal()"]');
@@ -247,9 +228,14 @@ document.addEventListener('alpine:init', () => {
         if (active) {
             active.classList.add('text-[#1b1b18]', 'font-semibold');
         }
+        // Same highlight in the mobile section fan (defined in sectionFab.js)
+        if (typeof window.markSectionFabCurrent === 'function') window.markSectionFabCurrent(id);
     }
 
     if (navLinks.length && sections.length) {
+        // rootMargin shrinks the viewport to a band between 30% from the top and 40% from
+        // the bottom: a section counts as "current" when it crosses that reading band,
+        // and the most visible one wins when two sections share it.
         const observer = new IntersectionObserver((entries) => {
             const visibleEntries = entries
                 .filter((entry) => entry.isIntersecting)
@@ -359,9 +345,13 @@ function applyDataXShim() {
     }
 
     function onScroll() {
-        if (window.innerWidth > 640) { removeFixed(); return; }
         if (origRect === null) recalc();
-        if (window.scrollY > target.__origTop) applyFixed(); else removeFixed();
+        const pastActions = window.scrollY > target.__origTop;
+        // Shared signal for the other floating control (section fan, sectionFab.js):
+        // it appears at the same scroll position, on every viewport below desktop.
+        document.documentElement.classList.toggle('is-past-actions', pastActions);
+        if (window.innerWidth > 640) { removeFixed(); return; }
+        if (pastActions) applyFixed(); else removeFixed();
     }
 
     window.addEventListener('resize', () => { recalc(); onScroll(); });
@@ -501,3 +491,5 @@ Alpine.start();
 // Ambient halo: small, non-intrusive background glow updated on scroll/mousemove
 import './photoToggle';
 import './halo';
+import './sectionFab';
+import './contactFeedback';

@@ -15,7 +15,8 @@ class ContactMessage extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param array $payload  // ['name'=>..., 'email'=>..., 'message'=>...]
+     * @param array $payload  ['name' => ?string, 'email' => string, 'body' => string]
+     *                        ("body", not "message": $message is reserved in mail views)
      */
     public function __construct(array $payload)
     {

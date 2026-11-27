@@ -20,6 +20,6 @@ class CarouselAndVideoBehaviorTest extends TestCase
         $response->assertSee('@pointermove="handlePointerMove($event)"', false);
         $response->assertSee('@pointerup="handlePointerUp()"', false);
         $response->assertSee('x-show="videoOpen"', false);
-        $response->assertSee('video/quicktime', false);
+        $response->assertSee('video/mp4', false);
     }
 }

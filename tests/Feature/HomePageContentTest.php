@@ -17,7 +17,7 @@ class HomePageContentTest extends TestCase
         $response->assertSee('Voir les captures d&#039;écran précédentes', false);
         $response->assertSee('Voir les captures d&#039;écran suivantes', false);
         $response->assertSee('x-show="videoOpen"', false);
-        $response->assertSee('video/quicktime', false);
+        $response->assertSee('video/mp4', false);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -31,6 +31,18 @@ class HomePageContentTest extends TestCase
         $response->assertSee('View previous screenshots', false);
         $response->assertSee('View next screenshots', false);
         $response->assertSee('x-show="videoOpen"', false);
-        $response->assertSee('video/quicktime', false);
+        $response->assertSee('video/mp4', false);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function carousel_labels_with_apostrophes_are_escaped_for_alpine()
+    {
+        // Regression: "Captures d'écran" was injected raw into an Alpine expression,
+        // the apostrophe ended the JS string and threw "Unexpected identifier 'écran'".
+        $response = $this->get(route('home', ['locale' => 'fr']));
+
+        $response->assertOk();
+        $response->assertSee(":aria-label=\"'Captures d\\u0027\\u00e9cran' + ' ' + (index + 1)\"", false);
+        $response->assertDontSee(":aria-label=\"'Captures d&#039;écran", false);
     }
 }
