@@ -5,7 +5,7 @@ Resume rapide
 - Projet : site portfolio (UI FR, code EN).
 - Stack : Laravel 12 (PHP 8.3), Vite 7, TailwindCSS v4, Alpine.js.
 - Objectif : site a contenu majoritairement statique avec formulaire de contact SMTP.
-- Remote officiel : GitLab (`origin`).
+- Remote officiel : GitHub (`origin`). GitLab n'est plus utilise.
 
 ## 1) But et portee
 
@@ -43,6 +43,10 @@ php artisan test --filter=ContactFormTest
 - Aucun secret en dur dans le depot.
 
 ## 5) Documentation de reference
+
+Historique des changements : **`CHANGELOG.md`** (a mettre a jour a chaque lot).
+
+Pour decouvrir le code : **`docs/PARCOURS_DE_LECTURE.md`** (ordre de lecture des fichiers, parcours d'un clic de bout en bout, ou modifier quoi, pieges connus).
 
 ### Gouvernance
 
