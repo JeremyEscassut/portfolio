@@ -92,14 +92,14 @@
   "place.example.email": "name@example.com",
   "place.greeting": "Hello…",
 
-  "experience.primever.dates": "September–November 2026",
+  "experience.primever.dates": "Sept. - Nov. 2026",
   "experience.primever.title": "Web developer - Primever",
   "experience.primever.subtitle": "Business application development and maintenance",
   "experience.primever.description": "Within Primever's development team, I evolved and maintained internal applications in an Agile environment (PHP Symfony, PostgreSQL, React Native, REST APIs).",
   "experience.primever.missions": "Missions: prepare a notification application that sends automatic e-mails to receive Okta requests; redesign a meeting-tracking application (interface, usability and code); implement automatic translation of fields and labels in a business application with the DeepL API. All three missions were completed successfully.",
   "experience.primever.ai": "With AI: I worked daily with Codex to generate code and to understand the existing code and how the applications worked. I gave it the context it needed, framed what it could and should do, then checked every result before integrating it.",
 
-  "experience.current.dates": "February–April 2026",
+  "experience.current.dates": "Feb. - Apr. 2026",
   "experience.current.title": "Internship - ADM Assurances",
   "experience.current.subtitle": "Project Manager / Business Application Designer",
   "experience.current.description": "End-of-studies internship at ADM Assurances, where I contributed to the design and coordination of business-facing tools and journeys around digital transformation and process improvement.",
