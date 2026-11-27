@@ -42,7 +42,9 @@ Route::group([
     'middleware' => [\App\Http\Middleware\SetLocale::class]
 ], function () {
 
-    Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+    Route::post('/contact', [ContactController::class, 'send'])
+        ->middleware('throttle:contact') // 3 messages / 10 min per IP (AppServiceProvider)
+        ->name('contact.send');
 
     // Homepage is available at / and /{locale}
     // If no locale was provided in the URL (i.e. visiting `/`),

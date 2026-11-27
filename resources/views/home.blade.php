@@ -527,7 +527,7 @@ $contactAddress = config('mail.public_contact_address');
 				     over to the visitor's own email app (mailto:) or copy it.
 				     Behaviour: resources/js/contactFeedback.js --}}
 				<div class="contact-feedback contact-feedback--fallback" role="alert">
-					<p><strong>{{ __('contact.failed') }}</strong>@if($contactAddress) {{ __('contact.fallback.intro') }} <a href="mailto:{{ $contactAddress }}">{{ $contactAddress }}</a>.@endif</p>
+					<p><strong>{{ session('contactThrottled') ? __('contact.throttled') : __('contact.failed') }}</strong>@if($contactAddress) {{ __('contact.fallback.intro') }} <a href="mailto:{{ $contactAddress }}">{{ $contactAddress }}</a>.@endif</p>
 					@if($contactAddress)
 					<div class="contact-feedback__actions">
 						<a href="mailto:{{ $contactAddress }}" class="pf-btn pf-btn--primary pf-btn--small" data-mailto-fallback data-to="{{ $contactAddress }}" data-subject="{{ __('contact.fallback.subject') }}">{{ __('contact.fallback.open_mail') }}</a>

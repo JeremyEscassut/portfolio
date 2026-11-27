@@ -187,6 +187,7 @@
   "contact.sent": "Your message has been sent. Thank you:name — I will get back to you as soon as possible.",
   "contact.sent_short": "Your message has been sent. Thank you!",
   "contact.failed": "Your message could not be sent.",
+  "contact.throttled": "You have sent several messages in a short time. Please try again in a few minutes.",
   "contact.failed_debug": "Sending failed (debug mode).",
   "contact.fallback.intro": "Your text has been kept. You can send it from your own email app: it will already be written and addressed to",
   "contact.fallback.open_mail": "Open in my email app",
