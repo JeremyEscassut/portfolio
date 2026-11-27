@@ -52,13 +52,13 @@ Exclu : arbitrages techniques (`ARCHITECTURE.md`), priorites et phases (`roadmap
 
 ### Quality gates
 
-- Merge Request : lint + build + tests requis, bloquants.
+- Pull request : lint + build + tests requis, bloquants.
 - Un test critique en echec bloque la livraison.
 - Campagne de regression etendue en differé (nightly) quand CI activee.
 
 ### Definition de termine
 
-Une evolution n'est terminee que si le comportement cible est implemente et les tests impactes sont realignes.
+Une evolution n'est terminee que si le comportement cible est implemente, les tests impactes sont realignes, `CHANGELOG.md` est mis a jour (rubrique « Non publie ») et la roadmap reflete l'etat reel.
 
 ## Maintenabilite
 
@@ -69,15 +69,19 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 ## Documentation du code
 
 - Priorite a un code auto-explicatif.
-- Documenter surtout les zones critiques (securite, routage, mail, deploy).
+- Documenter surtout les zones critiques (securite, routage, mail, deploy) et les methodes non evidentes (calculs, contournements de cascade CSS, comportements JS).
+- Chaque fichier JS/Blade principal commence par un commentaire qui resume son role.
 - Une information, une source principale.
+- `docs/PARCOURS_DE_LECTURE.md` est tenu a jour quand un fichier ou un flux important est ajoute ou deplace.
+- `CHANGELOG.md` recoit chaque changement notable (Ajoute, Modifie, Corrige, Supprime, Securite, Performance, Documentation).
 
 ## Guidelines UI - Section Stack
 
 ### Categorisation obligatoire
 
-- Chaque technologie doit etre classee dans une categorie existante : `Front`, `Back` ou `Autres`.
-- Ne pas introduire de sous-bloc ad hoc (exemple : "Recently used") si les technologies peuvent etre classees dans les categories standards.
+- Chaque technologie doit etre classee dans une categorie existante : `Front`, `Back`, `Autres` ou `IA` (outils d'IA utilises pour concevoir et developper ; categorie validee le 2026-11-27).
+- Ne pas introduire d'autre sous-bloc ad hoc (exemple : "Recently used") si les technologies peuvent etre classees dans les categories standards.
+- La liste est definie dans le tableau `$stack` de `resources/views/home.blade.php`.
 
 ### Presentation visuelle
 
@@ -90,8 +94,40 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 
 - Les icones de la section Stack doivent etre monochromes (noir/blanc selon le theme) en mode clair et en mode sombre.
 - Les SVG doivent utiliser `currentColor` (pas de couleur de marque hardcodee) sauf exception explicitement validee.
-- Gabarit recommande pour les nouveaux SVG : `40x40` avec contenu centre.
+- Gabarit recommande pour les nouveaux SVG : `viewBox` carre (24x24 de preference), contenu centre, epaisseur de trait equivalente a 2 px sur 24.
+- Taille d'affichage commune fixee dans `app.css` (1.9rem mobile, 2.4rem desktop) : pas de surcharge de taille par icone.
+- Un logo officiel recupere d'une bibliotheque externe indique sa source et sa licence en commentaire en tete du fichier SVG.
 - La lisibilite doit rester coherente entre toutes les cards (pas d'icone visuellement plus grande que les autres).
+
+## Guidelines UI - Systeme de design
+
+### Couleurs et typographie
+
+- Les couleurs passent par les jetons `--pf-*` definis en fin de `resources/css/app.css`, avec leur pendant `.dark`.
+- Le mode sombre depend de la classe `.dark` sur `<html>`, pas de la preference systeme. Les classes Tailwind `dark:` suivent cette classe (`@custom-variant dark` dans `app.css`).
+- Police unique : Schibsted Grotesk (Bunny Fonts). Texte courant 16 px, lignes de 68 caracteres maximum.
+- Pas de texte tout en majuscules pour les titres et libelles.
+
+### Formes
+
+- Hexagone : elements d'action (boutons `.pf-btn`, bouton de sections, fleches du carrousel, fond des icones au survol). La forme est dessinee par `::before` pour ne pas couper le contour de focus.
+- Rectangle a angles de 6 px : surfaces et medias (images, carrousel, fenetres, champs, toasts).
+- Rectangle a angles de 4 px : etiquettes passives (tags de projet, noms de technos, badge de langue), avec un filet fin (`--pf-rule`), sans effet au survol.
+- Boutons : principal = hexagone plein (couleur d'action) ; secondaire = hexagone en contour de 1,5 px (couleur d'action) rempli de la couleur de fond, teinte au survol.
+- Cercles : uniquement les points de position du carrousel.
+
+### Cascade CSS
+
+- Les nouvelles regles vont dans le bloc « UX quick wins » en fin de `app.css`.
+- Les anciennes regles utilisent souvent `!important` et des selecteurs larges : prefixer les nouvelles (`html body #content ...`, `#home-aside ...`) et documenter en commentaire la regle contournee.
+- Un element place directement dans `<body>` subit `.dark body > div { position: static !important }` : le positionner avec un selecteur a identifiant ou positionner ses enfants.
+
+### Accessibilite
+
+- Focus clavier visible sur tout element interactif.
+- Cibles tactiles de 44 px minimum (48 px pour les icones de la colonne de gauche sur mobile).
+- Toute animation non declenchee par l'utilisateur, et tout defilement anime, respecte `prefers-reduced-motion`.
+- Contraste minimal 4,5:1 pour le texte et 3:1 pour les icones, y compris au survol et au focus, en clair et en sombre. Controle avant livraison d'un changement visuel : `tools/qa-contrast-audit.js` (mode d'emploi en tete du fichier).
 
 ## Langue et nomenclature
 
@@ -100,13 +136,16 @@ Une evolution n'est terminee que si le comportement cible est implemente et les 
 - ALT text, labels accessibles, titres, boutons, messages d'erreur, placeholders et textes de navigation : obligatoirement bilingues.
 - Toute nouvelle chaine de texte visible ou accessible doit etre ajoutee dans les fichiers de traduction existants : `resources/lang/fr.json` et `resources/lang/en.json`.
 - Les traductions doivent toujours etre utilisees via le mecanisme de traduction du projet (`__()` / `trans()`), et non pas en dur dans les vues ou composants.
+- Un texte traduit injecte dans une expression Alpine/JavaScript passe par `@js(__('cle'))` (sinon une apostrophe casse le script).
+- Les messages renvoyes par le serveur (flash, validation) sont traduits aussi : `resources/lang/fr/validation.php` pour la validation.
+- Controle avant livraison : `node tools/check-missing-translations.cjs` doit indiquer « All keys are synchronized ».
 - En cas de modification d'un texte existant, la version FR et EN doit etre mise a jour de maniere coherente et preserve la meme semantique dans les deux langues.
 - Une modification UI ne doit jamais produire un rendu monolingue ou un texte hors traduction ; la coherence avec la base de code et le comportement actuel du site est obligatoire.
 - Documentation gouvernance : francais.
 
 ## Workflow Git et livraison
 
-- Remote officiel : GitLab (`origin`).
+- Remote officiel : GitHub (`origin`, depot prive `JeremyEscassut/portfolio`). GitLab est abandonne depuis le 2026-11-27.
 - Convention de branches : `feature/*`, `fix/*`, `chore/*`, `docs/*`.
 - Convention de commits : `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `security`.
 
@@ -142,18 +181,18 @@ Maintenir un historique clair, des branches lisibles et des integrations sures.
 - `fix/<scope-court>` pour un correctif.
 - `docs/<scope-court>` pour la documentation.
 
-### Strategie de merge GitLab
+### Strategie de merge GitHub
 
-- Cible par defaut : merge requests vers `main`.
+- Cible par defaut : pull requests vers `main`.
 - Methode recommandee : `Squash and merge` pour conserver un historique de `main` lisible.
 - Option autorisee : `Merge commit` uniquement pour les lots multi-commits dont la granularite apporte une valeur de lecture.
 - `Rebase and merge` est reserve aux branches courtes avec historique propre et sans conflit fonctionnel.
 - La branche source doit etre synchronisee avec `main` juste avant merge (`git fetch` puis `git merge main` sur la branche de travail).
-- En cas de conflit, la resolution doit etre testee localement avant mise a jour de la MR.
+- En cas de conflit, la resolution doit etre testee localement avant mise a jour de la pull request.
 
 ### Conditions obligatoires avant merge
 
-- Pipeline MR en vert sur les checks obligatoires (au minimum build + tests cibles).
+- Pipeline de la pull request en vert sur les checks obligatoires (au minimum build + tests cibles).
 - Au moins une revue explicite si la modification touche routage, formulaire contact, mail ou securite.
 - Aucun secret, token ou donnee sensible dans les fichiers modifies.
 - Roadmap et logs documentaires synchronises quand le lot modifie le perimetre produit.
