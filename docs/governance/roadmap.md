@@ -170,7 +170,7 @@ Evaluation du 2026-11-27 : code pret (tests, build, audit de contraste au vert),
 - [ ] Smoke test Safari macOS et iPhone (seul Chrome a ete verifie) : accueil, bouton de sections, fenetres CV et contact, clair/sombre, FR/EN.
 - [ ] Relecture rapide des textes rediges par Jeremy.
 - [x] Lien LinkedIn mis a jour vers `https://www.linkedin.com/in/jeremyescassut` (icone et recommandation, 2026-11-27).
-- [ ] Remplacer les PDF des trois CV par les nouvelles versions de Jeremy (memes noms et chemins).
+- [x] Remplacer les PDF des trois CV par les nouvelles versions de Jeremy (memes noms et chemins, 2026-11-27). Pas de version anglaise : l'interface EN precise que les CV sont en francais.
 - [x] Merger les pull requests vers `main` (PR #3 en squash, PR #4 en merge commit, 2026-11-27).
 - [ ] Rotation des secrets exposes sur l'ancien depot GitLab : cle Mailgun, mot de passe SMTP, `APP_KEY` (mettre a jour le `.env` du serveur).
 - [x] Verifier que la racine web Alwaysdata pointe sur `public/` (confirme par Jeremy le 2026-11-27) (le deploiement rsync envoie tout le dossier du projet : `docs/`, `tests/`, `.claude/`, `CHANGELOG.md`...).
