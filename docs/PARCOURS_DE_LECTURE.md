@@ -39,14 +39,14 @@ Chaque fichier commence par un commentaire qui résume son rôle.
 
 **Envoyer un message**
 1. Toute commande « contact » (icône enveloppe, lien du pied de page) déclenche l'événement `open-contact`.
-2. Le composant Alpine `contactModal()` (défini dans `app.js`) affiche la fenêtre.
+2. `dialogs.js` ouvre la fenêtre `<dialog id="contact-dialog">` avec `showModal()` : le navigateur rend le reste de la page inerte, garde le focus dans la fenêtre, la ferme avec Échap et rend le focus au bouton d'origine.
 3. Le formulaire est envoyé en `POST /{locale}/contact` vers `ContactController@send`.
 4. Après validation et contrôle du champ piège `hp`, `ContactMessage` est envoyé, puis un toast confirme l'envoi.
-5. Si l'envoi échoue : toast d'erreur, la fenêtre se rouvre avec le texte conservé (`old()`), et propose d'ouvrir un e-mail déjà rédigé dans la messagerie du visiteur ou de copier le message (`contactFeedback.js`). En cas d'erreur de validation, la fenêtre se rouvre aussi, avec les erreurs.
+5. Si l'envoi échoue : pas de toast (il serait caché derrière la fenêtre), la fenêtre se rouvre avec son propre message d'erreur, avec le texte conservé (`old()`), et propose d'ouvrir un e-mail déjà rédigé dans la messagerie du visiteur ou de copier le message (`contactFeedback.js`). En cas d'erreur de validation, la fenêtre se rouvre aussi, avec les erreurs.
 
 **Ouvrir un CV**
 1. L'icône CV ajoute `#cv-selector-modal` à l'URL.
-2. `syncCvSelectorModalState()` (`app.js`) affiche la fenêtre tant que ce hash est présent.
+2. `syncCvSelectorModalState()` (`app.js`) ouvre la fenêtre native (`showModal()`) tant que ce hash est présent ; la fermer (Échap, clic à côté, croix) efface le hash.
 3. Chaque choix ouvre un PDF de `public/cv/` dans un nouvel onglet.
 
 ## Où modifier quoi
@@ -60,6 +60,8 @@ Chaque fichier commence par un commentaire qui résume son rôle.
 | Changer la forme des boutons | `.pf-btn` en fin de `app.css` ; la règle des formes (hexagone = action, 6 px = surface, 4 px = étiquette) est décrite dans le bloc « Shape system » |
 | Noter un changement | `CHANGELOG.md`, rubrique « Non publié » |
 | Mettre à jour un CV | Fichier PDF dans `public/cv/`, puis le tableau `$cvs` dans `home.blade.php` |
+| Changer le thème clair/sombre | Script en ligne dans `layouts/app.blade.php` (premier affichage, sans flash) et `resources/js/theme.js` (bouton). Par défaut le site suit le réglage du système. |
+| Ajouter une fenêtre | Un `<dialog class="pf-dialog">` contenant un `.pf-dialog__panel` ; `dialogs.js` gère l'ouverture et la fermeture. Ne pas ajouter `role="dialog"`, `aria-modal` ni gestion de focus. |
 | Changer la vidéo de démo | `public/mov/demo-admiral.mp4` (MP4 H.264 : lisible dans tous les navigateurs) |
 
 ## Où sont les fichiers
@@ -72,8 +74,8 @@ Chaque fichier commence par un commentaire qui résume son rôle.
 ## Pièges connus
 
 - **Cascade CSS chargée.** Beaucoup de règles anciennes utilisent `!important`. Une nouvelle règle doit souvent être préfixée (`html body #content …`, `#home-aside …`) pour s'appliquer. Exemple : `html:not(.dark) main#content * { color: inherit !important }` écrase toute couleur moins spécifique.
-- **`.dark body > div` force `position: static`** sur tous les blocs placés directement dans `<body>`. C'est pour ça que la fenêtre CV et le bouton de sections mobile repositionnent eux-mêmes leurs éléments.
-- **Apostrophes dans les expressions Alpine.** Un texte traduit injecté dans du JavaScript (`:aria-label="…"`) doit passer par `@js(__('clé'))`, sinon « d'écran » casse le script.
+- **`.dark body > div` force `position: static`** sur tous les blocs `<div>` placés directement dans `<body>`. C'est pour ça que le bouton de sections mobile repositionne lui-même ses éléments. Les fenêtres sont des `<dialog>`, donc non concernées.
+- **Apostrophes dans les expressions Alpine.** Un texte traduit injecté dans du JavaScript (`:aria-label="…"`) doit passer par `@js(__('clé'))`, sinon « d'écran » casse le script. Le carrousel n'utilise plus Alpine : ses textes sont écrits en Blade.
 - **Attributs `data-x-*`.** Ils sont copiés en `x-*` par `applyDataXShim()` avant le démarrage d'Alpine. Un élément ajouté après coup doit être réinitialisé (voir le bloc « CV link clone » dans `app.js`).
 - **Sous-chemin en production.** Le site peut être servi sous `/portfolio`. Toujours utiliser `route()` et `asset()`, jamais de chemin écrit en dur.
 

@@ -2,9 +2,9 @@
 // Purpose: single JS entry point (loaded by Vite from layouts/app.blade.php).
 //
 // The page is server-rendered Blade; this file only adds behaviour. Blocks, in order:
-//   1. Theme bootstrap ............ apply the saved light/dark theme before first paint
+//   1. Theme ..................... theme.js (system by default, toggle forces the other)
 //   2. Icon hover styles .......... small CSS injected at runtime (lift + tilt on icons)
-//   3. Contact modal .............. window.contactModal() Alpine factory + 'open-contact' event
+//   3. Dialogs .................... dialogs.js (native <dialog>: contact, CV choice, video)
 //   4. CV selector modal .......... opened/closed through the URL hash #cv-selector-modal
 //   5. Section observer ........... highlights the section in view (desktop nav + mobile fan)
 //   6. data-x-* shim .............. turns valid data-x-* attributes into Alpine x-* attributes
@@ -21,8 +21,13 @@ import './bootstrap';
 // Alpine.js initialization
 import Alpine from 'alpinejs';
 
-// Ensure theme from localStorage is applied immediately (no 'auto' option):
-{ const stored = localStorage.getItem('theme'); if (stored === 'dark') { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); } }
+// Theme: follows the system by default, the toggle forces the other one (see theme.js).
+// The first paint is handled by the inline script in layouts/app.blade.php.
+import './theme';
+
+// Native modal dialogs (contact, CV choice, Admiral video), see dialogs.js.
+import './dialogs';
+import './carousel';
 
 // Inject small UI hover/focus styles for icon links (moved from Blade)
 (function injectIconHoverStyles() {
@@ -86,44 +91,16 @@ import Alpine from 'alpinejs';
     document.head.appendChild(el);
 })();
 
-// Register contact modal factory and other small page behaviors here so markup can remain clean.
-// We keep a window.contactModal factory for compatibility with existing x-data="contactModal()" usage.
-window.contactModal = function () {
-    return {
-        isOpen: false,
-        lastActive: null,
-        openModal() {
-            this.lastActive = document.activeElement;
-            this.isOpen = true;
-            this.$nextTick(() => {
-                if (this.$refs && this.$refs.email) this.$refs.email.focus();
-            });
-            document.addEventListener('keydown', this._escHandler = (e) => {
-                if (e.key === 'Escape') this.closeModal();
-            });
-        },
-        closeModal() {
-            this.isOpen = false;
-            document.removeEventListener('keydown', this._escHandler);
-            this.$nextTick(() => {
-                if (this.lastActive && typeof this.lastActive.focus === 'function') this.lastActive.focus();
-            });
-        }
-    }
-}
-
 // CV selector modal: its open state lives in the URL hash so it also works without
 // Alpine and survives a reload. Opening = set #cv-selector-modal, closing = clear it;
 // syncCvSelectorModalState() reflects the hash on the modal (display + aria-hidden).
 function syncCvSelectorModalState() {
-    const modal = document.getElementById('cv-selector-modal');
-    if (!modal) return false;
+    const dialog = document.getElementById('cv-selector-modal');
+    if (!dialog || typeof dialog.showModal !== 'function') return false;
 
     const shouldOpen = window.location.hash === '#cv-selector-modal';
-    modal.style.display = shouldOpen ? 'flex' : 'none';
-    modal.classList.toggle('hidden', !shouldOpen);
-    modal.classList.toggle('flex', shouldOpen);
-    modal.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+    if (shouldOpen && !dialog.open) dialog.showModal();
+    if (!shouldOpen && dialog.open) dialog.close();
 
     return shouldOpen;
 }
@@ -143,6 +120,9 @@ window.closeCvSelectorModal = function () {
 
 window.addEventListener('DOMContentLoaded', () => {
     syncCvSelectorModalState();
+    // Closed natively (Escape, back gesture, click outside, close button): clear the hash too.
+    const cvDialog = document.getElementById('cv-selector-modal');
+    if (cvDialog) cvDialog.addEventListener('close', () => window.closeCvSelectorModal());
     document.querySelectorAll('[data-cv-open]').forEach((button) => {
         button.addEventListener('click', (event) => {
             event.preventDefault();
@@ -172,43 +152,6 @@ window.downloadSelectedCv = function (url) {
     }
 };
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-        window.closeCvSelectorModal();
-    }
-});
-
-// Fallback global listener to ensure the contact modal opens even if Alpine scope issues occur.
-// Every "contact" control dispatches a window 'open-contact' event (see home.blade.php);
-// the modal component listens with @open-contact.window, this is the safety net.
-window.addEventListener('open-contact', function _openContactFallback() {
-    function tryOpen() {
-        const el = document.querySelector('[x-data="contactModal()"]');
-        if (!el) return false;
-        try {
-            if (el.__x && el.__x.$data) {
-                el.__x.$data.isOpen = true;
-                setTimeout(() => {
-                    try {
-                        const email = el.querySelector('[x-ref="email"]');
-                        if (email && typeof email.focus === 'function') email.focus();
-                    } catch (e) {
-                        // ignore
-                    }
-                }, 40);
-                return true;
-            }
-        } catch (e) {
-            // ignore
-        }
-        return false;
-    }
-
-    if (!tryOpen()) {
-        setTimeout(tryOpen, 50);
-        setTimeout(tryOpen, 200);
-    }
-});
 
 // Page-specific UI helpers moved from home.blade.php
 document.addEventListener('alpine:init', () => {
@@ -361,29 +304,17 @@ function applyDataXShim() {
     setTimeout(() => { recalc(); onScroll(); }, 120);
 })();
 
-// Theme toggle fallback: if Alpine isn't active for some reason, provide
-// a small JS handler to ensure the button still toggles the theme class.
+// Theme toggle fallback: if Alpine isn't active for some reason, the button still
+// toggles the theme through theme.js.
 (function initThemeToggleFallback() {
-    try {
-        const btn = document.getElementById('themeToggleButton');
-        if (!btn) return;
-
-        btn.addEventListener('click', function (e) {
-            // If Alpine is handling the event, prefer Alpine behaviour
-            if (window.Alpine && btn.hasAttribute('x-on:click')) return;
-
-            // Use the same cycle logic as the Alpine component
-            const stored = localStorage.getItem('theme') || 'light';
-            const order = ['light', 'dark'];
-            let i = order.indexOf(stored);
-            if (i === -1) i = 0;
-            const next = order[(i + 1) % order.length];
-            if (next === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
-            localStorage.setItem('theme', next);
-        });
-    } catch (e) {
-        // noop
-    }
+    const btn = document.getElementById('themeToggleButton');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        // Alpine handles the click (@click="cycle()"); only act when it is missing,
+        // otherwise the theme would be toggled twice.
+        if (window.Alpine) return;
+        window.toggleTheme();
+    });
 })();
 
 // Ensure footer reserved space on mobile when it becomes stuck

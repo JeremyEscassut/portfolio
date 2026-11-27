@@ -8,11 +8,15 @@
 	  <main #content>       sections: about, projects, experience, studies,
 	                        recommendations, stack, then the footer.
 	  #section-fab          mobile/tablet "jump to section" fan
-	  contactModal()        contact form (Alpine), opened by the 'open-contact' event
-	  #cv-selector-modal    choice of CV, opened through the URL hash
+	  #contact-dialog       contact form (native <dialog>), opened by the 'open-contact' event
+	  #video-dialog         Admiral demo video (native <dialog>)
+	  #cv-selector-modal    choice of CV (native <dialog>), opened through the URL hash
 
 	Where the behaviour lives
-	  resources/js/app.js          modals, section highlight, pinned contact/CV icons
+	  resources/js/app.js          CV dialog hash, section highlight, pinned contact/CV icons
+	  resources/js/dialogs.js      native dialogs (open, close, click outside)
+	  resources/js/carousel.js     Admiral screenshots carousel
+	  resources/js/theme.js        light/dark theme
 	  resources/js/photoToggle.js  photo <-> AI version swap
 	  resources/js/sectionFab.js   the mobile section fan
 	  resources/css/app.css        styles (see the "UX quick wins" block at the end)
@@ -33,7 +37,7 @@ $icon = function (string $name): string {
 <div class="lg:flex lg:justify-between lg:gap-4">
 	<!-- LEFT: identity, actions and section navigation (sticky on large screens) -->
 	<aside id="home-aside" class="order-1 lg:order-1 lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-[48%] lg:flex-col lg:justify-between lg:py-12">
-		<div id="home" data-x-data="{ theme: localStorage.getItem('theme') || 'light', hoverCV: false, init(){ if(this.theme==='dark'){ document.documentElement.classList.add('dark') } else { document.documentElement.classList.remove('dark') } }, set(t){ this.theme=t; if(t==='dark'){ localStorage.setItem('theme','dark'); document.documentElement.classList.add('dark') } else { localStorage.setItem('theme','light'); document.documentElement.classList.remove('dark') } }, cycle(){ const order=['light','dark']; let i=order.indexOf(this.theme); this.set(order[(i+1)%order.length]); } }"
+		<div id="home" data-x-data="{ theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light', hoverCV: false, init(){ window.addEventListener('theme-change', (e) => { this.theme = e.detail }) }, cycle(){ window.toggleTheme() } }"
 			data-x-init="init()"
 			class="w-full bg-transparent dark:bg-transparent rounded-lg px-6 pt-6 pb-2 sm:px-8 lg:p-12 flex flex-col justify-between">
 
@@ -185,38 +189,44 @@ $icon = function (string $name): string {
 						<span class="project-tag">PostgreSQL</span>
 						<span class="project-tag">API REST</span>
 					</div>
-					<div class="project__media" x-data="{ videoOpen: false, slides: {{ json_encode($crmSlides) }}, currentIndex: 0, startX: null, dragDelta: 0, goToNext() { this.currentIndex = (this.currentIndex + 1) % this.slides.length; }, goToPrev() { this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length; }, handleTouchStart(event) { this.startX = event.touches[0].clientX; this.dragDelta = 0; }, handleTouchMove(event) { if (this.startX === null) return; this.dragDelta = this.startX - event.touches[0].clientX; }, handleTouchEnd() { if (this.dragDelta > 50) { this.goToNext(); } else if (this.dragDelta < -50) { this.goToPrev(); } this.startX = null; this.dragDelta = 0; }, handlePointerDown(event) { this.startX = event.clientX; this.dragDelta = 0; }, handlePointerMove(event) { if (this.startX === null) return; this.dragDelta = this.startX - event.clientX; }, handlePointerUp() { if (this.dragDelta > 50) { this.goToNext(); } else if (this.dragDelta < -50) { this.goToPrev(); } this.startX = null; this.dragDelta = 0; }, closeVideo() { this.videoOpen = false; if (this.$refs.demo) this.$refs.demo.pause(); } }" @keydown.escape.window="closeVideo()">
-						<div class="carousel relative w-full overflow-hidden" role="group" aria-roledescription="carousel" aria-label="{{ __('projects.crm.screenshots') }}" @touchstart="handleTouchStart($event)" @touchmove="handleTouchMove($event)" @touchend="handleTouchEnd()" @pointerdown="handlePointerDown($event)" @pointermove="handlePointerMove($event)" @pointerup="handlePointerUp()" @pointerleave="handlePointerUp()">
-							<template x-for="(slide, index) in slides" :key="index">
-								<div x-show="index === currentIndex" class="w-full">
-									<img loading="lazy" decoding="async" width="1600" height="824" :src="slide.src" :alt="slide.alt" class="h-auto w-full object-contain">
+					<div class="project__media">
+						{{-- Carousel: native horizontal scroll with snap points, so swiping works without JS and
+						     every screenshot is in the HTML. resources/js/carousel.js wires the arrows and dots and
+						     announces the slide in view (role="status"). Styles: app.css ("Carousel"). --}}
+						<section class="carousel relative w-full" aria-roledescription="carousel" aria-label="{{ __('projects.crm.screenshots') }}" data-carousel>
+							<div class="carousel__track" tabindex="0" role="group" aria-label="{{ __('projects.crm.carousel.track') }}">
+								@foreach($crmSlides as $i => $slide)
+								<div class="carousel__slide" role="group" aria-roledescription="slide" aria-label="{{ __('projects.crm.carousel.position', ['current' => $i + 1, 'total' => count($crmSlides)]) }}">
+									<img loading="lazy" decoding="async" width="1600" height="824" src="{{ $slide['src'] }}" alt="{{ $slide['alt'] }}" class="h-auto w-full object-contain">
 								</div>
-							</template>
-							<div class="carousel__dots">
-								<template x-for="(slide, index) in slides" :key="index">
-									<button type="button" class="carousel__dot" :class="index === currentIndex ? 'is-active' : ''" @click="currentIndex = index" :aria-label="@js(__('projects.crm.screenshots')) + ' ' + (index + 1)" :aria-current="index === currentIndex ? 'true' : 'false'"></button>
-								</template>
+								@endforeach
 							</div>
-							<button type="button" class="carousel__nav carousel__nav--prev" @click="goToPrev()" aria-label="{{ __('projects.crm.carousel.previous') }}">←</button>
-							<button type="button" class="carousel__nav carousel__nav--next" @click="goToNext()" aria-label="{{ __('projects.crm.carousel.next') }}">→</button>
-						</div>
+							<div class="carousel__dots">
+								@foreach($crmSlides as $i => $slide)
+								<button type="button" class="carousel__dot{{ $i === 0 ? ' is-active' : '' }}" data-slide="{{ $i }}" aria-label="{{ __('projects.crm.screenshots') }} {{ $i + 1 }}" aria-current="{{ $i === 0 ? 'true' : 'false' }}"></button>
+								@endforeach
+							</div>
+							<button type="button" class="carousel__nav carousel__nav--prev" data-direction="previous" aria-label="{{ __('projects.crm.carousel.previous') }}">←</button>
+							<button type="button" class="carousel__nav carousel__nav--next" data-direction="next" aria-label="{{ __('projects.crm.carousel.next') }}">→</button>
+							<p class="sr-only" role="status" aria-live="polite" data-carousel-status></p>
+						</section>
 						<div class="project__links">
-							<button type="button" @click="videoOpen = true" class="pf-btn pf-btn--secondary">
+							<button type="button" data-dialog-open="video-dialog" aria-haspopup="dialog" class="pf-btn pf-btn--secondary">
 								{{ __('projects.crm.video.launch') }}
 							</button>
 						</div>
-						<div x-show="videoOpen" x-cloak class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4" @click.self="closeVideo()">
-							<div class="video-dialog w-full max-w-4xl rounded-lg p-3 shadow-xl" role="dialog" aria-modal="true" aria-label="{{ __('projects.crm.video.title') }}">
+						<dialog id="video-dialog" class="pf-dialog" aria-labelledby="video-dialog-title">
+							<div class="pf-dialog__panel video-dialog w-full max-w-4xl rounded-lg p-3 shadow-xl">
 								<div class="mb-2 flex items-center justify-between">
-									<p class="video-dialog__title">{{ __('projects.crm.video.title') }}</p>
-									<button type="button" @click="closeVideo()" class="video-dialog__close" aria-label="{{ __('projects.crm.video.close') }}">✕</button>
+									<h1 id="video-dialog-title" class="video-dialog__title">{{ __('projects.crm.video.title') }}</h1>
+									<button type="button" data-dialog-close class="video-dialog__close" aria-label="{{ __('projects.crm.video.close') }}">✕</button>
 								</div>
-								<video x-ref="demo" controls playsinline preload="none" poster="{{ asset('images/projects/demo-admiral-poster.webp') }}" class="w-full rounded-lg">
+								<video controls playsinline preload="none" poster="{{ asset('images/projects/demo-admiral-poster.webp') }}" class="w-full rounded-lg">
 									<source src="{{ asset('mov/demo-admiral.mp4') }}" type="video/mp4">
 									{{ __('projects.crm.video.unsupported') }}
 								</video>
 							</div>
-						</div>
+						</dialog>
 					</div>
 				</article>
 
@@ -407,16 +417,18 @@ $icon = function (string $name): string {
 	</main>
 </div>
 
-{{-- Toasts: result of the contact form after the redirect. Behaviour: resources/js/contactFeedback.js --}}
-<div id="toast-region" class="toast-region">
+{{-- Toasts: result of the contact form after the redirect. Behaviour: resources/js/contactFeedback.js
+     No error toast after a failed send: the contact dialog reopens with its own message, and a toast
+     behind a modal dialog would be missed (and announced twice by screen readers). --}}
+<div id="toast-region" class="toast-region" role="region" aria-label="{{ __('toast.region') }}">
 	@if(session('status'))
-	<div class="toast toast--success" role="status" data-autohide="10000">
+	<div class="toast toast--success" role="status" data-autohide="20000">
 		<p class="toast__text">{{ session('status') }}</p>
 		<button type="button" class="toast__close" aria-label="{{ __('toast.close') }}">✕</button>
 	</div>
 	@endif
-	@if(session('error'))
-	<div class="toast toast--error" role="alert" data-autohide="10000">
+	@if(session('error') && ! session('contactFailed'))
+	<div class="toast toast--error" role="alert" data-autohide="20000">
 		<p class="toast__text">{{ session('error') }}</p>
 		<button type="button" class="toast__close" aria-label="{{ __('toast.close') }}">✕</button>
 	</div>
@@ -461,77 +473,74 @@ $contactFailed = (bool) session('contactFailed');
 $reopenContact = $contactFailed || $errors->any();
 $contactAddress = config('mail.public_contact_address');
 @endphp
-<div x-data="contactModal()" x-init="if (@js($reopenContact)) { isOpen = true; $nextTick(() => { if ($refs.message) $refs.message.focus(); }) }" @open-contact.window="isOpen = true; $nextTick(() => { if ($refs.email) $refs.email.focus(); })" @keydown.escape.window="if (isOpen) closeModal()" :aria-hidden="!isOpen">
-	<template x-if="isOpen">
-		<div>
-			<div x-show="isOpen" x-cloak class="fixed inset-0 bg-black/50" aria-hidden="true" style="z-index: 9998;"></div>
-
-			<div x-show="isOpen" x-cloak class="fixed inset-0 flex items-center justify-center p-4" style="z-index: 9999;">
-				<div @click.away="closeModal()" class="w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden" role="dialog" aria-modal="true" aria-labelledby="contact-title" style="z-index: 10000; position: relative;">
-					<div class="p-6">
-						<div class="flex justify-between items-center mb-4">
-							<h3 id="contact-title" class="text-lg font-medium">{{ __('contact.form.title') }}</h3>
-							<button type="button" @click="closeModal()" class="pf-close" aria-label="{{ __('ui.close') }}">✕</button>
-						</div>
-
-						<form method="POST" action="{{ route('contact.send', ['locale' => app()->getLocale()]) }}" class="space-y-4">
-							@csrf
-							<!-- honeypot -->
-							<input type="text" name="hp" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
-
-							@if($errors->any())
-							<div class="contact-feedback contact-feedback--error" role="alert">
-								<p>{{ __('contact.form.errors') }}</p>
-								<ul>
-									@foreach($errors->all() as $err)
-									<li>{{ $err }}</li>
-									@endforeach
-								</ul>
-							</div>
-							@endif
-
-							@if($contactFailed && $contactAddress)
-							{{-- Fallback when the server could not send the mail: hand the message
-							     over to the visitor's own email app (mailto:) or copy it.
-							     Behaviour: resources/js/contactFeedback.js --}}
-							<div class="contact-feedback contact-feedback--fallback" role="alert">
-								<p><strong>{{ __('contact.failed') }}</strong> {{ __('contact.fallback.intro') }} <a href="mailto:{{ $contactAddress }}">{{ $contactAddress }}</a>.</p>
-								<div class="contact-feedback__actions">
-									<a href="mailto:{{ $contactAddress }}" class="pf-btn pf-btn--primary pf-btn--small" data-mailto-fallback data-to="{{ $contactAddress }}" data-subject="{{ __('contact.fallback.subject') }}">{{ __('contact.fallback.open_mail') }}</a>
-									<button type="button" class="pf-btn pf-btn--secondary pf-btn--small" data-copy-message data-copied-label="{{ __('contact.fallback.copied') }}">{{ __('contact.fallback.copy') }}</button>
-								</div>
-								<p class="contact-feedback__hint">{{ __('contact.fallback.webmail_hint') }}</p>
-								{{-- Shown by contactFeedback.js when the mailto: link opened nothing --}}
-								<p class="contact-feedback__not-opened" data-mailto-not-opened hidden>{{ __('contact.fallback.not_opened') }} <strong>{{ $contactAddress }}</strong>.</p>
-							</div>
-							@endif
-
-							<div>
-								<label for="contact-name" class="block text-sm">{{ __('contact.form.name') }}</label>
-								<input id="contact-name" type="text" name="name" value="{{ old('name') }}" autocomplete="name" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.name_placeholder') }}">
-							</div>
-
-							<div>
-								<label for="contact-email" class="block text-sm">{{ __('contact.form.email') }}</label>
-								<input id="contact-email" x-ref="email" type="email" name="email" value="{{ old('email') }}" autocomplete="email" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.email_placeholder') }}" required>
-							</div>
-
-							<div>
-								<label for="contact-message" class="block text-sm">{{ __('contact.form.message') }}</label>
-								<textarea id="contact-message" x-ref="message" name="message" rows="4" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.message_placeholder') }}" required>{{ old('message') }}</textarea>
-							</div>
-
-							<div class="contact-actions">
-								<button type="button" @click="closeModal()" class="pf-btn pf-btn--secondary pf-btn--small">{{ __('contact.form.cancel') }}</button>
-								<button type="submit" class="pf-btn {{ $contactFailed ? 'pf-btn--secondary' : 'pf-btn--primary' }} pf-btn--small">{{ $contactFailed ? __('contact.form.retry') : __('contact.form.submit') }}</button>
-							</div>
-						</form>
-					</div>
-				</div>
+{{-- Native modal dialog (behaviour: resources/js/dialogs.js). data-reopen names the field
+     to focus when it reopens by itself after a failed send or a validation error. --}}
+<dialog id="contact-dialog" class="pf-dialog" aria-labelledby="contact-title"
+	data-reopen="{{ $reopenContact ? ($errors->has('email') && ! $errors->has('message') ? 'email' : 'message') : '' }}">
+	<div class="pf-dialog__panel w-full max-w-lg bg-white dark:bg-[#111] rounded-lg shadow-lg overflow-hidden">
+		<div class="p-6">
+			<div class="flex justify-between items-center mb-4">
+				<h1 id="contact-title" class="text-lg font-medium">{{ __('contact.form.title') }}</h1>
+				<button type="button" data-dialog-close class="pf-close" aria-label="{{ __('ui.close') }}">✕</button>
 			</div>
+
+			<form method="POST" action="{{ route('contact.send', ['locale' => app()->getLocale()]) }}" class="space-y-4">
+				@csrf
+				<!-- honeypot -->
+				<input type="text" name="hp" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+
+				@if($errors->any())
+				<div class="contact-feedback contact-feedback--error" role="alert">
+					<p>{{ __('contact.form.errors') }}</p>
+					<ul>
+						@foreach($errors->all() as $err)
+						<li>{{ $err }}</li>
+						@endforeach
+					</ul>
+				</div>
+				@endif
+
+				@if($contactFailed)
+				{{-- Fallback when the server could not send the mail: hand the message
+				     over to the visitor's own email app (mailto:) or copy it.
+				     Behaviour: resources/js/contactFeedback.js --}}
+				<div class="contact-feedback contact-feedback--fallback" role="alert">
+					<p><strong>{{ __('contact.failed') }}</strong>@if($contactAddress) {{ __('contact.fallback.intro') }} <a href="mailto:{{ $contactAddress }}">{{ $contactAddress }}</a>.@endif</p>
+					@if($contactAddress)
+					<div class="contact-feedback__actions">
+						<a href="mailto:{{ $contactAddress }}" class="pf-btn pf-btn--primary pf-btn--small" data-mailto-fallback data-to="{{ $contactAddress }}" data-subject="{{ __('contact.fallback.subject') }}">{{ __('contact.fallback.open_mail') }}</a>
+						<button type="button" class="pf-btn pf-btn--secondary pf-btn--small" data-copy-message data-copied-label="{{ __('contact.fallback.copied') }}">{{ __('contact.fallback.copy') }}</button>
+					</div>
+					<p class="contact-feedback__hint">{{ __('contact.fallback.webmail_hint') }}</p>
+					{{-- Shown by contactFeedback.js when the mailto: link opened nothing --}}
+					<p class="contact-feedback__not-opened" data-mailto-not-opened hidden>{{ __('contact.fallback.not_opened') }} <strong>{{ $contactAddress }}</strong>.</p>
+					@endif
+				</div>
+				@endif
+
+				<div>
+					<label for="contact-name" class="block text-sm">{{ __('contact.form.name') }}</label>
+					<input id="contact-name" type="text" name="name" value="{{ old('name') }}" autocomplete="name" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.name_placeholder') }}">
+				</div>
+
+				<div>
+					<label for="contact-email" class="block text-sm">{{ __('contact.form.email') }}</label>
+					<input id="contact-email" type="email" name="email" value="{{ old('email') }}" autocomplete="email" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.email_placeholder') }}" required>
+				</div>
+
+				<div>
+					<label for="contact-message" class="block text-sm">{{ __('contact.form.message') }}</label>
+					<textarea id="contact-message" name="message" rows="4" class="mt-1 block w-full rounded border px-3 py-2" placeholder="{{ __('contact.form.message_placeholder') }}" required>{{ old('message') }}</textarea>
+				</div>
+
+				<div class="contact-actions">
+					<button type="button" data-dialog-close class="pf-btn pf-btn--secondary pf-btn--small">{{ __('contact.form.cancel') }}</button>
+					<button type="submit" class="pf-btn {{ $contactFailed ? 'pf-btn--secondary' : 'pf-btn--primary' }} pf-btn--small">{{ $contactFailed ? __('contact.form.retry') : __('contact.form.submit') }}</button>
+				</div>
+			</form>
 		</div>
-	</template>
-</div>
+	</div>
+</dialog>
 
 @php
 $cvs = [
@@ -540,15 +549,15 @@ $cvs = [
 	['file' => 'ESCASSUT_JEREMY_-_CV_Product_Owner_|_Transformation_digitale_Juillet_2026.pdf', 'title' => 'cv.modal.po', 'desc' => 'cv.modal.po_desc'],
 ];
 @endphp
-<div id="cv-selector-modal" class="fixed inset-0 z-[10000] flex items-center justify-center p-4" aria-hidden="true" x-cloak style="display: none;">
-	<a href="#" class="absolute inset-0 bg-black/50" onclick="window.closeCvSelectorModal(); return false;" aria-label="{{ __('ui.close') }}"></a>
-	<div class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-[#111]" role="dialog" aria-modal="true" aria-labelledby="cv-modal-title">
+{{-- Native modal dialog, opened through the URL hash #cv-selector-modal (resources/js/app.js). --}}
+<dialog id="cv-selector-modal" class="pf-dialog" aria-labelledby="cv-modal-title">
+	<div class="pf-dialog__panel relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-[#111]">
 		<div class="flex items-start justify-between gap-4">
 			<div>
-				<h3 id="cv-modal-title" class="text-lg font-semibold">{{ __('cv.modal.title') }}</h3>
+				<h1 id="cv-modal-title" class="text-lg font-semibold">{{ __('cv.modal.title') }}</h1>
 				<p class="mt-1 text-sm text-[#706f6c]">{{ __('cv.modal.hint') }}</p>
 			</div>
-			<a href="#" onclick="window.closeCvSelectorModal(); return false;" class="pf-close" aria-label="{{ __('ui.close') }}">✕</a>
+			<button type="button" data-dialog-close class="pf-close" aria-label="{{ __('ui.close') }}">✕</button>
 		</div>
 		<div class="mt-6 flex flex-col gap-3">
 			@foreach($cvs as $cv)
@@ -562,7 +571,7 @@ $cvs = [
 			@endforeach
 		</div>
 	</div>
-</div>
+</dialog>
 
 @endsection
 

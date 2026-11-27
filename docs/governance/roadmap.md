@@ -152,6 +152,15 @@ Performance et accessibilite
 - [x] Video de demo en MP4 (62 Mo -> 4,9 Mo), chargee a l'ouverture.
 - [x] Focus clavier visible partout ; animations reduites respectees.
 
+Lot « web moderne » (2026-11-27, audit `rapports/audit-web-moderne.md`, valide par Jeremy)
+
+- [x] Theme : suit le systeme par defaut (decision de Jeremy), bouton pour forcer l'autre theme, script anti-flash dans `<head>` (`resources/js/theme.js`).
+- [x] Fenetres contact, CV et video en `<dialog>` natif avec `showModal()` (`resources/js/dialogs.js`).
+- [x] Pas de toast d'erreur quand la fenetre de contact se rouvre ; toasts annonces, 20 s, pause au survol et au focus.
+- [x] Carrousel Admiral en scroll snap, captures dans le HTML, position annoncee, points de 24 px (`resources/js/carousel.js`).
+- [x] Prechargement de la photo de profil, `font-size-adjust` sur la police.
+- [ ] Verifier sur un vrai iPhone (Safari) : fenetres, clic a cote pour fermer, glissement du carrousel.
+
 Reste a faire
 
 - [ ] Relecture par Jeremy des textes rediges (accroche, roles des projets, descriptions raccourcies).

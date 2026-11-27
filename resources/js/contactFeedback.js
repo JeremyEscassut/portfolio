@@ -2,26 +2,45 @@
 // Purpose: what the visitor sees after submitting the contact form (markup in home.blade.php).
 //
 // 1. Toasts (#toast-region): the server flashes 'status' (sent) or 'error' (not sent);
-//    Blade renders them as toasts; each one hides itself after `data-autohide` ms (10 s)
-//    or when closed. The error details stay visible in the reopened contact modal.
+//    Blade renders them as toasts; each one hides itself after `data-autohide` ms (20 s,
+//    paused on hover and focus) or when closed. After a failed send there is no error
+//    toast: the reopened contact dialog shows the message itself.
 // 2. Fallback when the server could not send the mail: the contact modal reopens with the
 //    visitor's text kept (Laravel old()), plus two ways to finish without retyping:
 //    - "Open in my email app": a mailto: link built from the current field values,
 //      addressed to the site owner, so the visitor only has to press Send;
 //    - "Copy the message" (message + name): for webmail users without a default email app.
 //    If the mailto: link opens nothing, a hint with the address appears (watchMailtoOutcome).
-//    The modal content is rendered by Alpine only while open, hence the delegated listeners.
 
 (function initToasts() {
     document.querySelectorAll('#toast-region .toast').forEach((toast) => {
+        let timer = null;
         const dismiss = () => {
             toast.classList.add('is-leaving');
             // Remove after the fade-out (also fine when reduced motion shortens it).
             setTimeout(() => toast.remove(), 250);
         };
         toast.querySelector('.toast__close')?.addEventListener('click', dismiss);
+
+        // Auto-hide, paused while the pointer or the keyboard focus is on the toast,
+        // so nobody loses the message while reading it.
         const delay = Number(toast.dataset.autohide);
-        if (delay > 0) setTimeout(dismiss, delay);
+        const start = () => { if (delay > 0) timer = setTimeout(dismiss, delay); };
+        const pause = () => { clearTimeout(timer); timer = null; };
+        toast.addEventListener('pointerenter', pause);
+        toast.addEventListener('pointerleave', start);
+        toast.addEventListener('focusin', pause);
+        toast.addEventListener('focusout', start);
+        start();
+
+        // A live region that is already filled when the page loads is not announced by
+        // screen readers: put the text back a moment later so it is read out.
+        const text = toast.querySelector('.toast__text');
+        if (text) {
+            const message = text.textContent;
+            text.textContent = '';
+            setTimeout(() => { text.textContent = message; }, 150);
+        }
     });
 })();
 

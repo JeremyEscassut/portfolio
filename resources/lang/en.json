@@ -36,6 +36,8 @@
   "projects.crm.screenshots": "Screenshots",
   "projects.crm.carousel.previous": "View previous screenshots",
   "projects.crm.carousel.next": "View next screenshots",
+  "projects.crm.carousel.track": "Screenshots, scroll horizontally",
+  "projects.crm.carousel.position": "Screenshot :current of :total",
   "projects.crm.carousel.slide1.alt": "Expected details",
   "projects.crm.carousel.slide2.alt": "Admin dashboard",
   "projects.crm.carousel.slide3.alt": "Client dashboard",
@@ -185,6 +187,7 @@
   "contact.fallback.webmail_hint": "Webmail (Gmail, Outlook…): copy the message and paste it into a new email.",
   "contact.form.retry": "Try sending again",
   "toast.close": "Close the notification",
+  "toast.region": "Notifications",
   "cv.page_title": "Jérémy Escassut's CV",
   "cv.heading": "Curriculum Vitae",
   "contact.fallback.not_opened": "Nothing opened? No email app is set up on this device. Copy the message and paste it into a new email addressed to"

@@ -36,6 +36,8 @@
   "projects.crm.screenshots": "Captures d'écran",
   "projects.crm.carousel.previous": "Voir les captures d'écran précédentes",
   "projects.crm.carousel.next": "Voir les captures d'écran suivantes",
+  "projects.crm.carousel.track": "Captures d'écran, faire défiler horizontalement",
+  "projects.crm.carousel.position": "Capture :current sur :total",
   "projects.crm.carousel.slide1.alt": "Détails d’un attendu",
   "projects.crm.carousel.slide2.alt": "Tableau de bord administrateur",
   "projects.crm.carousel.slide3.alt": "Tableau de bord client",
@@ -185,6 +187,7 @@
   "contact.fallback.webmail_hint": "Messagerie en ligne (Gmail, Outlook…) : copiez le message et collez-le dans un nouvel e-mail.",
   "contact.form.retry": "Réessayer l'envoi",
   "toast.close": "Fermer la notification",
+  "toast.region": "Notifications",
   "cv.page_title": "CV de Jérémy Escassut",
   "cv.heading": "Curriculum Vitae",
   "contact.fallback.not_opened": "Rien ne s'est ouvert ? Aucune messagerie n'est configurée sur cet appareil. Copiez le message et collez-le dans un nouvel e-mail adressé à"

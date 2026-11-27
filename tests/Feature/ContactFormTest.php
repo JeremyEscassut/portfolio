@@ -146,7 +146,20 @@ class ContactFormTest extends TestCase
         $response->assertSee('data-mailto-fallback', false);
         $response->assertSee('mailto:' . config('mail.public_contact_address'), false);
         $response->assertSee('Ouvrir dans ma messagerie', false);
+        // The reopened dialog carries the message; no error toast behind the modal.
+        $response->assertSee('data-reopen="message"', false);
+        $response->assertDontSee('class="toast toast--error"', false);
+    }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function error_toast_is_still_shown_when_the_dialog_does_not_reopen()
+    {
+        $response = $this->withSession(['error' => 'Erreur'])
+            ->get(route('home', ['locale' => 'fr']));
+
+        $response->assertOk();
         $response->assertSee('class="toast toast--error"', false);
+        $response->assertSee('data-reopen=""', false);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

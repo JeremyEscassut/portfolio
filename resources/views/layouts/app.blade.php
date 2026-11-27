@@ -16,6 +16,16 @@
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!-- Theme before first paint (no white flash): forced choice from localStorage, else the
+         system setting. Keep it inline and blocking (no defer/module). Logic: resources/js/theme.js -->
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            var dark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', dark);
+        })();
+    </script>
     <title>@yield('title', 'Portfolio - Jérémy Escassut')</title>
     <meta name="description" content="@yield('description', __('home.meta_description'))">
     <!-- Typeface: Schibsted Grotesk, served by Bunny Fonts (GDPR-friendly Google Fonts mirror) -->
@@ -39,6 +49,11 @@
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ $fsvg }}" sizes="any">
     <!-- Safari pinned tab (mask-icon) -->
     <link rel="mask-icon" href="{{ asset('favicon.svg') }}?v={{ $fsvg }}" color="#40916C">
+    <!-- Profile photo: drawn into a <canvas> by photoToggle.js, so the browser would only find it
+         after the JS loads. Preloading it lets the first visual on mobile arrive sooner. -->
+    @if(request()->routeIs('home', 'home.root'))
+    <link rel="preload" as="image" href="{{ asset('images/profile.jpg') }}" fetchpriority="high" crossorigin="anonymous">
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
