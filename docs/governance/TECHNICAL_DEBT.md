@@ -52,7 +52,7 @@
 - Cause : sources remplacees le 2026-11-27 mais conservees : `public/mov/Demo Admiral.mov` (62 Mo), `resources/mov/Demo Admiral.mov`, `resources/png/` (captures et icones CV d'origine), `resources/je_profile.jpeg`, `resources/je_ia_profile.jpg`, `public/images/je_profile.jpeg` (2 Mo), `public/images/je_ia_profile.jpg`, vue `welcome.blade.php` par defaut de Laravel.
 - Priorite : medium.
 - Plan : supprimer apres validation de Jeremy ; verifier qu'aucune vue ni test ne les reference.
-- Statut : **clos le 2026-11-27** (nettoyage demande par Jeremy, voir `docs/reports/AUDIT_2026-11-27.md`, P-1 a P-3). Aucun fichier supprime n'etait reference ; `public/cv-archive/` conserve en attente de decision.
+- Statut : **clos le 2026-11-27** (nettoyage demande par Jeremy, voir `docs/reports/AUDIT_2026-11-27.md`, P-1 a P-3). Aucun fichier supprime n'etait reference ; `public/cv-archive/` supprime ensuite sur decision de Jeremy.
 
 ## D-007 - Google Analytics charge sans consentement
 
