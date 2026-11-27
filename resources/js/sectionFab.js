@@ -8,6 +8,7 @@
 // - The toggle is a hexagon; the section links open as a quarter-circle fan:
 //   the top link sits right above the button, each following link is placed lower
 //   and further to the left, the last one ends up level with the button.
+// - The first link ("Back to top", href="#top") glides back to the top of the page.
 // - Choosing a section closes the fan and glides to it (see `glideTo`).
 // - Closes on link selection, on backdrop tap and on Escape; focus moves to the
 //   first link on open and back to the toggle on close.
@@ -99,9 +100,11 @@ const EDGE = 16; // minimum distance between a link and the screen edge
 
     // Selecting a section: close the fan, then glide to the section so the visitor
     // sees the page travel up or down instead of jumping.
+    // "#top" has no element: glideTo(null) goes back to the top of the page.
     links.forEach((link) => link.addEventListener('click', (event) => {
-        const target = document.querySelector(link.getAttribute('href'));
-        if (!target) return; // unknown anchor: default browser behaviour
+        const href = link.getAttribute('href');
+        const target = href === '#top' ? null : document.querySelector(href);
+        if (href !== '#top' && !target) return; // unknown anchor: default browser behaviour
         event.preventDefault();
         close({ restoreFocus: false });
         glideTo(target);
@@ -131,17 +134,25 @@ const EDGE = 16; // minimum distance between a link and the screen edge
      * - Reduced motion: jump instantly. Any wheel/touch/key input cancels the glide.
      * - Afterwards the URL hash is updated and focus moves to the section (for keyboard
      *   and screen reader users) without scrolling again.
+     * - section = null means "top of the page": the hash is removed and focus goes
+     *   to the page title (the name, h1).
      */
     function glideTo(section) {
-        const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
         const start = window.scrollY;
-        const end = Math.max(0, section.getBoundingClientRect().top + start - margin);
+        let end = 0;
+        if (section) {
+            const margin = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+            end = Math.max(0, section.getBoundingClientRect().top + start - margin);
+        }
         const distance = end - start;
 
         const finish = () => {
-            history.pushState(null, '', '#' + section.id);
-            if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1');
-            section.focus({ preventScroll: true });
+            const focusTarget = section || document.querySelector('.home-name');
+            if (section) history.pushState(null, '', '#' + section.id);
+            else history.pushState(null, '', location.pathname + location.search);
+            if (!focusTarget) return;
+            if (!focusTarget.hasAttribute('tabindex')) focusTarget.setAttribute('tabindex', '-1');
+            focusTarget.focus({ preventScroll: true });
         };
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || Math.abs(distance) < 2) {

@@ -195,6 +195,7 @@ Evaluation du 2026-11-27 : code pret (tests, build, audit de contraste au vert),
 - [x] Appliquer les quick wins : premiere impression, lisibilite, contenus, performance.
 - [x] Integrer les retours de Jeremy : icones regroupees, Contact/CV epingles sur mobile, formes, cadre photo, stack IA.
 - [x] Ajouter le bouton de sections mobile et le defilement anime.
+- [x] Ajouter un lien « Haut de page » en tete de l'eventail des sections mobile.
 - [x] Fiabiliser le formulaire de contact (toasts, repli messagerie, bilinguisme).
 - [x] Synchroniser les fichiers de gouvernance avec l'etat reel.
 - [ ] Relire les textes rediges et decouper le lot en commits.

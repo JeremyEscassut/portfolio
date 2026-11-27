@@ -3659,6 +3659,13 @@ html body .section-fab__link {
     color: var(--pf-ink) !important;
 }
 
+/* "Back to top" link: arrow icon before the label */
+html body .section-fab__link--top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 html body .section-fab__link[aria-current="true"] {
     --pf-btn-bg: var(--pf-action);
     color: var(--pf-on-action) !important;
