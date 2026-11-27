@@ -86,4 +86,20 @@ class HomePageContentTest extends TestCase
         $this->assertNotFalse($styles);
         $this->assertLessThan($styles, $script);
     }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function the_mobile_section_fan_starts_with_a_back_to_top_link_in_both_languages()
+    {
+        foreach (['fr' => 'Haut de page', 'en' => 'Back to top'] as $locale => $label) {
+            $html = $this->get(route('home', ['locale' => $locale]))->getContent();
+
+            $menu = substr($html, strpos($html, 'id="section-fab-menu"'));
+            $top = strpos($menu, 'href="#top"');
+            $about = strpos($menu, 'href="#about"');
+
+            $this->assertNotFalse($top, "[$locale] back-to-top link missing from the fan");
+            $this->assertLessThan($about, $top, "[$locale] back-to-top must be the first link");
+            $this->assertStringContainsString($label, substr($menu, $top, 600));
+        }
+    }
 }

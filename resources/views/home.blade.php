@@ -423,13 +423,13 @@ $icon = function (string $name): string {
      behind a modal dialog would be missed (and announced twice by screen readers). --}}
 <div id="toast-region" class="toast-region" role="region" aria-label="{{ __('toast.region') }}">
 	@if(session('status'))
-	<div class="toast toast--success" role="status" data-autohide="20000">
+	<div class="toast toast--success" role="status" data-autohide="10000">
 		<p class="toast__text">{{ session('status') }}</p>
 		<button type="button" class="toast__close" aria-label="{{ __('toast.close') }}">✕</button>
 	</div>
 	@endif
 	@if(session('error') && ! session('contactFailed'))
-	<div class="toast toast--error" role="alert" data-autohide="20000">
+	<div class="toast toast--error" role="alert" data-autohide="10000">
 		<p class="toast__text">{{ session('error') }}</p>
 		<button type="button" class="toast__close" aria-label="{{ __('toast.close') }}">✕</button>
 	</div>
@@ -444,8 +444,17 @@ $fabSections = ['about', 'projects', 'experience', 'studies', 'recommendations',
 	<div class="section-fab__backdrop" hidden></div>
 	<nav id="section-fab-menu" class="section-fab__menu" aria-label="{{ __('nav.sections') }}">
 		<ul>
+			{{-- First link, highest in the fan: back to the top of the page --}}
+			<li class="section-fab__item" style="--i: 0">
+				<a href="#top" class="pf-btn section-fab__link section-fab__link--top">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M12 19V5M5 12l7-7 7 7" />
+					</svg>
+					{{ __('nav.top') }}
+				</a>
+			</li>
 			@foreach($fabSections as $i => $sectionId)
-			<li class="section-fab__item" style="--i: {{ $i }}">
+			<li class="section-fab__item" style="--i: {{ $i + 1 }}">
 				<a href="#{{ $sectionId }}" class="pf-btn section-fab__link">{{ __('nav.' . $sectionId) }}</a>
 			</li>
 			@endforeach

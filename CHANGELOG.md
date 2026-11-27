@@ -11,6 +11,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Bandeau de consentement Google Analytics, court et non bloquant : « Refuser » et « Accepter » ont le même poids, GA ne se charge qu'après « Accepter », le choix est redemandé après 13 mois et le lien « Gérer les cookies » du pied de page permet d'en changer. Les mentions légales décrivent ce fonctionnement.
 - Bouton de sections mobile et tablette : un hexagone en bas à droite qui ouvre les sections en éventail (quart de cercle), avec la section en cours surlignée.
 - Défilement animé vers la section choisie dans l'éventail : on voit la page monter ou descendre jusqu'à la section. Saut direct si le téléphone demande de réduire les animations.
+- Lien « Haut de page » (« Back to top ») en tête de l'éventail des sections sur mobile et tablette : remonte en douceur en haut de la page et replace le focus sur le nom.
 - Toasts de confirmation et d'erreur après l'envoi du formulaire de contact.
 - Repli en cas d'échec d'envoi : la fenêtre de contact se rouvre avec le texte conservé, et propose « Ouvrir dans ma messagerie » (e-mail déjà rédigé et adressé à l'adresse pro `jeremyescassut@gmail.com`) ou « Copier le message » (message + nom ; l'adresse de l'expéditeur est ajoutée par sa messagerie). Si aucune messagerie ne s'ouvre, un message l'indique avec l'adresse à utiliser.
 - Groupe « IA » dans la stack : Claude Code, Codex et Lovable, avec leurs logos officiels (LobeHub Icons, licence MIT).
@@ -21,6 +22,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Carrousel Admiral : chaque capture est annoncée aux lecteurs d'écran (« Capture 2 sur 3 ») quand on change de capture, aux flèches, aux points ou au doigt.
 
 ### Modifié
+- Les toasts du formulaire de contact disparaissent après 10 secondes au lieu de 20 (toujours en pause au survol et au focus).
 - CV mis à jour (versions de novembre 2026) pour les trois profils, allégés (photo recompressée : environ 140 Ko par fichier au lieu de 7 Mo) et renommés sans date (`ESCASSUT_JEREMY_-_CV_<profil>.pdf`). En anglais, la fenêtre de choix et la page CV précisent que les CV sont en français.
 - Lien LinkedIn mis à jour vers le nouveau profil `https://www.linkedin.com/in/jeremyescassut` (icône de la colonne de gauche et lien de la recommandation).
 - Titre : « Product owner, chef de projet IT et développeur UX/UI ».
