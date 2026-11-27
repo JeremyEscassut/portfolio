@@ -181,11 +181,23 @@ Evaluation du 2026-11-27 : code pret (tests, build, audit de contraste au vert),
 - [x] Lien LinkedIn mis a jour vers `https://www.linkedin.com/in/jeremyescassut` (icone et recommandation, 2026-11-27).
 - [x] Remplacer les PDF des trois CV par les nouvelles versions de Jeremy (2026-11-27) : photo recompressee (environ 140 Ko par fichier), noms de fichiers sans date. Pas de version anglaise : l'interface EN precise que les CV sont en francais.
 - [x] Merger les pull requests vers `main` (PR #3 en squash, PR #4 en merge commit, 2026-11-27).
-- [ ] Rotation des secrets exposes sur l'ancien depot GitLab : cle Mailgun, mot de passe SMTP, `APP_KEY` (mettre a jour le `.env` du serveur).
+- [x] Rotation des secrets exposes sur l'ancien depot GitLab : cle Mailgun revoquee, mot de passe SMTP change, nouvel `APP_KEY` (2026-11-27).
 - [x] Verifier que la racine web Alwaysdata pointe sur `public/` (confirme par Jeremy le 2026-11-27) (le deploiement rsync envoie tout le dossier du projet : `docs/`, `tests/`, `.claude/`, `CHANGELOG.md`...).
-- [ ] `./scripts/deploy.sh --dry-run`, puis deploiement depuis `main` a jour, sans modification non commitee.
+- [x] Deploiement depuis `main` a jour (2026-11-27, apres correction de l'acces SSH : cle chargee dans le trousseau, hote ajoute a `known_hosts`).
 - [ ] Verification en production : envoi reel du formulaire, ouverture des CV, video de demo, mode sombre, version anglaise.
 - [ ] Passer la rubrique « Non publie » de `CHANGELOG.md` en version 3.0 datee, et poser le tag `v3.0`.
+
+## Phase 8 - Passage du depot en public
+
+Source : `docs/reports/AUDIT_2026-11-27.md`.
+
+- [x] Audit securite, proprete et SEO.
+- [x] Nettoyage des fichiers inutiles (P-1 a P-3, D-006).
+- [ ] Securite : mise a jour des dependances, installation cote serveur, en-tetes HTTP, limite d'envoi du formulaire (S-3 a S-7).
+- [ ] SEO : Open Graph, canonical, hreflang, sitemap, vraie 404, titres (SEO-1 a SEO-7, P-5).
+- [ ] Decider du sort de `public/cv-archive/` (P-4) et de la licence (P-8).
+- [ ] README de presentation du depot (P-7).
+- [ ] Nouveau depot public depuis l'historique propre, ancien archive (S-1, S-2) ; lien « Voir le code » dans le paragraphe IA.
 
 ## Plan du jour - execution rapide (2026-11-27)
 

@@ -72,7 +72,12 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Page d'accueil allégée de 8 Mo à environ 64 Ko : les images ne sont plus intégrées en base64 mais servies comme fichiers (WebP pour les captures).
 - Vidéo de démo convertie de `.mov` (62 Mo) en `.mp4` (4,9 Mo), lisible dans tous les navigateurs et chargée seulement à l'ouverture.
 
+### Supprimé
+- Fichiers de brouillon et sources remplacées, inutilisés par le site (environ 130 Mo) : dossier `backups/`, vidéos `Demo Admiral.mov`, captures et photos d'origine, motifs `cherry-wood*.svg`, vue `welcome.blade.php`, `LARAVEL_README.md`, `.envsed`, doublon `tools/extract-blade-strings.js` et sa sortie générée. Dette D-006 close.
+- `public/cv/README.md`, qui était consultable en ligne.
+
 ### Documentation
+- `docs/reports/AUDIT_2026-11-27.md` : audit sécurité, propreté et SEO avant le passage du dépôt en public.
 - `docs/PARCOURS_DE_LECTURE.md` : ordre de lecture du code, parcours de bout en bout, où modifier quoi, pièges connus.
 - Commentaires ajoutés sur le code non évident (routes, langue, contact, scripts JS, structure de la page et de la feuille de style).
 - `docs/reports/SOLUTIONS_LOG.md` : entrées 8 et 9.
