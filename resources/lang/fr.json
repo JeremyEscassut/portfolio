@@ -88,6 +88,9 @@
   "cv.modal.owner": "Product Owner",
 
   "legal.title": "Mentions légales",
+  "errors.404.title": "Page introuvable",
+  "errors.404.text": "Cette adresse ne correspond à aucune page du portfolio.",
+  "errors.404.home": "Retour à l'accueil",
   "ui.back": "Retour",
   "cv.icon_alt": "Icône CV",
 

@@ -28,8 +28,53 @@
             document.documentElement.classList.toggle('dark', dark);
         })();
     </script>
-    <title>@yield('title', 'Portfolio - Jérémy Escassut')</title>
+    <title>@yield('title', __('home.hero.name') . ' · ' . __('home.job_title'))</title>
     <meta name="description" content="@yield('description', __('home.meta_description'))">
+    {{-- SEO and link previews (LinkedIn, messaging apps). Each page has one canonical URL
+         per language; `/` is the French home page, so its canonical URL is /fr. --}}
+    @hasSection('noindex')
+    <meta name="robots" content="noindex">
+    @else
+    @php
+    $seoLocale = app()->getLocale() === 'en' ? 'en' : 'fr';
+    $seoRoute = request()->routeIs('cv', 'mentions') ? request()->route()->getName() : 'home';
+    $seoUrl = fn (string $l) => route($seoRoute, ['locale' => $l]);
+    $seoTitle = trim($__env->yieldContent('title', __('home.hero.name') . ' · ' . __('home.job_title')));
+    $seoDescription = trim($__env->yieldContent('description', __('home.meta_description')));
+    $seoImage = asset('images/og-' . $seoLocale . '.jpg');
+    @endphp
+    <link rel="canonical" href="{{ $seoUrl($seoLocale) }}">
+    <link rel="alternate" hreflang="fr" href="{{ $seoUrl('fr') }}">
+    <link rel="alternate" hreflang="en" href="{{ $seoUrl('en') }}">
+    <link rel="alternate" hreflang="x-default" href="{{ $seoUrl('fr') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ __('home.hero.name') }}">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDescription }}">
+    <meta property="og:url" content="{{ $seoUrl($seoLocale) }}">
+    <meta property="og:image" content="{{ $seoImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ __('home.hero.name') }} · {{ __('home.job_title') }}">
+    <meta property="og:locale" content="{{ $seoLocale === 'en' ? 'en_US' : 'fr_FR' }}">
+    <meta property="og:locale:alternate" content="{{ $seoLocale === 'en' ? 'fr_FR' : 'en_US' }}">
+    <meta name="twitter:card" content="summary_large_image">
+    @if($seoRoute === 'home')
+    {{-- Structured data: who the site is about (schema.org Person) --}}
+    @php
+    $seoPerson = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Person',
+        'name' => __('home.hero.name'),
+        'jobTitle' => __('home.job_title'),
+        'url' => $seoUrl($seoLocale),
+        'image' => asset('images/profile.jpg'),
+        'sameAs' => ['https://www.linkedin.com/in/jeremyescassut', 'https://gitlab.com/JeremyEscassut'],
+    ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($seoPerson, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>
+    @endif
+    @endif
     <!-- Typeface: Schibsted Grotesk, served by Bunny Fonts (GDPR-friendly Google Fonts mirror) -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=schibsted-grotesk:400,500,600,700&display=swap">

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Static sitemap: update it when a page is added (routes/web.php). -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.jeremyescassut.com/fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.jeremyescassut.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jeremyescassut.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.jeremyescassut.com/fr"/>
+  </url>
+  <url>
+    <loc>https://www.jeremyescassut.com/en</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.jeremyescassut.com/fr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jeremyescassut.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.jeremyescassut.com/fr"/>
+  </url>
+  <url>
+    <loc>https://www.jeremyescassut.com/fr/cv</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.jeremyescassut.com/fr/cv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jeremyescassut.com/en/cv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.jeremyescassut.com/fr/cv"/>
+  </url>
+  <url>
+    <loc>https://www.jeremyescassut.com/en/cv</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.jeremyescassut.com/fr/cv"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jeremyescassut.com/en/cv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.jeremyescassut.com/fr/cv"/>
+  </url>
+  <url>
+    <loc>https://www.jeremyescassut.com/fr/mentions</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.jeremyescassut.com/fr/mentions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jeremyescassut.com/en/mentions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.jeremyescassut.com/fr/mentions"/>
+  </url>
+  <url>
+    <loc>https://www.jeremyescassut.com/en/mentions</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.jeremyescassut.com/fr/mentions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jeremyescassut.com/en/mentions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.jeremyescassut.com/fr/mentions"/>
+  </url>
+</urlset>
