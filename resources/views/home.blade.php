@@ -537,7 +537,7 @@ $contactAddress = config('mail.public_contact_address');
 $cvs = [
 	['file' => 'ESCASSUT_JEREMY_-_CV_Développeur_Full_Stack_orienté_Produit_&_UX.pdf', 'title' => 'cv.modal.dev', 'desc' => 'cv.modal.dev_desc'],
 	['file' => 'ESCASSUT_JEREMY_-_CV_Chef_de_projet_Coordination_internationale.pdf', 'title' => 'cv.modal.pm', 'desc' => 'cv.modal.pm_desc'],
-	['file' => 'ESCASSUT_JEREMY_-_CV_Product_Owner_|_Transformation_digitale.pdf', 'title' => 'cv.modal.po', 'desc' => 'cv.modal.po_desc'],
+	['file' => 'ESCASSUT_JEREMY_-_CV_Product_Owner_-_Transformation_digitale.pdf', 'title' => 'cv.modal.po', 'desc' => 'cv.modal.po_desc'],
 ];
 @endphp
 <div id="cv-selector-modal" class="fixed inset-0 z-[10000] flex items-center justify-center p-4" aria-hidden="true" x-cloak style="display: none;">
