@@ -1,0 +1,44 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "php",
+      "runtimeArgs": [
+        "-d",
+        "opcache.enable=0",
+        "-d",
+        "opcache.enable_cli=0",
+        "-d",
+        "opcache.jit=0",
+        "artisan",
+        "serve",
+        "--host=127.0.0.1",
+        "--port=8000"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "portfolio-mail-fail",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "MAIL_MAILER=smtp",
+        "MAIL_HOST=127.0.0.1",
+        "MAIL_PORT=9",
+        "MAIL_SCHEME=smtp",
+        "php",
+        "-d",
+        "opcache.enable=0",
+        "-d",
+        "opcache.enable_cli=0",
+        "-d",
+        "opcache.jit=0",
+        "artisan",
+        "serve",
+        "--host=127.0.0.1",
+        "--port=8010"
+      ],
+      "port": 8010
+    }
+  ]
+}
