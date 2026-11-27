@@ -19,6 +19,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Balise `meta description` et langue de la page (`lang`) conforme à la langue affichée.
 
 ### Modifié
+- Lien LinkedIn mis à jour vers le nouveau profil `https://www.linkedin.com/in/jeremyescassut` (icône de la colonne de gauche et lien de la recommandation).
 - Titre : « Product owner, chef de projet IT et développeur UX/UI ».
 - Police Schibsted Grotesk, texte plus foncé et lignes plus courtes pour la lisibilité.
 - Sections séparées par un trait avec un titre visible ; colonne des dates réduite dans Expérience et Études.
