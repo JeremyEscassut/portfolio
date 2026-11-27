@@ -8,6 +8,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 ## [Non publié]
 
 ### Ajouté
+- Lien « Voir le code et les règles de ce portfolio » sous le paragraphe sur l'IA, vers le dépôt public GitHub.
 - Aperçu des liens partagés (LinkedIn, messageries) : balises Open Graph et Twitter, avec une image d'aperçu en français et en anglais (`public/images/og-fr.jpg`, `og-en.jpg`).
 - Référencement : URL canonique et liens `hreflang` FR/EN sur chaque page, données structurées `Person` (schema.org) sur l'accueil, `sitemap.xml` déclaré dans `robots.txt`.
 - Page 404 bilingue avec retour à l'accueil, non indexée.
@@ -87,6 +88,8 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - `public/cv/README.md`, qui était consultable en ligne.
 
 ### Documentation
+- `README.md` réécrit pour le dépôt public : présentation du site, cadre de travail avec l'IA (fichiers de gouvernance et journaux), stack, lancement en local, sécurité et droits.
+- Dépôt public `JeremyEscassut/portfolio` créé depuis l'historique propre (ancien mot de passe purgé, adresse e-mail personnelle remplacée par l'adresse privée GitHub) ; l'ancien dépôt est renommé `portfolio-archive`, privé et archivé.
 - `docs/reports/AUDIT_2026-11-27.md` : audit sécurité, propreté et SEO avant le passage du dépôt en public.
 - `docs/PARCOURS_DE_LECTURE.md` : ordre de lecture du code, parcours de bout en bout, où modifier quoi, pièges connus.
 - Commentaires ajoutés sur le code non évident (routes, langue, contact, scripts JS, structure de la page et de la feuille de style).

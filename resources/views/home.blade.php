@@ -161,6 +161,12 @@ $icon = function (string $name): string {
 				<p>{{ __('about.p1') }}</p>
 				<p>{{ __('about.p2') }}</p>
 				<p>{{ __('about.ai') }}</p>
+				{{-- Public repository: the code and the AI working rules described above --}}
+				<p class="about-code-link">
+					<a href="https://github.com/JeremyEscassut/portfolio" target="_blank" rel="noopener noreferrer" class="pf-btn pf-btn--secondary project-link">
+						<span>{{ __('about.ai_code_link') }}</span>
+					</a>
+				</p>
 				<p>{{ __('about.p3') }}</p>
 				<p>{{ __('about.p4') }}</p>
 			</div>

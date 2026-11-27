@@ -102,4 +102,14 @@ class HomePageContentTest extends TestCase
             $this->assertStringContainsString($label, substr($menu, $top, 600));
         }
     }
+
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function the_ai_paragraph_links_to_the_public_repository_in_both_languages()
+    {
+        foreach (['fr' => 'Voir le code et les règles de ce portfolio', 'en' => 'See this portfolio&#039;s code and rules'] as $locale => $label) {
+            $this->get(route('home', ['locale' => $locale]))
+                ->assertSee('href="https://github.com/JeremyEscassut/portfolio"', false)
+                ->assertSee($label, false);
+        }
+    }
 }
