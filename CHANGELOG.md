@@ -60,9 +60,10 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Déploiement : `rsync --delete` effaçait la sauvegarde créée juste avant (dossier `backups/` du serveur) ainsi que les logs et sessions de `storage/`. Ces dossiers sont désormais exclus, comme `tests/`, `docs/`, `.claude/` et les fichiers `.env.*`.
 
 ### Conformité
-- Mentions légales : déclaration de Google Analytics 4 (cookies `_ga`, finalité, transfert vers les États-Unis, moyens de refus). Reprise de la branche `claude/project-thread-v3ra6l` (commit 413f1ae). Le bandeau de consentement reste à faire.
+- Mentions légales : déclaration de Google Analytics 4 (cookies `_ga`, finalité, transfert vers les États-Unis, moyens de refus). Reprise de la branche `claude/project-thread-v3ra6l` (commit 413f1ae). Le bandeau de consentement a été ajouté ensuite (PR #2).
 
 ### Sécurité
+- Dépendances npm de compilation mises à jour (`npm audit fix`) : 14 alertes corrigées (Vite, PostCSS, Rollup, axios, concurrently, tar…), sans changement de version majeure.
 - Le message de confirmation, qui reprend le nom saisi par le visiteur, est désormais échappé à l'affichage (il était inséré en HTML brut).
 
 ### Performance
