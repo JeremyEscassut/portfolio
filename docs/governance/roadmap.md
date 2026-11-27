@@ -3,7 +3,7 @@
 ## Horizon
 
 - Derniere synchronisation : 2026-11-27 (etat reel du lot `feature/portfolio-ux-quickwins`).
-- Version cible : v1.2 Refonte UX, performance et bilinguisme (apres v1.1 Stabilisation qualite et gouvernance).
+- Version cible : v3.0 Refonte UX, performance et bilinguisme (apres v1.1 Stabilisation qualite et gouvernance). Numero choisi par Jeremy le 2026-11-27 : les branches de sauvegarde `v1.1` a `v2.3` existent deja.
 - Depot de reference : GitHub (`origin`). GitLab abandonne le 2026-11-27.
 - Historique des changements livres et en cours : `CHANGELOG.md`.
 
@@ -11,7 +11,7 @@
 
 ## Priorites
 
-1. Integrer le lot UX `feature/portfolio-ux-quickwins` : relecture des textes rediges, commits atomiques par sujet (faits), pull request vers `main`, mise en production v1.2. [En cours]
+1. Mettre en production la v3.0 (lot UX merge dans `main` le 2026-11-27, PR #3 et #4) : prerequis de la phase 7. [En cours]
 2. Basculer le contact sur l'adresse pro `jeremyescassut@gmail.com` (Alwaysdata, `.env` de production, mentions legales). [A venir]
 3. Google Analytics : mentions legales corrigees ; reste le consentement avant chargement (bandeau) ou une mesure sans cookie. [En cours]
 4. Garantir un affichage fiable sur navigateurs/appareils principaux : il reste Safari, Firefox, Edge et appareils reels. [En cours]
@@ -160,21 +160,21 @@ Reste a faire
 - [ ] Harmoniser la page Mentions legales avec le nouveau systeme de formes.
 - [ ] Decouper le lot en commits atomiques (UX, bouton de sections, contact, docs, gouvernance) et ouvrir la merge request.
     - [x] Commits atomiques faits le 2026-11-27 (outillage, medias, icones, interface, documentation ; gouvernance sur `docs/governance-sync-2026-11-27`).
-    - [ ] Ouvrir les pull requests vers `main` (gouvernance d'abord, puis le lot UX).
+    - [x] Ouvrir les pull requests vers `main` (gouvernance d'abord, puis le lot UX) : PR #3 et #4.
 - [x] Filet fin sur les libelles de la stack, comme les tags de projet.
 
-## Phase 7 - Mise en production v1.2
+## Phase 7 - Mise en production v3.0
 
 Evaluation du 2026-11-27 : code pret (tests, build, audit de contraste au vert), mais mise en ligne conditionnee aux etapes ci-dessous.
 
 - [ ] Smoke test Safari macOS et iPhone (seul Chrome a ete verifie) : accueil, bouton de sections, fenetres CV et contact, clair/sombre, FR/EN.
 - [ ] Relecture rapide des textes rediges par Jeremy.
-- [ ] Merger les pull requests vers `main`.
+- [x] Merger les pull requests vers `main` (PR #3 en squash, PR #4 en merge commit, 2026-11-27).
 - [ ] Rotation des secrets exposes sur l'ancien depot GitLab : cle Mailgun, mot de passe SMTP, `APP_KEY` (mettre a jour le `.env` du serveur).
 - [x] Verifier que la racine web Alwaysdata pointe sur `public/` (confirme par Jeremy le 2026-11-27) (le deploiement rsync envoie tout le dossier du projet : `docs/`, `tests/`, `.claude/`, `CHANGELOG.md`...).
 - [ ] `./scripts/deploy.sh --dry-run`, puis deploiement depuis `main` a jour, sans modification non commitee.
 - [ ] Verification en production : envoi reel du formulaire, ouverture des CV, video de demo, mode sombre, version anglaise.
-- [ ] Passer la rubrique « Non publie » de `CHANGELOG.md` en version 1.2 datee.
+- [ ] Passer la rubrique « Non publie » de `CHANGELOG.md` en version 3.0 datee, et poser le tag `v3.0`.
 
 ## Plan du jour - execution rapide (2026-11-27)
 
@@ -200,7 +200,8 @@ Evaluation du 2026-11-27 : code pret (tests, build, audit de contraste au vert),
 
 - [ ] Relecture des textes et ajout de resultats chiffres par projet.
 - [x] Commits atomiques.
-- [ ] Pull requests vers `main` et mise en production (phase 7).
+- [x] Pull requests vers `main` mergees (#3, #4).
+- [ ] Mise en production (phase 7).
 - [ ] Bascule de l'adresse de contact pro sur Alwaysdata.
 - [x] Mentions legales : declaration de Google Analytics.
 - [ ] Decision sur Google Analytics : bandeau de consentement ou mesure sans cookie.
