@@ -43,6 +43,16 @@ RSYNC_EXCLUDES=(
   "bootstrap/cache"
   "public/hot"
   ".github"
+  # Fichiers locaux sensibles ou inutiles en production
+  ".env.*"
+  ".claude"
+  "/tests"
+  "/docs"
+  # Conserver les données du serveur (logs, sessions, cache) et ses sauvegardes :
+  # sans ces exclusions, rsync --delete les efface, y compris la sauvegarde
+  # créée juste avant le déploiement.
+  "/storage"
+  "/backups"
 )
 
 EXCLUDE_ARGS=()
@@ -64,7 +74,7 @@ remote_root='${REMOTE_PATH}'
 backup_dir="\$remote_root/backups/$(timestamp)"
 mkdir -p "\$backup_dir"
 mkdir -p "\$remote_root"
-rsync -a --delete --exclude '.env' --exclude 'node_modules' --exclude 'vendor' --exclude 'bootstrap/cache' --exclude 'public/hot' "\$remote_root/" "\$backup_dir/"
+rsync -a --delete --exclude '/backups' --exclude '.env' --exclude 'node_modules' --exclude 'vendor' --exclude 'bootstrap/cache' --exclude 'public/hot' "\$remote_root/" "\$backup_dir/"
 echo "\$backup_dir"
 SSH_EOF
 }

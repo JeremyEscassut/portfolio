@@ -52,6 +52,7 @@ Catégories : **Ajouté**, **Modifié**, **Corrigé**, **Supprimé**, **Sécurit
 - Bouton « Envoyer » de la fenêtre de contact illisible en mode sombre.
 - Fenêtre de choix du CV masquée par le bandeau de section et les icônes épinglées sur mobile en mode sombre.
 - Survol illisible en mode sombre : choix de CV, croix de fermeture, icônes thème, langue et contact.
+- Déploiement : `rsync --delete` effaçait la sauvegarde créée juste avant (dossier `backups/` du serveur) ainsi que les logs et sessions de `storage/`. Ces dossiers sont désormais exclus, comme `tests/`, `docs/`, `.claude/` et les fichiers `.env.*`.
 
 ### Conformité
 - Mentions légales : déclaration de Google Analytics 4 (cookies `_ga`, finalité, transfert vers les États-Unis, moyens de refus). Reprise de la branche `claude/project-thread-v3ra6l` (commit 413f1ae). Le bandeau de consentement reste à faire.
